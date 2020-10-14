@@ -153,14 +153,17 @@ void MainWindow::loadFile(const QString &filename) {
 
 void MainWindow::loadImage(SgImage *img)
 {
-    bool imageLoaded(imageDisplay->changeImage(*img));
-    if (imageLoaded) {
-        imageDetails->changeImage(*img);
+    auto imageFile(img->getImage());
+    if (imageFile.isNull()) {
+        imageDisplay->clear();
+        imageDetails->setError(QString("Could not load image:\n%0").arg(img->errorMessage()));
+        saveAction->setEnabled(false);
     }
     else {
-        imageDetails->clear();
+        imageDisplay->changeImage(QPixmap::fromImage(imageFile));
+        imageDetails->changeImageDetails(img->binaryDescription());
+        saveAction->setEnabled(true);
     }
-    saveAction->setEnabled(imageLoaded);
 }
 
 void MainWindow::clearImage() {

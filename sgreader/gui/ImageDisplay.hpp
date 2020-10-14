@@ -1,22 +1,22 @@
 #ifndef IMAGEDISPLAY_HPP
 #define IMAGEDISPLAY_HPP
 
-#include <QtWidgets/QWidget>
+#include <QtWidgets/QGraphicsView>
 
-class QLabel;
-class SgImage;
+class QGraphicsPixmapItem;
+class QPixmap;
 
-class ImageDisplay : public QWidget
+class ImageDisplay : public QGraphicsView
 {
         Q_OBJECT
 
     private:
-        QLabel* image;
+        QGraphicsPixmapItem* imageItem;
 
     public:
         ImageDisplay(QWidget* parent = nullptr);
 
-        bool changeImage(SgImage& image);
+        void changeImage(const QPixmap& image);
 
         void clear();
 };

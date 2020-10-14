@@ -1,39 +1,31 @@
 #include "ImageDisplay.hpp"
 
-#include <QtWidgets/QLabel>
-
-#include "sgimage.h"
+#include <QtWidgets/QGraphicsPixmapItem>
+#include <QtWidgets/QGraphicsScene>
 
 
 
 ImageDisplay::ImageDisplay(QWidget* parent) :
-    QWidget(parent),
-    image(new QLabel(this))
+    QGraphicsView(parent),
+    imageItem(new QGraphicsPixmapItem())
 {
-
+    auto scene(new QGraphicsScene(this));
+    scene->addItem(imageItem);
+    setScene(scene);
+    scale(2.0, 2.0);
 }
 
 
 
-bool ImageDisplay::changeImage(SgImage& image)
+void ImageDisplay::changeImage(const QPixmap& image)
 {
-    auto imageFile(image.getImage());
-    if (imageFile.isNull()) {
-        this->image->setText(QString("Couldn't load image: %0").arg(image.errorMessage()));
-        this->image->adjustSize();
-
-        return false;
-    }
-
-    this->image->setPixmap(QPixmap::fromImage(imageFile));
-    this->image->adjustSize();
-
-    return true;
+    imageItem->setPixmap(image);
+    scene()->setSceneRect(imageItem->boundingRect());
 }
 
 
 
 void ImageDisplay::clear()
 {
-    this->image->setPixmap(QPixmap());
+    this->imageItem->setPixmap(QPixmap());
 }

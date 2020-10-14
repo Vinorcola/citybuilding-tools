@@ -4,19 +4,21 @@
 #include <QtWidgets/QWidget>
 
 class QLabel;
-class SgImage;
 
 class ImageDetails : public QWidget
 {
         Q_OBJECT
 
     private:
-        QLabel* label;
+        QLabel* errorMessage;
+        QLabel* details;
 
     public:
         ImageDetails(QWidget* parent = nullptr);
 
-        void changeImage(SgImage& image);
+        void changeImageDetails(const QString& details);
+
+        void setError(const QString& errorMessage);
 
         void clear();
 };

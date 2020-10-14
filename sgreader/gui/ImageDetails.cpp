@@ -3,18 +3,18 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QVBoxLayout>
 
-#include "sgimage.h"
-
 
 
 ImageDetails::ImageDetails(QWidget* parent) :
     QWidget(parent),
-    label(new QLabel(this))
+    errorMessage(new QLabel(this)),
+    details(new QLabel(this))
 {
-    label->setFont(QFont("Courier New"));
+    details->setFont(QFont("Courier New"));
 
     auto layout(new QVBoxLayout(this));
-    layout->addWidget(label);
+    layout->addWidget(errorMessage);
+    layout->addWidget(details);
     layout->addStretch(1);
 
     setMinimumWidth(340);
@@ -23,14 +23,26 @@ ImageDetails::ImageDetails(QWidget* parent) :
 
 
 
-void ImageDetails::changeImage(SgImage& image)
+void ImageDetails::changeImageDetails(const QString& details)
 {
-    label->setText(image.binaryDescription());
+    errorMessage->setVisible(false);
+    this->details->setText(details);
+    this->details->setVisible(true);
+}
+
+
+
+void ImageDetails::setError(const QString& errorMessage)
+{
+    details->setVisible(false);
+    this->errorMessage->setText(errorMessage);
+    this->errorMessage->setVisible(true);
 }
 
 
 
 void ImageDetails::clear()
 {
-    label->setText("");
+    errorMessage->setVisible(false);
+    details->setText("");
 }

@@ -1,7 +1,5 @@
 #include "ImageTree.hpp"
 
-#include <QDebug>
-
 #include <QtGui/QKeyEvent>
 
 
