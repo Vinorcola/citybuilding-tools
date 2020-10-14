@@ -7,6 +7,10 @@ QT += core gui widgets
 
 # Input
 HEADERS += aboutdialog.h \
+           ImageDetails.hpp \
+           ImageDisplay.hpp \
+           ImageTree.hpp \
+           display/BinaryFormatter.hpp \
            imagetreeitem.h \
            licencedialog.h \
            helpdialog.h \
@@ -21,6 +25,10 @@ HEADERS += aboutdialog.h \
            gui/extractthread.h \
            gui/extractwizard.h
 SOURCES += aboutdialog.cpp \
+           ImageDetails.cpp \
+           ImageDisplay.cpp \
+           ImageTree.cpp \
+           display/BinaryFormatter.cpp \
            imagetreeitem.cpp \
            licencedialog.cpp \
            helpdialog.cpp \
