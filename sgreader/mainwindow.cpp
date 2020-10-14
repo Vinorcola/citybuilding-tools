@@ -33,7 +33,7 @@ MainWindow::MainWindow()
 		loadFile(QCoreApplication::arguments().at(1));
 	}
 	
-    resize(1000, 600);
+    resize(1200, 600);
 }
 
 /* Slots */
