@@ -6,42 +6,46 @@ RCC_DIR = build/rcc
 QT += core gui widgets
 
 # Input
-HEADERS += aboutdialog.h \
-           ImageDetails.hpp \
-           ImageDisplay.hpp \
-           ImageTree.hpp \
-           display/BinaryFormatter.hpp \
-           imagetreeitem.h \
-           licencedialog.h \
-           helpdialog.h \
-           mainwindow.h \
-           sgbitmap.h \
-           sgfile.h \
-           sgimage.h \
-           gui/filelistpage.h \
-           gui/inputdirpage.h \
-           gui/outputdirpage.h \
-           gui/progresspage.h \
-           gui/extractthread.h \
-           gui/extractwizard.h
-SOURCES += aboutdialog.cpp \
-           ImageDetails.cpp \
-           ImageDisplay.cpp \
-           ImageTree.cpp \
-           display/BinaryFormatter.cpp \
-           imagetreeitem.cpp \
-           licencedialog.cpp \
-           helpdialog.cpp \
-           main.cpp \
-           mainwindow.cpp \
-           sgbitmap.cpp \
-           sgfile.cpp \
-           sgimage.cpp \
-           gui/filelistpage.cpp \
-           gui/inputdirpage.cpp \
-           gui/outputdirpage.cpp \
-           gui/progresspage.cpp \
-           gui/extractthread.cpp \
-           gui/extractwizard.cpp
+HEADERS += \
+    display/BinaryFormatter.hpp \
+    gui/extractWizard/filelistpage.h \
+    gui/extractWizard/inputdirpage.h \
+    gui/extractWizard/outputdirpage.h \
+    gui/extractWizard/progresspage.h \
+    gui/extractWizard/extractthread.h \
+    gui/extractWizard/extractwizard.h \
+    gui/ImageDetails.hpp \
+    gui/ImageDisplay.hpp \
+    gui/ImageTree.hpp \
+    aboutdialog.h \
+    helpdialog.h \
+    imagetreeitem.h \
+    licencedialog.h \
+    mainwindow.h \
+    sgbitmap.h \
+    sgfile.h \
+    sgimage.h
+
+SOURCES += \
+    display/BinaryFormatter.cpp \
+    gui/extractWizard/filelistpage.cpp \
+    gui/extractWizard/inputdirpage.cpp \
+    gui/extractWizard/outputdirpage.cpp \
+    gui/extractWizard/progresspage.cpp \
+    gui/extractWizard/extractthread.cpp \
+    gui/extractWizard/extractwizard.cpp \
+    gui/ImageDetails.cpp \
+    gui/ImageDisplay.cpp \
+    gui/ImageTree.cpp \
+    aboutdialog.cpp \
+    helpdialog.cpp \
+    imagetreeitem.cpp \
+    licencedialog.cpp \
+    main.cpp \
+    mainwindow.cpp \
+    sgbitmap.cpp \
+    sgfile.cpp \
+    sgimage.cpp
+
 RESOURCES += sgreader.qrc
 RC_FILE = sgreader.rc
