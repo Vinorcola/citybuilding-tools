@@ -172,18 +172,17 @@ void MainWindow::clearImage() {
 /* Creating stuff */
 void MainWindow::createChildren()
 {
-    treeWidget = new ImageTree(this);
-    treeWidget->setHeaderLabel("No file loaded");
-    treeWidget->setUniformRowHeights(true);
-
     auto leftDock(new QDockWidget("Image browser", this));
     leftDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
+    treeWidget = new ImageTree(leftDock);
+    treeWidget->setHeaderLabel("No file loaded");
+    treeWidget->setUniformRowHeights(true);
     leftDock->setWidget(treeWidget);
     addDockWidget(Qt::LeftDockWidgetArea, leftDock);
 
-    imageDetails = new ImageDetails(this);
     auto rightDock(new QDockWidget("Image details", this));
     rightDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
+    imageDetails = new ImageDetails(rightDock);
     rightDock->setWidget(imageDetails);
     addDockWidget(Qt::RightDockWidgetArea, rightDock);
 
