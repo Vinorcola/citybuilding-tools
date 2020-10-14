@@ -9,6 +9,9 @@ QT += core gui widgets
 HEADERS += \
     animation/Animation.hpp \
     display/BinaryFormatter.hpp \
+    file/BitmapMetaData.hpp \
+    file/FileMetaData.hpp \
+    file/ImageMetaData.hpp \
     gui/AnimationController.hpp \
     gui/dialog/aboutdialog.h \
     gui/dialog/helpdialog.h \
@@ -31,6 +34,9 @@ HEADERS += \
 SOURCES += \
     animation/Animation.cpp \
     display/BinaryFormatter.cpp \
+    file/BitmapMetaData.cpp \
+    file/FileMetaData.cpp \
+    file/ImageMetaData.cpp \
     gui/AnimationController.cpp \
     gui/dialog/aboutdialog.cpp \
     gui/dialog/helpdialog.cpp \
