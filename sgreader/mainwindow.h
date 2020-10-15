@@ -35,7 +35,7 @@ class MainWindow : public QMainWindow {
 		void createActions();
 		
 		void loadFile(const QString &filename);
-		void loadImage(SgImage *image);
+        void loadImage(SgImage& image);
 		void clearImage();
 		
         ImageTree *treeWidget;

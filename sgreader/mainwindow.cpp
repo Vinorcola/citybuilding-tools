@@ -17,7 +17,7 @@
 #include "gui/ImageDetails.hpp"
 #include "gui/ImageDisplay.hpp"
 #include "gui/ImageTree.hpp"
-#include "imagetreeitem.h"
+#include "gui/ImageTreeItem.hpp"
 
 MainWindow::MainWindow()
 	: QMainWindow(), appname("SGReader")
@@ -103,7 +103,7 @@ void MainWindow::treeSelectionChanged() {
 	
 	if (item->type() == ImageTreeItem::ItemType) {
 		ImageTreeItem *imageitem = (ImageTreeItem *)item;
-		loadImage(imageitem->image());
+        loadImage(imageitem->getImageMetadata());
 	} else {
 		clearImage();
 	}
@@ -132,7 +132,7 @@ void MainWindow::loadFile(const QString &filename) {
 		// Just have a long list of images
 		int numImages = sgFile->totalImageCount();
 		for (int i = 0; i < numImages; i++) {
-			new ImageTreeItem(treeWidget, i, sgFile->image(i));
+            new ImageTreeItem(treeWidget, i, *sgFile->image(i));
 		}
 	} else {
 		// Split up by file
@@ -144,24 +144,24 @@ void MainWindow::loadFile(const QString &filename) {
 			
 			int numImages = sgFile->imageCount(b);
 			for (int i = 0; i < numImages; i++) {
-				new ImageTreeItem(bitmapItem, i, sgFile->image(b, i));
+                new ImageTreeItem(bitmapItem, i, *sgFile->image(b, i));
 			}
 		}
 	}
 	treeWidget->scrollToTop();
 }
 
-void MainWindow::loadImage(SgImage *img)
+void MainWindow::loadImage(SgImage& img)
 {
-    auto imageFile(img->getImage());
+    auto imageFile(img.getImage());
     if (imageFile.isNull()) {
         imageDisplay->clear();
-        imageDetails->setError(QString("Could not load image:\n%0").arg(img->errorMessage()));
+        imageDetails->setError(QString("Could not load image:\n%0").arg(img.errorMessage()));
         saveAction->setEnabled(false);
     }
     else {
         imageDisplay->changeImage(QPixmap::fromImage(imageFile));
-        imageDetails->changeImageDetails(img->binaryDescription());
+        imageDetails->changeImageDetails(img.binaryDescription());
         saveAction->setEnabled(true);
     }
 }

@@ -20,7 +20,7 @@ HEADERS += \
     gui/ImageDetails.hpp \
     gui/ImageDisplay.hpp \
     gui/ImageTree.hpp \
-    imagetreeitem.h \
+    gui/ImageTreeItem.hpp \
     mainwindow.h \
     sgbitmap.h \
     sgfile.h \
@@ -40,7 +40,7 @@ SOURCES += \
     gui/ImageDetails.cpp \
     gui/ImageDisplay.cpp \
     gui/ImageTree.cpp \
-    imagetreeitem.cpp \
+    gui/ImageTreeItem.cpp \
     main.cpp \
     mainwindow.cpp \
     sgbitmap.cpp \
