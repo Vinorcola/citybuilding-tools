@@ -10,14 +10,14 @@
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QSplitter>
 
+#include "gui/dialog/aboutdialog.h"
+#include "gui/dialog/helpdialog.h"
+#include "gui/dialog/licencedialog.h"
 #include "gui/extractWizard/extractwizard.h"
 #include "gui/ImageDetails.hpp"
 #include "gui/ImageDisplay.hpp"
 #include "gui/ImageTree.hpp"
-#include "aboutdialog.h"
-#include "helpdialog.h"
 #include "imagetreeitem.h"
-#include "licencedialog.h"
 
 MainWindow::MainWindow()
 	: QMainWindow(), appname("SGReader")

@@ -8,6 +8,9 @@ QT += core gui widgets
 # Input
 HEADERS += \
     display/BinaryFormatter.hpp \
+    gui/dialog/aboutdialog.h \
+    gui/dialog/helpdialog.h \
+    gui/dialog/licencedialog.h \
     gui/extractWizard/filelistpage.h \
     gui/extractWizard/inputdirpage.h \
     gui/extractWizard/outputdirpage.h \
@@ -17,10 +20,7 @@ HEADERS += \
     gui/ImageDetails.hpp \
     gui/ImageDisplay.hpp \
     gui/ImageTree.hpp \
-    aboutdialog.h \
-    helpdialog.h \
     imagetreeitem.h \
-    licencedialog.h \
     mainwindow.h \
     sgbitmap.h \
     sgfile.h \
@@ -28,6 +28,9 @@ HEADERS += \
 
 SOURCES += \
     display/BinaryFormatter.cpp \
+    gui/dialog/aboutdialog.cpp \
+    gui/dialog/helpdialog.cpp \
+    gui/dialog/licencedialog.cpp \
     gui/extractWizard/filelistpage.cpp \
     gui/extractWizard/inputdirpage.cpp \
     gui/extractWizard/outputdirpage.cpp \
@@ -37,10 +40,7 @@ SOURCES += \
     gui/ImageDetails.cpp \
     gui/ImageDisplay.cpp \
     gui/ImageTree.cpp \
-    aboutdialog.cpp \
-    helpdialog.cpp \
     imagetreeitem.cpp \
-    licencedialog.cpp \
     main.cpp \
     mainwindow.cpp \
     sgbitmap.cpp \
