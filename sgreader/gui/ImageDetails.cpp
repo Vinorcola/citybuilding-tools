@@ -18,6 +18,7 @@ ImageDetails::ImageDetails(QWidget* parent) :
     layout->addStretch(1);
 
     setMinimumWidth(340);
+    setMaximumWidth(340);
     setLayout(layout);
 }
 
