@@ -6,9 +6,11 @@
 #include "sgfile.h"
 #include "sgimage.h"
 
+class ImageDetails;
+class ImageDisplay;
+class ImageTree;
 class QAction;
 class QTreeWidget;
-class QLabel;
 
 class MainWindow : public QMainWindow {
 	Q_OBJECT
@@ -36,8 +38,9 @@ class MainWindow : public QMainWindow {
 		void loadImage(SgImage *image);
 		void clearImage();
 		
-		QTreeWidget *treeWidget;
-		QLabel *imageLabel;
+        ImageTree *treeWidget;
+        ImageDetails *imageDetails;
+        ImageDisplay* imageDisplay;
 		QString filename;
 		QString appname;
 		QImage image;

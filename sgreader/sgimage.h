@@ -15,12 +15,13 @@ class SgImage {
 		int bitmapId() const;
 		QString description() const;
 		QString fullDescription() const;
+        QString binaryDescription() const;
 		void setInvertImage(SgImage *invert);
 		void setParent(SgBitmap *parent);
 		QImage getImage();
 		QString errorMessage() const;
 		
-	private:
+    private:
 		quint8 *fillBuffer();
 		/* Image loaders */
 		void loadPlainImage(QImage *img, quint8 *buffer);

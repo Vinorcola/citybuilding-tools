@@ -1,7 +1,7 @@
 #include "extractthread.h"
 
-#include "../sgbitmap.h"
-#include "../sgfile.h"
+#include "../../sgbitmap.h"
+#include "../../sgfile.h"
 
 #include <QtCore/QDebug>
 

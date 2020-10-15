@@ -2,6 +2,7 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtWidgets/QAction>
+#include <QtWidgets/QDockWidget>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMenu>
@@ -9,7 +10,10 @@
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QSplitter>
 
-#include "gui/extractwizard.h"
+#include "gui/extractWizard/extractwizard.h"
+#include "gui/ImageDetails.hpp"
+#include "gui/ImageDisplay.hpp"
+#include "gui/ImageTree.hpp"
 #include "aboutdialog.h"
 #include "helpdialog.h"
 #include "imagetreeitem.h"
@@ -29,7 +33,7 @@ MainWindow::MainWindow()
 		loadFile(QCoreApplication::arguments().at(1));
 	}
 	
-	resize(600, 400);
+    resize(1200, 600);
 }
 
 /* Slots */
@@ -147,49 +151,48 @@ void MainWindow::loadFile(const QString &filename) {
 	treeWidget->scrollToTop();
 }
 
-void MainWindow::loadImage(SgImage *img) {
-	image = img->getImage();
-	if (image.isNull()) {
-		imageLabel->setText(QString("Couldn't load image: %0")
-			.arg(img->errorMessage()));
-		saveAction->setEnabled(false);
-	} else {
-		imageLabel->setPixmap(QPixmap::fromImage(image));
-		saveAction->setEnabled(true);
-	}
-	imageLabel->adjustSize();
+void MainWindow::loadImage(SgImage *img)
+{
+    auto imageFile(img->getImage());
+    if (imageFile.isNull()) {
+        imageDisplay->clear();
+        imageDetails->setError(QString("Could not load image:\n%0").arg(img->errorMessage()));
+        saveAction->setEnabled(false);
+    }
+    else {
+        imageDisplay->changeImage(QPixmap::fromImage(imageFile));
+        imageDetails->changeImageDetails(img->binaryDescription());
+        saveAction->setEnabled(true);
+    }
 }
 
 void MainWindow::clearImage() {
-	imageLabel->setPixmap(QPixmap());
-	saveAction->setEnabled(false);
+    imageDisplay->clear();
+    imageDetails->clear();
+    saveAction->setEnabled(false);
 }
 
 /* Creating stuff */
-void MainWindow::createChildren() {
-	QSplitter *splitter = new QSplitter(this);
-	QScrollArea *scroll = new QScrollArea(splitter);
-	
-	treeWidget = new QTreeWidget(splitter);
-	treeWidget->setHeaderLabel("No file loaded");
-	treeWidget->setUniformRowHeights(true);
-	treeWidget->setIconSize(QSize(0, 0));
-	
-	imageLabel = new QLabel();
-	imageLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-	
-	scroll->setWidget(imageLabel);
-	imageLabel->show();
-	
-	splitter->addWidget(treeWidget);
-	splitter->addWidget(scroll);
-	splitter->setStretchFactor(0, 0);
-	splitter->setStretchFactor(1, 10);
-	splitter->setSizes(QList<int>() << 200 << 400);
-	setCentralWidget(splitter);
-	
-	connect(treeWidget, SIGNAL(itemSelectionChanged()),
-			this, SLOT(treeSelectionChanged()));
+void MainWindow::createChildren()
+{
+    auto leftDock(new QDockWidget("Image browser", this));
+    leftDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
+    treeWidget = new ImageTree(leftDock);
+    treeWidget->setHeaderLabel("No file loaded");
+    treeWidget->setUniformRowHeights(true);
+    leftDock->setWidget(treeWidget);
+    addDockWidget(Qt::LeftDockWidgetArea, leftDock);
+
+    auto rightDock(new QDockWidget("Image details", this));
+    rightDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
+    imageDetails = new ImageDetails(rightDock);
+    rightDock->setWidget(imageDetails);
+    addDockWidget(Qt::RightDockWidgetArea, rightDock);
+
+    imageDisplay = new ImageDisplay(this);
+    setCentralWidget(imageDisplay);
+
+    connect(treeWidget, &QTreeWidget::itemSelectionChanged, this, &MainWindow::treeSelectionChanged);
 }
 
 void MainWindow::createActions() {
@@ -206,6 +209,7 @@ void MainWindow::createActions() {
 	connect(extractAllAction, SIGNAL(triggered()), this, SLOT(extractAll()));
 	
 	exitAction = new QAction(tr("E&xit"), this);
+    exitAction->setShortcut(tr("Ctrl+Q"));
 	connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
 	
 	helpAction = new QAction(tr("&Help"), this);
