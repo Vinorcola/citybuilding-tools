@@ -29,18 +29,19 @@ public:
         *stream >> __unknown_d;
         *stream >> __unknown_e;
         *stream >> __unknown_f;
-        *stream >> __unknown_g;
-        *stream >> __unknown_h;
+        *stream >> position_offset_x;
+        *stream >> position_offset_y;
         *stream >> __unknown_i;
         *stream >> __unknown_j;
         *stream >> __unknown_k;
+        *stream >> __unknown_l;
 		*stream >> type;
 		stream->readRawData(flags, 4);
         *stream >> bitmap_id;
-        *stream >> __unknown_l;
         *stream >> __unknown_m;
         *stream >> __unknown_n;
         *stream >> __unknown_o;
+        *stream >> __unknown_p;
 		
 		if (includeAlpha) {
 			*stream >> alpha_offset;
@@ -62,18 +63,19 @@ public:
     quint16 __unknown_d;// 22 unknown bytes, mostly zero
     quint16 __unknown_e;
     quint16 __unknown_f;
-    quint16 __unknown_g;
-    quint32 __unknown_h;
-    quint32 __unknown_i;
+    qint16 position_offset_x;
+    qint16 position_offset_y;
+    quint16 __unknown_i;
     quint32 __unknown_j;
-    quint16 __unknown_k;
+    quint32 __unknown_k;
+    quint16 __unknown_l;
     quint16 type;
     char flags[4]; // 4 flag/option-like bytes
     quint8 bitmap_id;
-    quint8 __unknown_l;// 3 bytes
-    quint8 __unknown_m;
+    quint8 __unknown_m;// 3 bytes
     quint8 __unknown_n;
-    quint32 __unknown_o; // 4 zero bytes
+    quint8 __unknown_o;
+    quint32 __unknown_p; // 4 zero bytes
 	/* For D6 and up SG3 versions: alpha masks */
 	quint32 alpha_offset;
 	quint32 alpha_length;
@@ -137,21 +139,22 @@ QString SgImage::binaryDescription() const
     content += BinaryFormatter::format("__unknown_d", workRecord->__unknown_d) + "\n";
     content += BinaryFormatter::format("__unknown_e", workRecord->__unknown_e) + "\n";
     content += BinaryFormatter::format("__unknown_f", workRecord->__unknown_f) + "\n";
-    content += BinaryFormatter::format("__unknown_g", workRecord->__unknown_g) + "\n";
-    content += BinaryFormatter::format("__unknown_h", workRecord->__unknown_h) + "\n";
+    content += BinaryFormatter::format("position_offset_x", workRecord->position_offset_x) + "\n";
+    content += BinaryFormatter::format("position_offset_y", workRecord->position_offset_y) + "\n";
     content += BinaryFormatter::format("__unknown_i", workRecord->__unknown_i) + "\n";
     content += BinaryFormatter::format("__unknown_j", workRecord->__unknown_j) + "\n";
     content += BinaryFormatter::format("__unknown_k", workRecord->__unknown_k) + "\n";
+    content += BinaryFormatter::format("__unknown_l", workRecord->__unknown_l) + "\n";
     content += BinaryFormatter::format("type", workRecord->type) + "\n";
     content += BinaryFormatter::format("flag 1", workRecord->flags[0]) + "\n";
     content += BinaryFormatter::format("flag 2", workRecord->flags[1]) + "\n";
     content += BinaryFormatter::format("flag 3", workRecord->flags[2]) + "\n";
     content += BinaryFormatter::format("flag 4", workRecord->flags[3]) + "\n";
     content += BinaryFormatter::format("bitmap_id", workRecord->bitmap_id) + "\n";
-    content += BinaryFormatter::format("__unknown_l", workRecord->__unknown_l) + "\n";
     content += BinaryFormatter::format("__unknown_m", workRecord->__unknown_m) + "\n";
     content += BinaryFormatter::format("__unknown_n", workRecord->__unknown_n) + "\n";
     content += BinaryFormatter::format("__unknown_o", workRecord->__unknown_o) + "\n";
+    content += BinaryFormatter::format("__unknown_p", workRecord->__unknown_p) + "\n";
     content += BinaryFormatter::format("alpha_offset", workRecord->alpha_offset) + "\n";
     content += BinaryFormatter::format("alpha_length", workRecord->alpha_length) + "\n";
 
