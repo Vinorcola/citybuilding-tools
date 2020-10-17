@@ -7,7 +7,9 @@ QT += core gui widgets
 
 # Input
 HEADERS += \
+    animation/Animation.hpp \
     display/BinaryFormatter.hpp \
+    gui/AnimationController.hpp \
     gui/dialog/aboutdialog.h \
     gui/dialog/helpdialog.h \
     gui/dialog/licencedialog.h \
@@ -27,7 +29,9 @@ HEADERS += \
     sgimage.h
 
 SOURCES += \
+    animation/Animation.cpp \
     display/BinaryFormatter.cpp \
+    gui/AnimationController.cpp \
     gui/dialog/aboutdialog.cpp \
     gui/dialog/helpdialog.cpp \
     gui/dialog/licencedialog.cpp \

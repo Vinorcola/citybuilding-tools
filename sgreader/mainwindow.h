@@ -6,6 +6,7 @@
 #include "sgfile.h"
 #include "sgimage.h"
 
+class Animation;
 class ImageDetails;
 class ImageDisplay;
 class ImageTree;
@@ -17,7 +18,7 @@ class MainWindow : public QMainWindow {
 	
 	public:
 		MainWindow();
-		//~MainWindow();
+        virtual ~MainWindow();
 		
 	
 	private slots:
@@ -28,6 +29,8 @@ class MainWindow : public QMainWindow {
 		void help();
 		void licence();
 		void about();
+        void startAnimation(int startingImageIndex, int endingImageIndex);
+        void stopAnimation();
 		
 	private:
 		void createChildren();
@@ -45,6 +48,7 @@ class MainWindow : public QMainWindow {
 		QString appname;
 		QImage image;
 		SgFile *sgFile;
+        Animation* animation;
 		
 		QAction *openAction;
 		QAction *saveAction;

@@ -247,7 +247,12 @@ QImage SgImage::getImage() {
 	if (invert) {
 		return result.mirrored(true, false);
 	}
-	return result;
+    return result;
+}
+
+QPoint SgImage::getPositionOffset() const
+{
+    return { workRecord->__unknown_h, workRecord->__unknown_g };
 }
 
 quint8* SgImage::fillBuffer() {

@@ -29,10 +29,11 @@ ImageDisplay::ImageDisplay(QWidget* parent) :
 
 
 
-void ImageDisplay::changeImage(const QPixmap& image)
+void ImageDisplay::changeImage(const QPixmap& image, const QPoint offset)
 {
     imageItem->setPixmap(image);
-    imageItem->setPos(-image.width() / 2.0, -image.height() / 2.0);
+    //imageItem->setPos(-image.width() / 2.0, -image.height() / 2.0);
+    imageItem->setPos(-(image.width() - offset.x()) / 2.0, -(image.height() - offset.y()) / 2.0);
 }
 
 
