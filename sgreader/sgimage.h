@@ -19,6 +19,7 @@ class SgImage {
 		void setInvertImage(SgImage *invert);
 		void setParent(SgBitmap *parent);
 		QImage getImage();
+        QPoint getPositionOffset() const;
 		QString errorMessage() const;
 		
     private:

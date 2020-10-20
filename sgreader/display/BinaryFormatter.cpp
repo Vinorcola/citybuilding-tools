@@ -40,7 +40,7 @@ QString BinaryFormatter::format(const QString& name, quint16 value)
 
     auto binaryContent(QString::fromLatin1(memoryArray.toHex()));
 
-    return binaryContent + " (" + QString::number(value) + ") = " + name;
+    return binaryContent + "      (" + QString::number(value) + ") = " + name;
 }
 
 
@@ -53,7 +53,7 @@ QString BinaryFormatter::format(const QString& name, qint16 value)
 
     auto binaryContent(QString::fromLatin1(memoryArray.toHex()));
 
-    return binaryContent + " (" + QString::number(value) + ") = " + name;
+    return binaryContent + "      (" + QString::number(value) + ") = " + name;
 }
 
 
@@ -66,5 +66,5 @@ QString BinaryFormatter::format(const QString& name, char value)
 
     auto binaryContent(QString::fromLatin1(memoryArray.toHex()));
 
-    return binaryContent + " (" + QString::number(value) + ") = " + name;
+    return binaryContent + "        (" + QString::number(value) + ") = " + name;
 }

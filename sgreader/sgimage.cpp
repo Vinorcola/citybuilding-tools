@@ -127,6 +127,10 @@ QString SgImage::fullDescription() const {
 QString SgImage::binaryDescription() const
 {
     QString content;
+    content += record->invert_offset ? "inverted\n" : "normal\n";
+    auto positionOffset(getPositionOffset());
+    content += "{ x: " + QString::number(positionOffset.x()) + ", y:" + QString::number(positionOffset.y()) + " }\n";
+    content += "------------\n";
     content += BinaryFormatter::format("offset", workRecord->offset) + "\n";
     content += BinaryFormatter::format("length", workRecord->length) + "\n";
     content += BinaryFormatter::format("uncompressed_length", workRecord->uncompressed_length) + "\n";
@@ -247,7 +251,15 @@ QImage SgImage::getImage() {
 	if (invert) {
 		return result.mirrored(true, false);
 	}
-	return result;
+    return result;
+}
+
+QPoint SgImage::getPositionOffset() const
+{
+    return {
+        record->invert_offset ? -workRecord->width + workRecord->position_offset_x : -workRecord->position_offset_x,
+        -workRecord->position_offset_y + 8 // 8 = A quarter of tile height
+    };
 }
 
 quint8* SgImage::fillBuffer() {

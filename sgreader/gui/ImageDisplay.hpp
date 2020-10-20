@@ -16,7 +16,7 @@ class ImageDisplay : public QGraphicsView
     public:
         ImageDisplay(QWidget* parent = nullptr);
 
-        void changeImage(const QPixmap& image);
+        void changeImage(const QPixmap& image, const QPoint offset);
 
         void clear();
 };

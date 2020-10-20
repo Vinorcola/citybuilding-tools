@@ -9,18 +9,23 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QSplitter>
+#include <QtWidgets/QVBoxLayout>
 
+#include "animation/Animation.hpp"
 #include "gui/dialog/aboutdialog.h"
 #include "gui/dialog/helpdialog.h"
 #include "gui/dialog/licencedialog.h"
 #include "gui/extractWizard/extractwizard.h"
+#include "gui/AnimationController.hpp"
 #include "gui/ImageDetails.hpp"
 #include "gui/ImageDisplay.hpp"
 #include "gui/ImageTree.hpp"
 #include "gui/ImageTreeItem.hpp"
 
-MainWindow::MainWindow()
-	: QMainWindow(), appname("SGReader")
+MainWindow::MainWindow() :
+    QMainWindow(),
+    appname("SGReader"),
+    animation(nullptr)
 {
 	setWindowTitle(appname);
 	setWindowIcon(QIcon(":/icon.png"));
@@ -34,6 +39,13 @@ MainWindow::MainWindow()
 	}
 	
     resize(1200, 600);
+}
+
+MainWindow::~MainWindow()
+{
+    if (animation != nullptr) {
+        delete animation;
+    }
 }
 
 /* Slots */
@@ -87,7 +99,32 @@ void MainWindow::about() {
 		"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
 		"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 		"See the GNU General Public License or Help->Licence for more details.\n"));
-	dialog.exec();
+    dialog.exec();
+}
+
+void MainWindow::startAnimation(int startingImageIndex, int endingImageIndex)
+{
+    if (animation != nullptr) {
+        return;
+    }
+
+    QList<SgImage*> animationImages;
+    for (auto index(startingImageIndex); index <= endingImageIndex; index += AnimationController::IMAGE_ANIMATION_STEP) {
+        animationImages.append(sgFile->image(index - 1));
+    }
+    animation = new Animation(animationImages, *imageDisplay);
+    animation->start();
+}
+
+void MainWindow::stopAnimation()
+{
+    if (animation == nullptr) {
+        return;
+    }
+
+    animation->stop();
+    delete animation;
+    animation = nullptr;
 }
 
 void MainWindow::treeSelectionChanged() {
@@ -160,7 +197,7 @@ void MainWindow::loadImage(SgImage& img)
         saveAction->setEnabled(false);
     }
     else {
-        imageDisplay->changeImage(QPixmap::fromImage(imageFile));
+        imageDisplay->changeImage(QPixmap::fromImage(imageFile), img.getPositionOffset());
         imageDetails->changeImageDetails(img.binaryDescription());
         saveAction->setEnabled(true);
     }
@@ -190,7 +227,17 @@ void MainWindow::createChildren()
     addDockWidget(Qt::RightDockWidgetArea, rightDock);
 
     imageDisplay = new ImageDisplay(this);
-    setCentralWidget(imageDisplay);
+
+    auto animationController(new AnimationController(this));
+    connect(animationController, &AnimationController::requiredAnimationStart, this, &MainWindow::startAnimation);
+    connect(animationController, &AnimationController::requiredAnimationEnd, this, &MainWindow::stopAnimation);
+
+    auto mainWidget(new QWidget());
+    auto layout(new QVBoxLayout());
+    layout->addWidget(imageDisplay);
+    layout->addWidget(animationController);
+    mainWidget->setLayout(layout);
+    setCentralWidget(mainWidget);
 
     connect(treeWidget, &QTreeWidget::itemSelectionChanged, this, &MainWindow::treeSelectionChanged);
 }
