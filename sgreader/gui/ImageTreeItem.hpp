@@ -4,9 +4,8 @@
 #include <QtCore/QString>
 #include <QtWidgets/QTreeWidgetItem>
 
-#include "../sgimage.h"
-
-
+class BitmapMetaData;
+class ImageMetaData;
 
 class ImageTreeItem : public QTreeWidgetItem
 {
@@ -15,13 +14,25 @@ class ImageTreeItem : public QTreeWidgetItem
 
     private:
         int imageId;
-        SgImage& imageRecord;
+        const BitmapMetaData& bitmapMetaData;
+        const ImageMetaData& imageMetaData;
 
     public:
-        ImageTreeItem(QTreeWidget* parent, int id, SgImage& image);
-        ImageTreeItem(QTreeWidgetItem* parent, int id, SgImage& image);
+        ImageTreeItem(
+            QTreeWidget* parent,
+            const BitmapMetaData& bitmapMetaData,
+            int imageId,
+            const ImageMetaData& imageMetaData
+        );
+        ImageTreeItem(
+            QTreeWidgetItem* parent,
+            const BitmapMetaData& bitmapMetaData,
+            int imageId,
+            const ImageMetaData& imageMetaData
+        );
 
-        SgImage& getImageMetadata();
+        const BitmapMetaData& getBitmapMetaData() const;
+        const ImageMetaData& getImageMetaData() const;
 
     private:
         void setColumnData();

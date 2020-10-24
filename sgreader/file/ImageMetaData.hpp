@@ -1,6 +1,8 @@
 #ifndef IMAGEMETADATA_HPP
 #define IMAGEMETADATA_HPP
 
+#include <QtCore/QPoint>
+#include <QtCore/QSize>
 #include <QtCore/QtGlobal>
 
 /**
@@ -11,15 +13,18 @@
  */
 class ImageMetaData
 {
+        Q_DISABLE_COPY_MOVE(ImageMetaData)
+
     public:
         static const int RAW_DATA_SIZE = 64;
         static const int RAW_DATA_WITH_ALPHA_SIZE = 72;
 
     private:
         struct FileRawData {
+            Q_DISABLE_COPY_MOVE(FileRawData)
             quint32 offset;
             quint32 length;
-            quint32 uncompressed_length;
+            quint32 base_tile_length;
             quint32 unknown_a; // 4 zero bytes
             qint32 invert_offset;
             qint16 width;
@@ -45,15 +50,37 @@ class ImageMetaData
             // For D6 and up SG3 versions: alpha masks
             quint32 alpha_offset;
             quint32 alpha_length;
+
+            FileRawData(QDataStream& input, bool includeAlpha);
         };
 
     private:
+        int imageId;
         FileRawData rawData;
+        const FileRawData* invertedRawData; // Some image are the vertical flip of other images. This is the raw data of the inverted source image.
 
     public:
-        ImageMetaData(QDataStream& input, bool includeAlpha);
+        ImageMetaData(int imageId, QDataStream& input, bool includeAlpha);
+
+        void registerInvertedImage(const ImageMetaData& invertedSource);
 
         quint8 getBitmapId() const;
+        bool hasAlphaData() const;
+        qint32 getInvertedSourceImageOffset() const;
+        bool isExtern() const;
+        int getTotalDataLength() const;
+        int getNonAlphaDataLength() const;
+        int getAlphaDataLength() const;
+        int getBaseTileDataLength() const;
+        quint32 getDataOffset() const;
+        quint16 getType() const;
+        QSize getSize() const;
+        int getTileSize() const;
+        QPoint getPositionOffset() const;
+        QString getBinaryDescription() const;
+
+        QString getTitle() const;
+        QString getDescription() const;
 };
 
 #endif // IMAGEMETADATA_HPP

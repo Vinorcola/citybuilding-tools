@@ -12,6 +12,11 @@
 #include <QtWidgets/QVBoxLayout>
 
 #include "animation/Animation.hpp"
+#include "exception/FileException.hpp"
+#include "file/BitmapMetaData.hpp"
+#include "file/FileMetaData.hpp"
+#include "file/ImageMetaData.hpp"
+#include "file/ImageReader.hpp"
 #include "gui/dialog/aboutdialog.h"
 #include "gui/dialog/helpdialog.h"
 #include "gui/dialog/licencedialog.h"
@@ -24,7 +29,9 @@
 
 MainWindow::MainWindow() :
     QMainWindow(),
+    imageReader(nullptr),
     appname("SGReader"),
+    sgFile(nullptr),
     animation(nullptr)
 {
 	setWindowTitle(appname);
@@ -45,6 +52,12 @@ MainWindow::~MainWindow()
 {
     if (animation != nullptr) {
         delete animation;
+    }
+    if (sgFile != nullptr) {
+        delete sgFile;
+    }
+    if (imageReader != nullptr) {
+        delete imageReader;
     }
 }
 
@@ -104,16 +117,7 @@ void MainWindow::about() {
 
 void MainWindow::startAnimation(int startingImageIndex, int endingImageIndex)
 {
-    if (animation != nullptr) {
-        return;
-    }
-
-    QList<SgImage*> animationImages;
-    for (auto index(startingImageIndex); index <= endingImageIndex; index += AnimationController::IMAGE_ANIMATION_STEP) {
-        animationImages.append(sgFile->image(index - 1));
-    }
-    animation = new Animation(animationImages, *imageDisplay);
-    animation->start();
+    // TODO
 }
 
 void MainWindow::stopAnimation()
@@ -127,83 +131,89 @@ void MainWindow::stopAnimation()
     animation = nullptr;
 }
 
-void MainWindow::treeSelectionChanged() {
-	
-	QList<QTreeWidgetItem*> items = treeWidget->selectedItems();
-	if (items.size() != 1) {
-		qDebug("No selection");
-		clearImage();
-		return;
-	}
-	
-	QTreeWidgetItem *item = items.at(0);
-	
-	if (item->type() == ImageTreeItem::ItemType) {
-		ImageTreeItem *imageitem = (ImageTreeItem *)item;
-        loadImage(imageitem->getImageMetadata());
-	} else {
-		clearImage();
-	}
-}
-
-void MainWindow::loadFile(const QString &filename) {
-	treeWidget->clear();
-	treeWidget->setHeaderLabel("No file loaded");
-	clearImage();
-	
-	sgFile = new SgFile(filename);
-	if (!sgFile->load()) {
-		setWindowTitle(appname);
-		return;
-	}
-	
-	QFileInfo fi(filename);
-	
-	this->filename = filename;
-	setWindowTitle(QString("%0 - %1").arg(fi.fileName()).arg(appname));
-	
-	treeWidget->setHeaderLabel(fi.fileName());
-	
-	if (sgFile->bitmapCount() == 1 ||
-			sgFile->imageCount(0) == sgFile->totalImageCount()) {
-		// Just have a long list of images
-		int numImages = sgFile->totalImageCount();
-		for (int i = 0; i < numImages; i++) {
-            new ImageTreeItem(treeWidget, i, *sgFile->image(i));
-		}
-	} else {
-		// Split up by file
-		int numBitmaps = sgFile->bitmapCount();
-		for (int b = 0; b < numBitmaps; b++) {
-			QTreeWidgetItem *bitmapItem =
-				new QTreeWidgetItem(treeWidget,
-					QStringList(sgFile->getBitmapDescription(b)));
-			
-			int numImages = sgFile->imageCount(b);
-			for (int i = 0; i < numImages; i++) {
-                new ImageTreeItem(bitmapItem, i, *sgFile->image(b, i));
-			}
-		}
-	}
-	treeWidget->scrollToTop();
-}
-
-void MainWindow::loadImage(SgImage& img)
+void MainWindow::treeSelectionChanged()
 {
-    auto imageFile(img.getImage());
-    if (imageFile.isNull()) {
-        imageDisplay->clear();
-        imageDetails->setError(QString("Could not load image:\n%0").arg(img.errorMessage()));
-        saveAction->setEnabled(false);
+    QList<QTreeWidgetItem*> items = treeWidget->selectedItems();
+    if (items.size() != 1) {
+        qDebug("No selection");
+        clearImage();
+        return;
+    }
+
+    auto imageItem(dynamic_cast<ImageTreeItem*>(items.at(0)));
+    if (imageItem) {
+        loadImage(imageItem->getBitmapMetaData(), imageItem->getImageMetaData());
     }
     else {
-        imageDisplay->changeImage(QPixmap::fromImage(imageFile), img.getPositionOffset());
-        imageDetails->changeImageDetails(img.binaryDescription());
-        saveAction->setEnabled(true);
+        clearImage();
     }
 }
 
-void MainWindow::clearImage() {
+void MainWindow::loadFile(const QString &filename)
+{
+    treeWidget->clear();
+    treeWidget->setHeaderLabel("No file loaded");
+    clearImage();
+
+    if (sgFile != nullptr) {
+        delete sgFile;
+    }
+    sgFile = new FileMetaData(filename);
+
+    this->filename = sgFile->getFileInfo().fileName();
+    setWindowTitle(QString("%0 - %1").arg(this->filename).arg(appname));
+    treeWidget->setHeaderLabel(this->filename);
+
+    const int bitmapQuantity(sgFile->getBitmapQuantity());
+    if (bitmapQuantity == 1) {
+        // Just have a long list of images
+        auto& bitmapMetaData(sgFile->getBitmapMetaData(0));
+        const int imageQuantity(sgFile->getTotalImageQuantity());
+        for (int imageIndex(0); imageIndex < imageQuantity; ++imageIndex) {
+            new ImageTreeItem(treeWidget, bitmapMetaData, imageIndex, sgFile->getImageMetaData(imageIndex));
+        }
+    }
+    else {
+        // Split up by file
+        for (int bitmapIndex(0); bitmapIndex < bitmapQuantity; ++bitmapIndex) {
+            auto& bitmapMetaData(sgFile->getBitmapMetaData(bitmapIndex));
+            auto bitmapItem(new QTreeWidgetItem(
+                treeWidget,
+                QStringList(bitmapMetaData.getTitle())
+            ));
+
+            const int imageQuantity(bitmapMetaData.getRegisteredImageQuantity());
+            for (int imageIndex(0); imageIndex < imageQuantity; imageIndex++) {
+                new ImageTreeItem(bitmapItem, bitmapMetaData, imageIndex, bitmapMetaData.getImageMetaData(imageIndex));
+            }
+        }
+    }
+
+    treeWidget->scrollToTop();
+    if (imageReader != nullptr) {
+        delete imageReader;
+    }
+    imageReader = new ImageReader();
+}
+
+void MainWindow::loadImage(const BitmapMetaData& bitmapMetaData, const ImageMetaData& imageMetaData)
+{
+    try {
+        auto imageFile(imageReader->readImage(*sgFile, bitmapMetaData, imageMetaData));
+
+        imageDisplay->changeImage(QPixmap::fromImage(imageFile), imageMetaData.getPositionOffset());
+        imageDetails->changeImageDetails(imageMetaData.getBinaryDescription());
+        saveAction->setEnabled(true);
+    }
+    catch (FileException exception) {
+        imageDisplay->clear();
+        imageDetails->setError("Could not load image:\n" + exception.getMessage());
+        saveAction->setEnabled(false);
+    }
+}
+
+void MainWindow::clearImage()
+{
     imageDisplay->clear();
     imageDetails->clear();
     saveAction->setEnabled(false);

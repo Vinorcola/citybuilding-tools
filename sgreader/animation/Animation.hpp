@@ -5,8 +5,9 @@
 #include <QtCore/QObject>
 #include <QtGui/QPixmap>
 
+class BitmapMetaData;
 class ImageDisplay;
-class SgImage;
+class ImageMetaData;
 
 /**
  * This class runs an animation.
@@ -16,22 +17,23 @@ class Animation : public QObject
         Q_OBJECT
 
     private:
-        QList<SgImage*> images;
-        ImageDisplay& display;
+        const BitmapMetaData& bitmapMetaData;
+        QList<const ImageMetaData*> imagesMetaData;
         int timerId;
         int currentImageIndex;
 
     public:
-        Animation(const QList<SgImage*>& images, ImageDisplay& display);
+        Animation(const BitmapMetaData& bitmapMetaData, const QList<const ImageMetaData*>& imagesMetaData);
 
         void start();
 
         void stop();
 
+    signals:
+        void loadImage(const BitmapMetaData& bitmapMetaData, const ImageMetaData& imageMetaData);
+
     protected:
         virtual void timerEvent(QTimerEvent* event) override;
-
-        void updateImageDisplay();
 };
 
 #endif // ANIMATION_HPP

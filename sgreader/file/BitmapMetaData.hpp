@@ -13,11 +13,14 @@ class ImageMetaData;
  */
 class BitmapMetaData
 {
+        Q_DISABLE_COPY_MOVE(BitmapMetaData)
+
     public:
         static const int RAW_DATA_SIZE = 200;
 
     private:
         struct BitmapRawData {
+            Q_DISABLE_COPY_MOVE(BitmapRawData)
             char filename[65];
             char comment[51];
             quint32 width;
@@ -31,16 +34,25 @@ class BitmapMetaData
             // 12b, 3x int: if any is non-zero: internal image
             // 24 more misc bytes, most zero
             quint32 unknown[16];
+
+            explicit BitmapRawData(QDataStream& input);
         };
 
     private:
         BitmapRawData rawData;
         QList<ImageMetaData*> images;
+        QString fileName;
 
     public:
         BitmapMetaData(QDataStream& input);
 
         void registerImage(ImageMetaData* image);
+
+        const QString& getFileName() const;
+        int getRegisteredImageQuantity() const;
+        const ImageMetaData& getImageMetaData(int imageIndex) const;
+
+        QString getTitle() const;
 };
 
 #endif // BITMAPMETADATA_HPP

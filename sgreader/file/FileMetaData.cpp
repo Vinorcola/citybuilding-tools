@@ -41,8 +41,12 @@ FileMetaData::FileMetaData(const QFileInfo& fileInfo) :
     bool includeAlpha(doesIncludeAlpha());
     input.skipRawData(includeAlpha ? ImageMetaData::RAW_DATA_WITH_ALPHA_SIZE : ImageMetaData::RAW_DATA_SIZE); // Skip first image tha tis unused.
     for (int imageIndex(0); imageIndex < headerRawData.num_image_records; ++imageIndex) {
-        auto image(new ImageMetaData(input, includeAlpha));
+        auto image(new ImageMetaData(imageIndex + 1, input, includeAlpha));
         images.append(image);
+        auto invertedSourceImageOffset(image->getInvertedSourceImageOffset());
+        if (invertedSourceImageOffset != 0) {
+            image->registerInvertedImage(*images[imageIndex + invertedSourceImageOffset]);
+        }
         bitmaps[image->getBitmapId()]->registerImage(image);
     }
 }
@@ -53,6 +57,46 @@ FileMetaData::~FileMetaData()
 {
     qDeleteAll(images);
     qDeleteAll(bitmaps);
+}
+
+
+
+const QFileInfo& FileMetaData::getFileInfo() const
+{
+    return fileInfo;
+}
+
+
+
+int FileMetaData::getBitmapQuantity() const
+{
+    if (bitmaps.first()->getRegisteredImageQuantity() == images.length()) {
+        // All the images are set in the first bitmap.
+        return 1;
+    }
+
+    return bitmaps.length();
+}
+
+
+
+int FileMetaData::getTotalImageQuantity() const
+{
+    return images.length();
+}
+
+
+
+const BitmapMetaData& FileMetaData::getBitmapMetaData(int bitmapIndex) const
+{
+    return *bitmaps.at(bitmapIndex);
+}
+
+
+
+const ImageMetaData& FileMetaData::getImageMetaData(int imageIndex) const
+{
+    return *images.at(imageIndex);
 }
 
 
@@ -140,4 +184,11 @@ bool FileMetaData::doesIncludeAlpha() const
         default:
             return false;
     }
+}
+
+
+
+FileMetaData::HeaderRawData::HeaderRawData()
+{
+
 }
