@@ -97,11 +97,11 @@ quint32 ImageMetaData::getDataOffset() const
 
 
 
-quint16 ImageMetaData::getType() const
+ImageMetaData::Type ImageMetaData::getType() const
 {
     auto& workingRawData(invertedRawData == nullptr ? rawData : *invertedRawData);
 
-    return workingRawData.type;
+    return static_cast<Type>(workingRawData.type);
 }
 
 
@@ -128,10 +128,28 @@ QPoint ImageMetaData::getPositionOffset() const
 {
     auto& workingRawData(invertedRawData == nullptr ? rawData : *invertedRawData);
 
-    return {
-        rawData.invert_offset != 0 ? -workingRawData.width + workingRawData.position_offset_x : -workingRawData.position_offset_x,
-        -workingRawData.position_offset_y + 8 // 8 = A quarter of tile height
-    };
+    switch (static_cast<Type>(workingRawData.type)) {
+        case Type::Building:
+            return {
+                -workingRawData.width / 2,
+                -workingRawData.height + 15 // 15 = half of tile height
+            };
+
+        case Type::Decoration:
+            if (workingRawData.is_character) {
+                return {
+                    rawData.invert_offset != 0 ? -workingRawData.width + workingRawData.position_offset_x : -workingRawData.position_offset_x,
+                    -workingRawData.position_offset_y + 8 // 8 = A quarter of tile height
+                };
+            }
+            // No break wanted
+
+        default:
+            return {
+                -workingRawData.width / 2,
+                -workingRawData.height / 2
+            };
+    }
 }
 
 
@@ -171,7 +189,7 @@ QString ImageMetaData::getBinaryDescription() const
     content += BinaryFormatter::format("bitmap_id", workingRawData.bitmap_id) + "\n";
     content += BinaryFormatter::format("__unknown_i", workingRawData.unknown_i) + "\n";
     content += BinaryFormatter::format("__unknown_j", workingRawData.unknown_j) + "\n";
-    content += BinaryFormatter::format("__unknown_k", workingRawData.unknown_k) + "\n";
+    content += BinaryFormatter::format("is character", workingRawData.is_character) + "\n";
     content += BinaryFormatter::format("__unknown_l", workingRawData.unknown_l) + "\n";
     content += BinaryFormatter::format("alpha_offset", workingRawData.alpha_offset) + "\n";
     content += BinaryFormatter::format("alpha_length", workingRawData.alpha_length) + "\n";
@@ -231,7 +249,7 @@ ImageMetaData::FileRawData::FileRawData(QDataStream& input, bool includeAlpha)
     input >> bitmap_id;
     input >> unknown_i;
     input >> unknown_j;
-    input >> unknown_k;
+    input >> is_character;
     input >> unknown_l;
 
     if (includeAlpha) {

@@ -19,6 +19,18 @@ class ImageMetaData
         static const int RAW_DATA_SIZE = 64;
         static const int RAW_DATA_WITH_ALPHA_SIZE = 72;
 
+        enum class Type {
+            InterfaceIcon = 0,
+            StatusIcon = 1,
+            BorderedBackground = 10,
+            InterfaceButton = 12,
+            GreySquare = 13,
+            Building = 30,
+            Decoration = 256,
+            Unknwon = 257,
+            Font = 276,
+        };
+
     private:
         struct FileRawData {
             Q_DISABLE_COPY_MOVE(FileRawData)
@@ -45,7 +57,7 @@ class ImageMetaData
             quint8 bitmap_id;
             quint8 unknown_i; // 3 bytes
             quint8 unknown_j;
-            quint8 unknown_k;
+            quint8 is_character;
             quint32 unknown_l; // 4 zero bytes
             // For D6 and up SG3 versions: alpha masks
             quint32 alpha_offset;
@@ -73,7 +85,7 @@ class ImageMetaData
         int getAlphaDataLength() const;
         int getBaseTileDataLength() const;
         quint32 getDataOffset() const;
-        quint16 getType() const;
+        Type getType() const;
         QSize getSize() const;
         int getTileSize() const;
         QPoint getPositionOffset() const;

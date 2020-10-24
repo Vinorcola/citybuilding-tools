@@ -97,7 +97,7 @@ QString ImageReader::resolveFilePathIgnoringCase(const QDir& directory, const QS
 
 quint8* ImageReader::loadDataFromFile(const ImageMetaData& imageMetaData, QFile& file)
 {
-    auto imageDataLength(imageMetaData.getTotalDataLength());
+    auto imageDataLength(static_cast<unsigned int>(imageMetaData.getTotalDataLength()));
     auto data(new char[imageDataLength]);
     file.seek(imageMetaData.getDataOffset());
     auto readLength(static_cast<quint32>(file.read(data, imageDataLength)));
@@ -125,26 +125,26 @@ QImage ImageReader::writeImage(const ImageMetaData& imageMetaData, quint8* data)
     image.fill(Qt::transparent);
 
     switch (imageMetaData.getType()) {
-        case 0:
-        case 1:
-        case 10:
-        case 12:
-        case 13:
+        case ImageMetaData::Type::InterfaceIcon:
+        case ImageMetaData::Type::StatusIcon:
+        case ImageMetaData::Type::BorderedBackground:
+        case ImageMetaData::Type::InterfaceButton:
+        case ImageMetaData::Type::GreySquare:
             writePlainImage(imageMetaData, image, data);
             break;
 
-        case 30:
+        case ImageMetaData::Type::Building:
             writeIsometricImage(imageMetaData, image, data);
             break;
 
-        case 256:
-        case 257:
-        case 276:
+        case ImageMetaData::Type::Decoration:
+        case ImageMetaData::Type::Unknwon:
+        case ImageMetaData::Type::Font:
             writeSpriteImage(imageMetaData, image, data);
             break;
 
         default:
-            throw FileException("Image of unknown type: " + QString::number(imageMetaData.getType()) + ".");
+            throw FileException("Image of unknown type: " + QString::number(static_cast<int>(imageMetaData.getType())) + ".");
     }
 
     if (imageMetaData.hasAlphaData()) {
