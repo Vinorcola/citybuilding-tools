@@ -7,14 +7,19 @@ QT += core gui widgets
 
 # Input
 HEADERS += \
-    animation/Animation.hpp \
+    animation/AbstractAnimationModel.hpp \
+    animation/AnimatedImage.hpp \
+    animation/AnimationDialog.hpp \
+    animation/AnimationScene.hpp \
+    animation/BuildingAnimationModel.hpp \
     display/BinaryFormatter.hpp \
     exception/FileException.hpp \
+    exception/OutOfRangeException.hpp \
+    exception/RuntimeException.hpp \
     file/BitmapMetaData.hpp \
     file/FileMetaData.hpp \
     file/ImageMetaData.hpp \
     file/ImageReader.hpp \
-    gui/AnimationController.hpp \
     gui/dialog/aboutdialog.h \
     gui/dialog/helpdialog.h \
     gui/dialog/licencedialog.h \
@@ -34,14 +39,18 @@ HEADERS += \
     sgimage.h
 
 SOURCES += \
-    animation/Animation.cpp \
+    animation/AnimatedImage.cpp \
+    animation/AnimationDialog.cpp \
+    animation/AnimationScene.cpp \
+    animation/BuildingAnimationModel.cpp \
     display/BinaryFormatter.cpp \
     exception/FileException.cpp \
+    exception/OutOfRangeException.cpp \
+    exception/RuntimeException.cpp \
     file/BitmapMetaData.cpp \
     file/FileMetaData.cpp \
     file/ImageMetaData.cpp \
     file/ImageReader.cpp \
-    gui/AnimationController.cpp \
     gui/dialog/aboutdialog.cpp \
     gui/dialog/helpdialog.cpp \
     gui/dialog/licencedialog.cpp \

@@ -2,6 +2,7 @@
 
 #include <QtCore/QDataStream>
 
+#include "../exception/OutOfRangeException.hpp"
 #include "ImageMetaData.hpp"
 
 
@@ -40,6 +41,22 @@ int BitmapMetaData::getRegisteredImageQuantity() const
 const ImageMetaData& BitmapMetaData::getImageMetaData(int imageIndex) const
 {
     return *images.at(imageIndex);
+}
+
+
+
+const ImageMetaData& BitmapMetaData::getNextImage(const ImageMetaData& from) const
+{
+    for (auto iterator(images.begin()), end(images.end()); iterator != end; ++iterator) {
+        if (*iterator == &from) {
+            ++iterator;
+            if (iterator != end) {
+                return **iterator;
+            }
+        }
+    }
+
+    throw OutOfRangeException("Cannot find next image in bitmap.");
 }
 
 

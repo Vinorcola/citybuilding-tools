@@ -89,7 +89,9 @@ class ImageMetaData
         QSize getSize() const;
         int getTileSize() const;
         QPoint getPositionOffset() const;
+        QPoint getRawPositionOffset() const;
         QString getBinaryDescription() const;
+        int getAnimationLength() const;
 
         QString getTitle() const;
         QString getDescription() const;

@@ -154,6 +154,15 @@ QPoint ImageMetaData::getPositionOffset() const
 
 
 
+QPoint ImageMetaData::getRawPositionOffset() const
+{
+    auto& workingRawData(invertedRawData == nullptr ? rawData : *invertedRawData);
+
+    return { workingRawData.position_offset_x, workingRawData.position_offset_y };
+}
+
+
+
 QString ImageMetaData::getBinaryDescription() const
 {
     auto& workingRawData(invertedRawData == nullptr ? rawData : *invertedRawData);
@@ -195,6 +204,15 @@ QString ImageMetaData::getBinaryDescription() const
     content += BinaryFormatter::format("alpha_length", workingRawData.alpha_length) + "\n";
 
     return content;
+}
+
+
+
+int ImageMetaData::getAnimationLength() const
+{
+    auto& workingRawData(invertedRawData == nullptr ? rawData : *invertedRawData);
+
+    return workingRawData.image_quantity_in_animation;
 }
 
 

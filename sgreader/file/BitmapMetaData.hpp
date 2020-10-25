@@ -51,6 +51,7 @@ class BitmapMetaData
         const QString& getFileName() const;
         int getRegisteredImageQuantity() const;
         const ImageMetaData& getImageMetaData(int imageIndex) const;
+        const ImageMetaData& getNextImage(const ImageMetaData& from) const;
 
         QString getTitle() const;
 };

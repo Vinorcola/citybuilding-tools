@@ -11,7 +11,8 @@
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QVBoxLayout>
 
-#include "animation/Animation.hpp"
+#include "animation/AnimationDialog.hpp"
+#include "animation/BuildingAnimationModel.hpp"
 #include "exception/FileException.hpp"
 #include "file/BitmapMetaData.hpp"
 #include "file/FileMetaData.hpp"
@@ -21,7 +22,6 @@
 #include "gui/dialog/helpdialog.h"
 #include "gui/dialog/licencedialog.h"
 #include "gui/extractWizard/extractwizard.h"
-#include "gui/AnimationController.hpp"
 #include "gui/ImageDetails.hpp"
 #include "gui/ImageDisplay.hpp"
 #include "gui/ImageTree.hpp"
@@ -31,8 +31,7 @@ MainWindow::MainWindow() :
     QMainWindow(),
     imageReader(nullptr),
     appname("SGReader"),
-    sgFile(nullptr),
-    animation(nullptr)
+    sgFile(nullptr)
 {
 	setWindowTitle(appname);
 	setWindowIcon(QIcon(":/icon.png"));
@@ -50,9 +49,6 @@ MainWindow::MainWindow() :
 
 MainWindow::~MainWindow()
 {
-    if (animation != nullptr) {
-        delete animation;
-    }
     if (sgFile != nullptr) {
         delete sgFile;
     }
@@ -113,22 +109,6 @@ void MainWindow::about() {
 		"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 		"See the GNU General Public License or Help->Licence for more details.\n"));
     dialog.exec();
-}
-
-void MainWindow::startAnimation(int startingImageIndex, int endingImageIndex)
-{
-    // TODO
-}
-
-void MainWindow::stopAnimation()
-{
-    if (animation == nullptr) {
-        return;
-    }
-
-    animation->stop();
-    delete animation;
-    animation = nullptr;
 }
 
 void MainWindow::treeSelectionChanged()
@@ -238,14 +218,9 @@ void MainWindow::createChildren()
 
     imageDisplay = new ImageDisplay(this);
 
-    auto animationController(new AnimationController(this));
-    connect(animationController, &AnimationController::requiredAnimationStart, this, &MainWindow::startAnimation);
-    connect(animationController, &AnimationController::requiredAnimationEnd, this, &MainWindow::stopAnimation);
-
     auto mainWidget(new QWidget());
     auto layout(new QVBoxLayout());
     layout->addWidget(imageDisplay);
-    layout->addWidget(animationController);
     mainWidget->setLayout(layout);
     setCentralWidget(mainWidget);
 
@@ -264,6 +239,26 @@ void MainWindow::createActions() {
 	
 	extractAllAction = new QAction("&Batch extract...", this);
 	connect(extractAllAction, SIGNAL(triggered()), this, SLOT(extractAll()));
+
+    animationAction = new QAction("&Animation", this);
+    animationAction->setShortcut(tr("Ctrl+A"));
+    connect(animationAction, &QAction::triggered, this, [this]() {
+        auto selection(treeWidget->selectedItems());
+        if (selection.size() != 1) {
+            return;
+        }
+
+        auto imageItem(dynamic_cast<ImageTreeItem*>(selection.at(0)));
+        if (!imageItem) {
+            return;
+        }
+
+        if (imageItem->getImageMetaData().getType() == ImageMetaData::Type::Building) {
+            BuildingAnimationModel model(*imageReader, *sgFile, imageItem->getBitmapMetaData(), imageItem->getImageMetaData());
+            AnimationDialog dialog(this, model);
+            dialog.exec();
+        }
+    });
 	
 	exitAction = new QAction(tr("E&xit"), this);
     exitAction->setShortcut(tr("Ctrl+Q"));
@@ -288,6 +283,7 @@ void MainWindow::createMenu() {
 	menu->addAction(saveAction);
 	menu->addSeparator();
 	menu->addAction(extractAllAction);
+    menu->addAction(animationAction);
 	menu->addSeparator();
 	menu->addAction(exitAction);
 	

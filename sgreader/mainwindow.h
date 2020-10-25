@@ -3,7 +3,6 @@
 
 #include <QtWidgets/QMainWindow>
 
-class Animation;
 class BitmapMetaData;
 class FileMetaData;
 class ImageDetails;
@@ -27,11 +26,11 @@ class MainWindow : public QMainWindow
         QString appname;
         QImage image;
         FileMetaData* sgFile;
-        Animation* animation;
 
         QAction* openAction;
         QAction* saveAction;
         QAction* extractAllAction;
+        QAction* animationAction;
         QAction* exitAction;
 
         QAction* helpAction;
@@ -50,8 +49,6 @@ class MainWindow : public QMainWindow
         void help();
         void licence();
         void about();
-        void startAnimation(int startingImageIndex, int endingImageIndex);
-        void stopAnimation();
 
     private:
         void createChildren();
