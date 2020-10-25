@@ -4,6 +4,7 @@
 #include <QtWidgets/QMainWindow>
 
 class BitmapMetaData;
+class ControlPanel;
 class FileMetaData;
 class ImageDetails;
 class ImageLoader;
@@ -21,6 +22,7 @@ class MainWindow : public QMainWindow
         ImageLoader* imageLoader;
         ImageTree* treeWidget;
         ImageDetails* imageDetails;
+        ControlPanel* controlPanel;
         Viewer* imageViewer;
         QString filename;
         QString appname;

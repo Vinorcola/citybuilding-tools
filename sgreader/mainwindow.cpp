@@ -9,6 +9,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QSplitter>
+#include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 
 #include "animation/AnimationDialog.hpp"
@@ -23,6 +24,7 @@
 #include "gui/dialog/helpdialog.h"
 #include "gui/dialog/licencedialog.h"
 #include "gui/extractWizard/extractwizard.h"
+#include "gui/ControlPanel.hpp"
 #include "gui/ImageDetails.hpp"
 #include "gui/ImageTree.hpp"
 #include "gui/ImageTreeItem.hpp"
@@ -208,6 +210,11 @@ void MainWindow::createChildren()
     rightDock->setWidget(imageDetails);
     addDockWidget(Qt::RightDockWidgetArea, rightDock);
 
+    auto statusBar(new QStatusBar(this));
+    controlPanel = new ControlPanel(this);
+    statusBar->addWidget(controlPanel);
+    setStatusBar(statusBar);
+
     imageViewer = new Viewer(this, *imageLoader);
 
     auto mainWidget(new QWidget());
@@ -217,6 +224,7 @@ void MainWindow::createChildren()
     setCentralWidget(mainWidget);
 
     connect(treeWidget, &QTreeWidget::itemSelectionChanged, this, &MainWindow::treeSelectionChanged);
+    connect(controlPanel, &ControlPanel::zoomChanged, imageViewer, &Viewer::changeZoom);
 }
 
 void MainWindow::createActions() {
