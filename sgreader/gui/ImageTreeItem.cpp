@@ -6,13 +6,11 @@
 
 ImageTreeItem::ImageTreeItem(
     QTreeWidget* parent,
-    const BitmapMetaData& bitmapMetaData,
     int imageId,
     const ImageMetaData& imageMetaData
 ) :
     QTreeWidgetItem(parent, ItemType),
     imageId(imageId),
-    bitmapMetaData(bitmapMetaData),
     imageMetaData(imageMetaData)
 {
     setColumnData();
@@ -22,23 +20,14 @@ ImageTreeItem::ImageTreeItem(
 
 ImageTreeItem::ImageTreeItem(
     QTreeWidgetItem* parent,
-    const BitmapMetaData& bitmapMetaData,
     int imageId,
     const ImageMetaData& imageMetaData
 ) :
     QTreeWidgetItem(parent, ItemType),
     imageId(imageId),
-    bitmapMetaData(bitmapMetaData),
     imageMetaData(imageMetaData)
 {
     setColumnData();
-}
-
-
-
-const BitmapMetaData& ImageTreeItem::getBitmapMetaData() const
-{
-    return bitmapMetaData;
 }
 
 

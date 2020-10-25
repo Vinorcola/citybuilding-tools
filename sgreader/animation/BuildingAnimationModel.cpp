@@ -6,22 +6,18 @@
 
 
 
-BuildingAnimationModel::BuildingAnimationModel(
-    ImageReader& imageReader,
-    const FileMetaData& fileMetaData,
-    const BitmapMetaData& bitmapMetaData,
-    const ImageMetaData& imageMetaData
-) :
+BuildingAnimationModel::BuildingAnimationModel(ImageReader& imageReader, const ImageMetaData& imageMetaData) :
     AbstractAnimationModel(),
     imageReader(imageReader),
     animationMetaData(imageMetaData),
-    rootImage(QPixmap::fromImage(imageReader.readImage(fileMetaData, bitmapMetaData, imageMetaData))),
+    rootImage(QPixmap::fromImage(imageReader.readImage(imageMetaData))),
     animationImages()
 {
+    auto& bitmapMetaData(imageMetaData.getBitmapMetaData());
     const ImageMetaData* nextImage(&imageMetaData);
     for (int animationIndex(0); animationIndex < imageMetaData.getAnimationLength(); ++animationIndex) {
         nextImage = &bitmapMetaData.getNextImage(*nextImage);
-        animationImages.append(QPixmap::fromImage(imageReader.readImage(fileMetaData, bitmapMetaData, *nextImage)));
+        animationImages.append(QPixmap::fromImage(imageReader.readImage(*nextImage)));
     }
 }
 

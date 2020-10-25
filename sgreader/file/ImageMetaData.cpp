@@ -6,9 +6,10 @@
 
 
 
-ImageMetaData::ImageMetaData(int imageId, QDataStream& input, bool includeAlpha) :
-    imageId(imageId),
+ImageMetaData::ImageMetaData(const QList<BitmapMetaData*> bitmaps, int imageId, QDataStream& input, bool includeAlpha) :
     rawData(input, includeAlpha),
+    bitmapMetaData(*bitmaps.at(rawData.bitmap_id)),
+    imageId(imageId),
     invertedRawData(nullptr)
 {
 
@@ -19,6 +20,13 @@ ImageMetaData::ImageMetaData(int imageId, QDataStream& input, bool includeAlpha)
 void ImageMetaData::registerInvertedImage(const ImageMetaData& invertedSource)
 {
     invertedRawData = &invertedSource.rawData;
+}
+
+
+
+const BitmapMetaData& ImageMetaData::getBitmapMetaData() const
+{
+    return bitmapMetaData;
 }
 
 

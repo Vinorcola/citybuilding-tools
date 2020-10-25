@@ -56,7 +56,7 @@ class MainWindow : public QMainWindow
         void createActions();
 
         void loadFile(const QString &filename);
-        void loadImage(const BitmapMetaData& bitmapMetaData, const ImageMetaData& imageMetaData);
+        void loadImage(const ImageMetaData& imageMetaData);
         void clearImage();
 };
 

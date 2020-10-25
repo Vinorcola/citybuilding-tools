@@ -122,7 +122,7 @@ void MainWindow::treeSelectionChanged()
 
     auto imageItem(dynamic_cast<ImageTreeItem*>(items.at(0)));
     if (imageItem) {
-        loadImage(imageItem->getBitmapMetaData(), imageItem->getImageMetaData());
+        loadImage(imageItem->getImageMetaData());
     }
     else {
         clearImage();
@@ -147,10 +147,9 @@ void MainWindow::loadFile(const QString &filename)
     const int bitmapQuantity(sgFile->getBitmapQuantity());
     if (bitmapQuantity == 1) {
         // Just have a long list of images
-        auto& bitmapMetaData(sgFile->getBitmapMetaData(0));
         const int imageQuantity(sgFile->getTotalImageQuantity());
         for (int imageIndex(0); imageIndex < imageQuantity; ++imageIndex) {
-            new ImageTreeItem(treeWidget, bitmapMetaData, imageIndex, sgFile->getImageMetaData(imageIndex));
+            new ImageTreeItem(treeWidget, imageIndex, sgFile->getImageMetaData(imageIndex));
         }
     }
     else {
@@ -164,7 +163,7 @@ void MainWindow::loadFile(const QString &filename)
 
             const int imageQuantity(bitmapMetaData.getRegisteredImageQuantity());
             for (int imageIndex(0); imageIndex < imageQuantity; imageIndex++) {
-                new ImageTreeItem(bitmapItem, bitmapMetaData, imageIndex, bitmapMetaData.getImageMetaData(imageIndex));
+                new ImageTreeItem(bitmapItem, imageIndex, bitmapMetaData.getImageMetaData(imageIndex));
             }
         }
     }
@@ -176,10 +175,10 @@ void MainWindow::loadFile(const QString &filename)
     imageReader = new ImageReader();
 }
 
-void MainWindow::loadImage(const BitmapMetaData& bitmapMetaData, const ImageMetaData& imageMetaData)
+void MainWindow::loadImage(const ImageMetaData& imageMetaData)
 {
     try {
-        auto imageFile(imageReader->readImage(*sgFile, bitmapMetaData, imageMetaData));
+        auto imageFile(imageReader->readImage(imageMetaData));
 
         imageDisplay->changeImage(QPixmap::fromImage(imageFile), imageMetaData.getPositionOffset());
         imageDetails->changeImageDetails(imageMetaData.getBinaryDescription());
@@ -254,7 +253,7 @@ void MainWindow::createActions() {
         }
 
         if (imageItem->getImageMetaData().getType() == ImageMetaData::Type::Building) {
-            BuildingAnimationModel model(*imageReader, *sgFile, imageItem->getBitmapMetaData(), imageItem->getImageMetaData());
+            BuildingAnimationModel model(*imageReader, imageItem->getImageMetaData());
             AnimationDialog dialog(this, model);
             dialog.exec();
         }

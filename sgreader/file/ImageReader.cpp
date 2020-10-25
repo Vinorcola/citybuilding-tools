@@ -17,17 +17,14 @@ ImageReader::ImageReader() :
 
 
 
-QImage ImageReader::readImage(
-    const FileMetaData& fileMetaData,
-    const BitmapMetaData& bitmapMetaData,
-    const ImageMetaData& imageMetaData
-) {
+QImage ImageReader::readImage(const ImageMetaData& imageMetaData)
+{
     if (!imageCache.contains(&imageMetaData)) {
         if (imageMetaData.getTotalDataLength() == 0) {
             throw FileException("Empty image");
         }
 
-        QFile file(resolveContentFilePath(fileMetaData, bitmapMetaData, imageMetaData.isExtern()));
+        QFile file(resolveContentFilePath(imageMetaData.getBitmapMetaData(), imageMetaData.isExtern()));
         if (!file.open(QIODevice::ReadOnly)) {
             throw FileException("Could not open file \"" + file.fileName() + "\".");
         }
@@ -43,15 +40,13 @@ QImage ImageReader::readImage(
 
 
 
-QString ImageReader::resolveContentFilePath(
-    const FileMetaData& fileMetaData,
-    const BitmapMetaData& bitmapMetaData,
-    bool isImageExtern
-) {
+QString ImageReader::resolveContentFilePath(const BitmapMetaData& bitmapMetaData, bool isImageExtern)
+{
+    auto& metaDataFileInfo(bitmapMetaData.getFileMetaData().getFileInfo());
     QString fileName(
         isImageExtern ?
             bitmapMetaData.getFileName() :
-            fileMetaData.getFileInfo().fileName()
+            metaDataFileInfo.fileName()
     );
 
     // Change the extension to .555
@@ -61,7 +56,7 @@ QString ImageReader::resolveContentFilePath(
     }
     fileName.replace(position + 1, 3, "555");
 
-    QDir directory(fileMetaData.getFileInfo().dir());
+    QDir directory(metaDataFileInfo.dir());
     QString path(resolveFilePathIgnoringCase(directory, fileName));
     if (!path.isEmpty()) {
         return path;

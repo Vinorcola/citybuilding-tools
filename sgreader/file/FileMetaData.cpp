@@ -33,15 +33,15 @@ FileMetaData::FileMetaData(const QFileInfo& fileInfo) :
 
     // Load bitmaps.
     for (int bitmapIndex(0); bitmapIndex < headerRawData.num_bitmap_records; ++bitmapIndex) {
-        bitmaps.append(new BitmapMetaData(input));
+        bitmaps.append(new BitmapMetaData(*this, input));
     }
     file.seek(HEADER_RAW_DATA_SIZE + getMaxBitmapsQuantity() * BitmapMetaData::RAW_DATA_SIZE);
 
     // Load images.
     bool includeAlpha(doesIncludeAlpha());
-    input.skipRawData(includeAlpha ? ImageMetaData::RAW_DATA_WITH_ALPHA_SIZE : ImageMetaData::RAW_DATA_SIZE); // Skip first image tha tis unused.
+    input.skipRawData(includeAlpha ? ImageMetaData::RAW_DATA_WITH_ALPHA_SIZE : ImageMetaData::RAW_DATA_SIZE); // Skip first image that is unused.
     for (int imageIndex(0); imageIndex < headerRawData.num_image_records; ++imageIndex) {
-        auto image(new ImageMetaData(imageIndex + 1, input, includeAlpha));
+        auto image(new ImageMetaData(bitmaps, imageIndex + 1, input, includeAlpha));
         images.append(image);
         auto invertedSourceImageOffset(image->getInvertedSourceImageOffset());
         if (invertedSourceImageOffset != 0) {

@@ -5,6 +5,8 @@
 #include <QtCore/QSize>
 #include <QtCore/QtGlobal>
 
+class BitmapMetaData;
+
 /**
  * @brief Represent the meta-data of an image.
  *
@@ -67,15 +69,17 @@ class ImageMetaData
         };
 
     private:
-        int imageId;
         FileRawData rawData;
+        const BitmapMetaData& bitmapMetaData;
+        int imageId;
         const FileRawData* invertedRawData; // Some image are the vertical flip of other images. This is the raw data of the inverted source image.
 
     public:
-        ImageMetaData(int imageId, QDataStream& input, bool includeAlpha);
+        ImageMetaData(const QList<BitmapMetaData*> bitmaps, int imageId, QDataStream& input, bool includeAlpha);
 
         void registerInvertedImage(const ImageMetaData& invertedSource);
 
+        const BitmapMetaData& getBitmapMetaData() const;
         quint8 getBitmapId() const;
         bool hasAlphaData() const;
         qint32 getInvertedSourceImageOffset() const;

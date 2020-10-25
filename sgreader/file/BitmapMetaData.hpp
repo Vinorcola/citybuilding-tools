@@ -4,6 +4,7 @@
 #include <QtCore/QList>
 #include <QtCore/QtGlobal>
 
+class FileMetaData;
 class ImageMetaData;
 
 /**
@@ -40,14 +41,16 @@ class BitmapMetaData
 
     private:
         BitmapRawData rawData;
+        const FileMetaData& fileMetaData;
         QList<ImageMetaData*> images;
         QString fileName;
 
     public:
-        BitmapMetaData(QDataStream& input);
+        BitmapMetaData(const FileMetaData& fileMetaData, QDataStream& input);
 
         void registerImage(ImageMetaData* image);
 
+        const FileMetaData& getFileMetaData() const;
         const QString& getFileName() const;
         int getRegisteredImageQuantity() const;
         const ImageMetaData& getImageMetaData(int imageIndex) const;

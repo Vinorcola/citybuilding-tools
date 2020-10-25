@@ -1,5 +1,6 @@
 #include "sgimage.h"
 
+#include <QtCore/QDebug>
 #include <QtCore/QFile>
 #include <QtCore/QDataStream>
 
@@ -178,7 +179,7 @@ QString SgImage::errorMessage() const {
 }
 
 void SgImage::setError(const QString &message) {
-    qDebug(message.toLatin1().constData());
+    qDebug() << message;
 	error = message;
 }
 

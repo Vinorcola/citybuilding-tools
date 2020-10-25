@@ -7,8 +7,9 @@
 
 
 
-BitmapMetaData::BitmapMetaData(QDataStream& input) :
+BitmapMetaData::BitmapMetaData(const FileMetaData& fileMetaData, QDataStream& input) :
     rawData(input),
+    fileMetaData(fileMetaData),
     images(),
     fileName(rawData.filename)
 {
@@ -20,6 +21,13 @@ BitmapMetaData::BitmapMetaData(QDataStream& input) :
 void BitmapMetaData::registerImage(ImageMetaData* image)
 {
     images.append(image);
+}
+
+
+
+const FileMetaData& BitmapMetaData::getFileMetaData() const
+{
+    return fileMetaData;
 }
 
 

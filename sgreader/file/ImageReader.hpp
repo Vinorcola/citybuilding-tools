@@ -6,7 +6,6 @@
 #include <QtGui/QImage>
 
 class BitmapMetaData;
-class FileMetaData;
 class ImageMetaData;
 
 class ImageReader
@@ -17,19 +16,11 @@ class ImageReader
     public:
         ImageReader();
 
-        QImage readImage(
-            const FileMetaData& fileMetaData,
-            const BitmapMetaData& bitmapMetaData,
-            const ImageMetaData& imageMetaData
-        );
+        QImage readImage(const ImageMetaData& imageMetaData);
 
     private:
         // File loading.
-        static QString resolveContentFilePath(
-            const FileMetaData& fileMetaData,
-            const BitmapMetaData& bitmapMetaData,
-            bool isImageExtern
-        );
+        static QString resolveContentFilePath(const BitmapMetaData& bitmapMetaData, bool isImageExtern);
         static QString resolveFilePathIgnoringCase(const QDir& directory, const QString& fileName);
         // Image writing.
         // -- Load image data from file.

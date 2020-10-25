@@ -22,12 +22,7 @@ class BuildingAnimationModel : public AbstractAnimationModel
         QList<QPixmap> animationImages;
 
     public:
-        BuildingAnimationModel(
-            ImageReader& imageReader,
-            const FileMetaData& fileMetaData,
-            const BitmapMetaData& bitmapMetaData,
-            const ImageMetaData& imageMetaData
-        );
+        BuildingAnimationModel(ImageReader& imageReader, const ImageMetaData& imageMetaData);
 
         QString getTitle(const QModelIndex& index) const;
         virtual QPixmap getPixmap(const QModelIndex &index) const override;
