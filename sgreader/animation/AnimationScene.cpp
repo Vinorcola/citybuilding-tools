@@ -2,8 +2,8 @@
 
 #include <QtWidgets/QGraphicsPixmapItem>
 
+#include "../display/image/AnimatedImageGraphics.hpp"
 #include "AbstractAnimationModel.hpp"
-#include "AnimatedImage.hpp"
 
 
 
@@ -23,7 +23,7 @@ AnimationScene::AnimationScene(const AbstractAnimationModel& model) :
 
     // Check for children.
     if (model.hasChildren(rootIndex)) {
-        animatedItem = new AnimatedImage();
+        animatedItem = new AnimatedImageGraphics(nullptr);
         addItem(animatedItem);
         animationLength = model.rowCount(rootIndex);
         for (int row(0); row < animationLength; ++row) {

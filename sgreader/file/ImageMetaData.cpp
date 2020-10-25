@@ -140,14 +140,14 @@ QPoint ImageMetaData::getPositionOffset() const
         case Type::Building:
             return {
                 -workingRawData.width / 2,
-                -workingRawData.height + 15 // 15 = half of tile height
+                -workingRawData.height
             };
 
         case Type::Decoration:
             if (workingRawData.is_character) {
                 return {
                     rawData.invert_offset != 0 ? -workingRawData.width + workingRawData.position_offset_x : -workingRawData.position_offset_x,
-                    -workingRawData.position_offset_y + 8 // 8 = A quarter of tile height
+                    -workingRawData.position_offset_y - 10 // 10 = Third of tile height
                 };
             }
             // No break wanted
@@ -221,6 +221,22 @@ int ImageMetaData::getAnimationLength() const
     auto& workingRawData(invertedRawData == nullptr ? rawData : *invertedRawData);
 
     return workingRawData.image_quantity_in_animation;
+}
+
+
+
+bool ImageMetaData::isBuilding() const
+{
+    return getType() == Type::Building;
+}
+
+
+
+bool ImageMetaData::isCharacter() const
+{
+    auto& workingRawData(invertedRawData == nullptr ? rawData : *invertedRawData);
+
+    return workingRawData.is_character;
 }
 
 

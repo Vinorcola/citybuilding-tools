@@ -40,6 +40,13 @@ QImage ImageLoader::loadImage(const ImageMetaData& imageMetaData)
 
 
 
+void ImageLoader::clearCache()
+{
+    imageCache.clear();
+}
+
+
+
 QString ImageLoader::resolveContentFilePath(const BitmapMetaData& bitmapMetaData, bool isImageExtern)
 {
     auto& metaDataFileInfo(bitmapMetaData.getFileMetaData().getFileInfo());

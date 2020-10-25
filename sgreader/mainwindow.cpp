@@ -14,6 +14,7 @@
 #include "animation/AnimationDialog.hpp"
 #include "animation/BuildingAnimationModel.hpp"
 #include "exception/FileException.hpp"
+#include "display/image/Viewer.hpp"
 #include "file/BitmapMetaData.hpp"
 #include "file/FileMetaData.hpp"
 #include "file/ImageLoader.hpp"
@@ -23,13 +24,12 @@
 #include "gui/dialog/licencedialog.h"
 #include "gui/extractWizard/extractwizard.h"
 #include "gui/ImageDetails.hpp"
-#include "gui/ImageDisplay.hpp"
 #include "gui/ImageTree.hpp"
 #include "gui/ImageTreeItem.hpp"
 
 MainWindow::MainWindow() :
     QMainWindow(),
-    imageReader(nullptr),
+    imageLoader(new ImageLoader()),
     appname("SGReader"),
     sgFile(nullptr)
 {
@@ -52,9 +52,7 @@ MainWindow::~MainWindow()
     if (sgFile != nullptr) {
         delete sgFile;
     }
-    if (imageReader != nullptr) {
-        delete imageReader;
-    }
+    delete imageLoader;
 }
 
 /* Slots */
@@ -169,23 +167,18 @@ void MainWindow::loadFile(const QString &filename)
     }
 
     treeWidget->scrollToTop();
-    if (imageReader != nullptr) {
-        delete imageReader;
-    }
-    imageReader = new ImageLoader();
+    imageLoader->clearCache();
 }
 
 void MainWindow::loadImage(const ImageMetaData& imageMetaData)
 {
     try {
-        auto imageFile(imageReader->loadImage(imageMetaData));
-
-        imageDisplay->changeImage(QPixmap::fromImage(imageFile), imageMetaData.getPositionOffset());
+        imageViewer->changeImage(imageMetaData);
         imageDetails->changeImageDetails(imageMetaData.getBinaryDescription());
         saveAction->setEnabled(true);
     }
     catch (FileException exception) {
-        imageDisplay->clear();
+        imageViewer->clear();
         imageDetails->setError("Could not load image:\n" + exception.getMessage());
         saveAction->setEnabled(false);
     }
@@ -193,7 +186,7 @@ void MainWindow::loadImage(const ImageMetaData& imageMetaData)
 
 void MainWindow::clearImage()
 {
-    imageDisplay->clear();
+    imageViewer->clear();
     imageDetails->clear();
     saveAction->setEnabled(false);
 }
@@ -215,11 +208,11 @@ void MainWindow::createChildren()
     rightDock->setWidget(imageDetails);
     addDockWidget(Qt::RightDockWidgetArea, rightDock);
 
-    imageDisplay = new ImageDisplay(this);
+    imageViewer = new Viewer(this, *imageLoader);
 
     auto mainWidget(new QWidget());
     auto layout(new QVBoxLayout());
-    layout->addWidget(imageDisplay);
+    layout->addWidget(imageViewer);
     mainWidget->setLayout(layout);
     setCentralWidget(mainWidget);
 
@@ -253,7 +246,7 @@ void MainWindow::createActions() {
         }
 
         if (imageItem->getImageMetaData().getType() == ImageMetaData::Type::Building) {
-            BuildingAnimationModel model(*imageReader, imageItem->getImageMetaData());
+            BuildingAnimationModel model(*imageLoader, imageItem->getImageMetaData());
             AnimationDialog dialog(this, model);
             dialog.exec();
         }

@@ -6,22 +6,22 @@
 class BitmapMetaData;
 class FileMetaData;
 class ImageDetails;
-class ImageDisplay;
 class ImageLoader;
 class ImageMetaData;
 class ImageTree;
 class QAction;
 class QTreeWidget;
+class Viewer;
 
 class MainWindow : public QMainWindow
 {
         Q_OBJECT
 
     private:
-        ImageLoader* imageReader;
+        ImageLoader* imageLoader;
         ImageTree* treeWidget;
         ImageDetails* imageDetails;
-        ImageDisplay* imageDisplay;
+        Viewer* imageViewer;
         QString filename;
         QString appname;
         QImage image;

@@ -5,7 +5,7 @@
 #include <QtWidgets/QGraphicsScene>
 
 class AbstractAnimationModel;
-class AnimatedImage;
+class AnimatedImageGraphics;
 
 class AnimationScene : public QGraphicsScene
 {
@@ -13,7 +13,7 @@ class AnimationScene : public QGraphicsScene
 
     private:
         int timerId;
-        AnimatedImage* animatedItem;
+        AnimatedImageGraphics* animatedItem;
         int animationLength;
         int currentAnimationIndex;
 

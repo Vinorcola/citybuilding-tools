@@ -17,6 +17,7 @@ class ImageLoader
         ImageLoader();
 
         QImage loadImage(const ImageMetaData& imageMetaData);
+        void clearCache();
 
     private:
         // File loading.
