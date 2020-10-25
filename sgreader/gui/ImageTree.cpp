@@ -28,7 +28,7 @@ void ImageTree::keyPressEvent(QKeyEvent* event)
         auto selectionIndex(selectionModel()->currentIndex());
         auto newSelectionIndex(selectionIndex.siblingAtRow(selectionIndex.row() + AnimationController::IMAGE_ANIMATION_STEP));
         if (!newSelectionIndex.isValid()) {
-            newSelectionIndex = selectionIndex.siblingAtRow(model()->rowCount() - 1);
+            newSelectionIndex = selectionIndex.siblingAtRow(model()->rowCount(selectionIndex.parent()) - 1);
         }
         selectionModel()->setCurrentIndex(newSelectionIndex, QItemSelectionModel::SelectCurrent);
     }
