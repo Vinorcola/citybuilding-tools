@@ -2,19 +2,19 @@
 
 #include <cassert>
 
+#include "../file/ImageMetaData.hpp"
 #include "../gui/ImageDisplay.hpp"
-#include "../sgimage.h"
 
 
 
-Animation::Animation(const QList<SgImage*>& images, ImageDisplay& display) :
-    images(images),
-    display(display),
+Animation::Animation(const BitmapMetaData& bitmapMetaData, const QList<const ImageMetaData*>& imagesMetaData) :
+    bitmapMetaData(bitmapMetaData),
+    imagesMetaData(imagesMetaData),
     timerId(0),
     currentImageIndex(0)
 {
-    assert(images.length() > 0);
-    updateImageDisplay();
+    assert(imagesMetaData.length() > 0);
+    emit loadImage(bitmapMetaData, *imagesMetaData.first());
 }
 
 
@@ -38,14 +38,6 @@ void Animation::stop()
 
 void Animation::timerEvent(QTimerEvent* /*event*/)
 {
-    currentImageIndex = (currentImageIndex + 1) % images.length();
-    updateImageDisplay();
-}
-
-
-
-void Animation::updateImageDisplay()
-{
-    auto image(images.at(currentImageIndex));
-    display.changeImage(QPixmap::fromImage(image->getImage()), image->getPositionOffset());
+    currentImageIndex = (currentImageIndex + 1) % imagesMetaData.length();
+    emit loadImage(bitmapMetaData, *imagesMetaData.at(currentImageIndex));
 }

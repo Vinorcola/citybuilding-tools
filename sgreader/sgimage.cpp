@@ -484,6 +484,11 @@ void SgImage::set555Pixel(QImage *img, int x, int y, quint16 color) {
 	// Blue: bits 1-5, should go to bits 1-8
 	rgb |= ((color & 0x1f) << 3) | ((color & 0x1c) >> 2);
 	
+    // Transform red to transparent black (for shadows).
+    if (rgb == 0xffff0000) {
+        rgb = 0x88000000;
+    }
+
 	img->setPixel(x, y, rgb);
 }
 

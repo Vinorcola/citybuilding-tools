@@ -3,61 +3,64 @@
 
 #include <QtWidgets/QMainWindow>
 
-#include "sgfile.h"
-#include "sgimage.h"
-
 class Animation;
+class BitmapMetaData;
+class FileMetaData;
 class ImageDetails;
 class ImageDisplay;
+class ImageMetaData;
+class ImageReader;
 class ImageTree;
 class QAction;
 class QTreeWidget;
 
-class MainWindow : public QMainWindow {
-	Q_OBJECT
-	
-	public:
-		MainWindow();
+class MainWindow : public QMainWindow
+{
+        Q_OBJECT
+
+    private:
+        ImageReader* imageReader;
+        ImageTree* treeWidget;
+        ImageDetails* imageDetails;
+        ImageDisplay* imageDisplay;
+        QString filename;
+        QString appname;
+        QImage image;
+        FileMetaData* sgFile;
+        Animation* animation;
+
+        QAction* openAction;
+        QAction* saveAction;
+        QAction* extractAllAction;
+        QAction* exitAction;
+
+        QAction* helpAction;
+        QAction* licenceAction;
+        QAction* aboutAction;
+
+    public:
+        MainWindow();
         virtual ~MainWindow();
-		
-	
-	private slots:
-		void openFile();
-		void saveFile();
-		void extractAll();
-		void treeSelectionChanged();
-		void help();
-		void licence();
-		void about();
+
+    private slots:
+        void openFile();
+        void saveFile();
+        void extractAll();
+        void treeSelectionChanged();
+        void help();
+        void licence();
+        void about();
         void startAnimation(int startingImageIndex, int endingImageIndex);
         void stopAnimation();
-		
-	private:
-		void createChildren();
-		void createMenu();
-		void createActions();
-		
-		void loadFile(const QString &filename);
-        void loadImage(SgImage& image);
-		void clearImage();
-		
-        ImageTree *treeWidget;
-        ImageDetails *imageDetails;
-        ImageDisplay* imageDisplay;
-		QString filename;
-		QString appname;
-		QImage image;
-		SgFile *sgFile;
-        Animation* animation;
-		
-		QAction *openAction;
-		QAction *saveAction;
-		QAction *extractAllAction;
-		QAction *exitAction;
-		
-		QAction *helpAction;
-		QAction *licenceAction;
-		QAction *aboutAction;
+
+    private:
+        void createChildren();
+        void createMenu();
+        void createActions();
+
+        void loadFile(const QString &filename);
+        void loadImage(const BitmapMetaData& bitmapMetaData, const ImageMetaData& imageMetaData);
+        void clearImage();
 };
 
 #endif /* MAINWINDOW_H */
