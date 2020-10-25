@@ -18,8 +18,8 @@ HEADERS += \
     exception/RuntimeException.hpp \
     file/BitmapMetaData.hpp \
     file/FileMetaData.hpp \
+    file/ImageLoader.hpp \
     file/ImageMetaData.hpp \
-    file/ImageReader.hpp \
     gui/dialog/aboutdialog.h \
     gui/dialog/helpdialog.h \
     gui/dialog/licencedialog.h \
@@ -49,8 +49,8 @@ SOURCES += \
     exception/RuntimeException.cpp \
     file/BitmapMetaData.cpp \
     file/FileMetaData.cpp \
+    file/ImageLoader.cpp \
     file/ImageMetaData.cpp \
-    file/ImageReader.cpp \
     gui/dialog/aboutdialog.cpp \
     gui/dialog/helpdialog.cpp \
     gui/dialog/licencedialog.cpp \

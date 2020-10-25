@@ -8,21 +8,21 @@
 
 class BitmapMetaData;
 class FileMetaData;
+class ImageLoader;
 class ImageMetaData;
-class ImageReader;
 
 class BuildingAnimationModel : public AbstractAnimationModel
 {
         Q_OBJECT
 
     private:
-        ImageReader& imageReader;
+        ImageLoader& imageLoader;
         const ImageMetaData& animationMetaData;
         QPixmap rootImage;
         QList<QPixmap> animationImages;
 
     public:
-        BuildingAnimationModel(ImageReader& imageReader, const ImageMetaData& imageMetaData);
+        BuildingAnimationModel(ImageLoader& imageLoader, const ImageMetaData& imageMetaData);
 
         QString getTitle(const QModelIndex& index) const;
         virtual QPixmap getPixmap(const QModelIndex &index) const override;

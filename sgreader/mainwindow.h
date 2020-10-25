@@ -7,8 +7,8 @@ class BitmapMetaData;
 class FileMetaData;
 class ImageDetails;
 class ImageDisplay;
+class ImageLoader;
 class ImageMetaData;
-class ImageReader;
 class ImageTree;
 class QAction;
 class QTreeWidget;
@@ -18,7 +18,7 @@ class MainWindow : public QMainWindow
         Q_OBJECT
 
     private:
-        ImageReader* imageReader;
+        ImageLoader* imageReader;
         ImageTree* treeWidget;
         ImageDetails* imageDetails;
         ImageDisplay* imageDisplay;

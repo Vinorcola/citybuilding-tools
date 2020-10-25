@@ -1,5 +1,5 @@
-#ifndef IMAGEREADER_HPP
-#define IMAGEREADER_HPP
+#ifndef IMAGELOADER_HPP
+#define IMAGELOADER_HPP
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QHash>
@@ -8,15 +8,15 @@
 class BitmapMetaData;
 class ImageMetaData;
 
-class ImageReader
+class ImageLoader
 {
     private:
         QHash<const ImageMetaData*, QImage> imageCache;
 
     public:
-        ImageReader();
+        ImageLoader();
 
-        QImage readImage(const ImageMetaData& imageMetaData);
+        QImage loadImage(const ImageMetaData& imageMetaData);
 
     private:
         // File loading.
@@ -47,4 +47,4 @@ class ImageReader
         static void writeAlphaPixel(QImage& image, const QPoint& position, quint8 color);
 };
 
-#endif // IMAGEREADER_HPP
+#endif // IMAGELOADER_HPP

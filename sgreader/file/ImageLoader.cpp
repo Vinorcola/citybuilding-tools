@@ -1,4 +1,4 @@
-#include "ImageReader.hpp"
+#include "ImageLoader.hpp"
 
 #include <QtCore/QDir>
 
@@ -9,7 +9,7 @@
 
 
 
-ImageReader::ImageReader() :
+ImageLoader::ImageLoader() :
     imageCache()
 {
 
@@ -17,7 +17,7 @@ ImageReader::ImageReader() :
 
 
 
-QImage ImageReader::readImage(const ImageMetaData& imageMetaData)
+QImage ImageLoader::loadImage(const ImageMetaData& imageMetaData)
 {
     if (!imageCache.contains(&imageMetaData)) {
         if (imageMetaData.getTotalDataLength() == 0) {
@@ -40,7 +40,7 @@ QImage ImageReader::readImage(const ImageMetaData& imageMetaData)
 
 
 
-QString ImageReader::resolveContentFilePath(const BitmapMetaData& bitmapMetaData, bool isImageExtern)
+QString ImageLoader::resolveContentFilePath(const BitmapMetaData& bitmapMetaData, bool isImageExtern)
 {
     auto& metaDataFileInfo(bitmapMetaData.getFileMetaData().getFileInfo());
     QString fileName(
@@ -75,7 +75,7 @@ QString ImageReader::resolveContentFilePath(const BitmapMetaData& bitmapMetaData
 
 
 
-QString ImageReader::resolveFilePathIgnoringCase(const QDir& directory, const QString& fileName)
+QString ImageLoader::resolveFilePathIgnoringCase(const QDir& directory, const QString& fileName)
 {
     QString lowerFileName(fileName.toLower());
 
@@ -90,7 +90,7 @@ QString ImageReader::resolveFilePathIgnoringCase(const QDir& directory, const QS
 
 
 
-quint8* ImageReader::loadDataFromFile(const ImageMetaData& imageMetaData, QFile& file)
+quint8* ImageLoader::loadDataFromFile(const ImageMetaData& imageMetaData, QFile& file)
 {
     auto imageDataLength(static_cast<unsigned int>(imageMetaData.getTotalDataLength()));
     auto data(new char[imageDataLength]);
@@ -114,7 +114,7 @@ quint8* ImageReader::loadDataFromFile(const ImageMetaData& imageMetaData, QFile&
 
 
 
-QImage ImageReader::writeImage(const ImageMetaData& imageMetaData, quint8* data)
+QImage ImageLoader::writeImage(const ImageMetaData& imageMetaData, quint8* data)
 {
     QImage image(imageMetaData.getSize(), QImage::Format_ARGB32);
     image.fill(Qt::transparent);
@@ -156,7 +156,7 @@ QImage ImageReader::writeImage(const ImageMetaData& imageMetaData, quint8* data)
 
 
 
-void ImageReader::writePlainImage(const ImageMetaData& imageMetaData, QImage& image, quint8* data)
+void ImageLoader::writePlainImage(const ImageMetaData& imageMetaData, QImage& image, quint8* data)
 {
     // Check whether the image data is OK
     auto size(imageMetaData.getSize());
@@ -174,7 +174,7 @@ void ImageReader::writePlainImage(const ImageMetaData& imageMetaData, QImage& im
 
 
 
-void ImageReader::writeIsometricImage(const ImageMetaData& imageMetaData, QImage& image, quint8* data)
+void ImageLoader::writeIsometricImage(const ImageMetaData& imageMetaData, QImage& image, quint8* data)
 {
     writeIsometricBase(imageMetaData, image, data);
     writeTransparentImage(
@@ -187,14 +187,14 @@ void ImageReader::writeIsometricImage(const ImageMetaData& imageMetaData, QImage
 
 
 
-void ImageReader::writeSpriteImage(const ImageMetaData& imageMetaData, QImage& image, quint8* data)
+void ImageLoader::writeSpriteImage(const ImageMetaData& imageMetaData, QImage& image, quint8* data)
 {
     writeTransparentImage(imageMetaData, image, data, imageMetaData.getNonAlphaDataLength());
 }
 
 
 
-void ImageReader::writeAlphaMask(const ImageMetaData& imageMetaData, QImage& image, const quint8* data)
+void ImageLoader::writeAlphaMask(const ImageMetaData& imageMetaData, QImage& image, const quint8* data)
 {
     const int width(imageMetaData.getSize().width());
     const int length(imageMetaData.getAlphaDataLength());
@@ -232,7 +232,7 @@ const int ISOMETRIC_TILE_BYTES(1800);
 const int ISOMETRIC_LARGE_TILE_WIDTH(78);
 const int ISOMETRIC_LARGE_TILE_HEIGHT(40);
 const int ISOMETRIC_LARGE_TILE_BYTES(3200);
-void ImageReader::writeIsometricBase(const ImageMetaData& imageMetaData, QImage& image, const quint8* data)
+void ImageLoader::writeIsometricBase(const ImageMetaData& imageMetaData, QImage& image, const quint8* data)
 {
     const int width(imageMetaData.getSize().width());
     const int height((width + 2) / 2); // 58 -> 30, 118 -> 60, etc
@@ -303,7 +303,7 @@ void ImageReader::writeIsometricBase(const ImageMetaData& imageMetaData, QImage&
 
 
 
-void ImageReader::writeIsometricTile(QImage& image, const quint8* data, int offsetX, int offsetY, int tileWidth, int tileHeight)
+void ImageLoader::writeIsometricTile(QImage& image, const quint8* data, int offsetX, int offsetY, int tileWidth, int tileHeight)
 {
     const int halfHeight(tileHeight / 2);
 
@@ -326,7 +326,7 @@ void ImageReader::writeIsometricTile(QImage& image, const quint8* data, int offs
 
 
 
-void ImageReader::writeTransparentImage(const ImageMetaData& imageMetaData, QImage& image, const quint8* data, int length)
+void ImageLoader::writeTransparentImage(const ImageMetaData& imageMetaData, QImage& image, const quint8* data, int length)
 {
     const int width(imageMetaData.getSize().width());
 
@@ -356,7 +356,7 @@ void ImageReader::writeTransparentImage(const ImageMetaData& imageMetaData, QIma
 
 
 
-void ImageReader::writePixel(QImage& image, const QPoint& position, quint16 color)
+void ImageLoader::writePixel(QImage& image, const QPoint& position, quint16 color)
 {
     if (color == 0xf81f) {
         // ???
@@ -384,7 +384,7 @@ void ImageReader::writePixel(QImage& image, const QPoint& position, quint16 colo
 
 
 
-void ImageReader::writeAlphaPixel(QImage& image, const QPoint& position, quint8 color)
+void ImageLoader::writeAlphaPixel(QImage& image, const QPoint& position, quint8 color)
 {
     /* Only the first five bits of the alpha channel are used */
     quint8 alpha = ((color & 0x1f) << 3) | ((color & 0x1c) >> 2);

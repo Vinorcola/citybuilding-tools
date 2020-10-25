@@ -16,8 +16,8 @@
 #include "exception/FileException.hpp"
 #include "file/BitmapMetaData.hpp"
 #include "file/FileMetaData.hpp"
+#include "file/ImageLoader.hpp"
 #include "file/ImageMetaData.hpp"
-#include "file/ImageReader.hpp"
 #include "gui/dialog/aboutdialog.h"
 #include "gui/dialog/helpdialog.h"
 #include "gui/dialog/licencedialog.h"
@@ -172,13 +172,13 @@ void MainWindow::loadFile(const QString &filename)
     if (imageReader != nullptr) {
         delete imageReader;
     }
-    imageReader = new ImageReader();
+    imageReader = new ImageLoader();
 }
 
 void MainWindow::loadImage(const ImageMetaData& imageMetaData)
 {
     try {
-        auto imageFile(imageReader->readImage(imageMetaData));
+        auto imageFile(imageReader->loadImage(imageMetaData));
 
         imageDisplay->changeImage(QPixmap::fromImage(imageFile), imageMetaData.getPositionOffset());
         imageDetails->changeImageDetails(imageMetaData.getBinaryDescription());

@@ -1,23 +1,23 @@
 #include "BuildingAnimationModel.hpp"
 
 #include "../file/BitmapMetaData.hpp"
+#include "../file/ImageLoader.hpp"
 #include "../file/ImageMetaData.hpp"
-#include "../file/ImageReader.hpp"
 
 
 
-BuildingAnimationModel::BuildingAnimationModel(ImageReader& imageReader, const ImageMetaData& imageMetaData) :
+BuildingAnimationModel::BuildingAnimationModel(ImageLoader& imageLoader, const ImageMetaData& imageMetaData) :
     AbstractAnimationModel(),
-    imageReader(imageReader),
+    imageLoader(imageLoader),
     animationMetaData(imageMetaData),
-    rootImage(QPixmap::fromImage(imageReader.readImage(imageMetaData))),
+    rootImage(QPixmap::fromImage(imageLoader.loadImage(imageMetaData))),
     animationImages()
 {
     auto& bitmapMetaData(imageMetaData.getBitmapMetaData());
     const ImageMetaData* nextImage(&imageMetaData);
     for (int animationIndex(0); animationIndex < imageMetaData.getAnimationLength(); ++animationIndex) {
         nextImage = &bitmapMetaData.getNextImage(*nextImage);
-        animationImages.append(QPixmap::fromImage(imageReader.readImage(*nextImage)));
+        animationImages.append(QPixmap::fromImage(imageLoader.loadImage(*nextImage)));
     }
 }
 
