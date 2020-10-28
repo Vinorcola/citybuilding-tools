@@ -4,7 +4,7 @@
 #include <QtGui/QPixmap>
 #include <QtWidgets/QGraphicsScene>
 
-class AbstractAnimationModel;
+class AbstractImageModel;
 class AnimatedImageGraphics;
 
 class AnimationScene : public QGraphicsScene
@@ -18,7 +18,7 @@ class AnimationScene : public QGraphicsScene
         int currentAnimationIndex;
 
     public:
-        AnimationScene(const AbstractAnimationModel& model);
+        AnimationScene(const AbstractImageModel& model);
 
         void startAnimation();
         void stopAnimation();

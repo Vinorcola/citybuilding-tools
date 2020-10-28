@@ -5,7 +5,7 @@
 
 #include "AnimationScene.hpp"
 
-class AbstractAnimationModel;
+class AbstractImageModel;
 
 class AnimationDialog : public QDialog
 {
@@ -15,7 +15,7 @@ class AnimationDialog : public QDialog
         AnimationScene scene;
 
     public:
-        AnimationDialog(QWidget* parent, const AbstractAnimationModel& model);
+        AnimationDialog(QWidget* parent, const AbstractImageModel& model);
 };
 
 #endif // ANIMATIONDIALOG_HPP

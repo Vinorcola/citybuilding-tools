@@ -3,11 +3,11 @@
 #include <QtWidgets/QGraphicsPixmapItem>
 
 #include "../display/image/AnimatedImageGraphics.hpp"
-#include "AbstractAnimationModel.hpp"
+#include "../file/AbstractImageModel.hpp"
 
 
 
-AnimationScene::AnimationScene(const AbstractAnimationModel& model) :
+AnimationScene::AnimationScene(const AbstractImageModel& model) :
     QGraphicsScene(),
     timerId(0),
     animatedItem(nullptr),

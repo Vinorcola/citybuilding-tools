@@ -4,14 +4,14 @@
 #include <QtCore/QList>
 #include <QtGui/QPixmap>
 
-#include "AbstractAnimationModel.hpp"
+#include "../file/AbstractImageModel.hpp"
 
 class BitmapMetaData;
 class FileMetaData;
 class ImageLoader;
 class ImageMetaData;
 
-class BuildingAnimationModel : public AbstractAnimationModel
+class BuildingAnimationModel : public AbstractImageModel
 {
         Q_OBJECT
 
@@ -22,7 +22,7 @@ class BuildingAnimationModel : public AbstractAnimationModel
         QList<QPixmap> animationImages;
 
     public:
-        BuildingAnimationModel(ImageLoader& imageLoader, const ImageMetaData& imageMetaData);
+        BuildingAnimationModel(QObject* parent, ImageLoader& imageLoader, const ImageMetaData& imageMetaData);
 
         QString getTitle(const QModelIndex& index) const;
         virtual QPixmap getPixmap(const QModelIndex &index) const override;

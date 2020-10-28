@@ -254,7 +254,7 @@ void MainWindow::createActions() {
         }
 
         if (imageItem->getImageMetaData().getType() == ImageMetaData::Type::Building) {
-            BuildingAnimationModel model(*imageLoader, imageItem->getImageMetaData());
+            BuildingAnimationModel model(this, *imageLoader, imageItem->getImageMetaData());
             AnimationDialog dialog(this, model);
             dialog.exec();
         }

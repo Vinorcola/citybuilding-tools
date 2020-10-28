@@ -6,7 +6,7 @@
 
 
 
-AnimationDialog::AnimationDialog(QWidget* parent, const AbstractAnimationModel& model) :
+AnimationDialog::AnimationDialog(QWidget* parent, const AbstractImageModel& model) :
     QDialog(parent),
     scene(model)
 {

@@ -6,8 +6,12 @@
 
 
 
-BuildingAnimationModel::BuildingAnimationModel(ImageLoader& imageLoader, const ImageMetaData& imageMetaData) :
-    AbstractAnimationModel(),
+BuildingAnimationModel::BuildingAnimationModel(
+    QObject* parent,
+    ImageLoader& imageLoader,
+    const ImageMetaData& imageMetaData
+) :
+    AbstractImageModel(parent),
     imageLoader(imageLoader),
     animationMetaData(imageMetaData),
     rootImage(QPixmap::fromImage(imageLoader.loadImage(imageMetaData))),

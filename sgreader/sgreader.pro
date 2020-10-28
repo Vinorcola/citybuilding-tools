@@ -7,7 +7,6 @@ QT += core gui widgets
 
 # Input
 HEADERS += \
-    animation/AbstractAnimationModel.hpp \
     animation/AnimationDialog.hpp \
     animation/AnimationScene.hpp \
     animation/BuildingAnimationModel.hpp \
@@ -19,8 +18,10 @@ HEADERS += \
     exception/FileException.hpp \
     exception/OutOfRangeException.hpp \
     exception/RuntimeException.hpp \
+    file/AbstractImageModel.hpp \
     file/BitmapMetaData.hpp \
     file/FileMetaData.hpp \
+    file/FileModel.hpp \
     file/ImageLoader.hpp \
     file/ImageMetaData.hpp \
     gui/dialog/aboutdialog.h \
@@ -53,8 +54,10 @@ SOURCES += \
     exception/FileException.cpp \
     exception/OutOfRangeException.cpp \
     exception/RuntimeException.cpp \
+    file/AbstractImageModel.cpp \
     file/BitmapMetaData.cpp \
     file/FileMetaData.cpp \
+    file/FileModel.cpp \
     file/ImageLoader.cpp \
     file/ImageMetaData.cpp \
     gui/dialog/aboutdialog.cpp \
