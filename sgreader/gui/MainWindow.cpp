@@ -123,6 +123,7 @@ void MainWindow::loadFile(const QString& filePath)
 
 void MainWindow::clearFile()
 {
+    imageLoader.clearCache();
     if (currentFileMetaData!= nullptr) {
         delete currentFileMetaData;
         currentFileMetaData = nullptr;
