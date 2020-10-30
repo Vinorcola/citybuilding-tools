@@ -2,8 +2,6 @@
 
 #include <QtGui/QPainter>
 
-#include "AnimatedImageGraphics.hpp"
-
 // TODO: Review to handle Emperor size.
 const int TILE_WIDTH(58);
 const int TILE_HALF_WIDTH(TILE_WIDTH / 2);
@@ -16,7 +14,7 @@ ImageGraphics::ImageGraphics() :
     QGraphicsItem(),
     tileImage(new QGraphicsPixmapItem(this)),
     mainImage(new QGraphicsPixmapItem(this)),
-    animation(new AnimatedImageGraphics(this))
+    foregroundImage(new QGraphicsPixmapItem(mainImage))
 {
     // Generate tile image.
     QImage tile(TILE_WIDTH, TILE_HEIGHT, QImage::Format_ARGB32);
@@ -40,17 +38,27 @@ ImageGraphics::ImageGraphics() :
 
 void ImageGraphics::displayImage(const QPixmap& image, const QPoint& position, bool displayTile)
 {
+    tileImage->setVisible(displayTile);
     mainImage->setPixmap(image);
     mainImage->setPos(position);
-    tileImage->setVisible(displayTile);
-    animation->setVisible(false);
+    foregroundImage->setVisible(false);
 }
 
 
 
-void ImageGraphics::displayImageWithAnimation()
-{
-    // TODO
+void ImageGraphics::displaySuperimposedImages(
+    const QPixmap& image,
+    const QPoint& position,
+    const QPixmap& foregroundImage,
+    const QPoint& foregroundPosition,
+    bool displayTile
+) {
+    tileImage->setVisible(displayTile);
+    mainImage->setPixmap(image);
+    mainImage->setPos(position);
+    this->foregroundImage->setPixmap(foregroundImage);
+    this->foregroundImage->setPos(foregroundPosition);
+    this->foregroundImage->setVisible(true);
 }
 
 

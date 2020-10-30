@@ -138,17 +138,28 @@ void MainWindow::clearFile()
 
 
 
-void MainWindow::loadImage(const QModelIndex& index)
+void MainWindow::loadImage(const QModelIndex& index, const QModelIndex& animationIndex)
 {
     if (currentFileModel == nullptr) {
         return;
     }
 
-    viewer->changeImage(
-        currentFileModel->getPixmap(index),
-        currentFileModel->getPosition(index),
-        currentFileModel->displayTile(index)
-    );
+    if (animationModel != nullptr && animationModel->hasBackgroundImage(animationIndex)) {
+        viewer->changeImage(
+            currentFileModel->getPixmap(animationModel->getMainModelRootImageIndex()),
+            currentFileModel->getPosition(animationModel->getMainModelRootImageIndex()),
+            currentFileModel->getPixmap(index),
+            currentFileModel->getRawPositionOffset(animationModel->getMainModelRootImageIndex()),
+            currentFileModel->displayTile(index)
+        );
+    }
+    else {
+        viewer->changeImage(
+            currentFileModel->getPixmap(index),
+            currentFileModel->getPosition(index),
+            currentFileModel->displayTile(index)
+        );
+    }
     detailsDisplay->changeBinaryDetails(currentFileModel->getBinaryDetails(index));
     animationAction->setEnabled(animationModel != nullptr || currentFileModel->canBeAnimated(index));
 }
@@ -199,7 +210,7 @@ void MainWindow::updateBrowser(const QModelIndex& selection)
         connect(browser->selectionModel(), &QItemSelectionModel::selectionChanged, [this](const QItemSelection& selected) {
             auto selectedIndexes(selected.indexes());
             if (selectedIndexes.length() == 1) {
-                loadImage(selectedIndexes.first());
+                loadImage(selectedIndexes.first(), QModelIndex());
             }
         });
         if (selection.isValid()) {
@@ -211,7 +222,7 @@ void MainWindow::updateBrowser(const QModelIndex& selection)
         connect(browser->selectionModel(), &QItemSelectionModel::selectionChanged, [this](const QItemSelection& selected) {
             auto selectedIndexes(selected.indexes());
             if (selectedIndexes.length() == 1) {
-                loadImage(animationModel->getMainModelImageIndex(selectedIndexes.first()));
+                loadImage(animationModel->getMainModelImageIndex(selectedIndexes.first()), selectedIndexes.first());
             }
         });
         browser->selectionModel()->setCurrentIndex(

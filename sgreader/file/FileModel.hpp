@@ -25,6 +25,7 @@ class FileModel : public QAbstractItemModel
         QString getBinaryDetails(const QModelIndex& index) const;
         QPixmap getPixmap(const QModelIndex& index) const;
         QPoint getPosition(const QModelIndex& index) const;
+        QPoint getRawPositionOffset(const QModelIndex& index) const;
         bool displayTile(const QModelIndex& index) const;
         bool canBeAnimated(const QModelIndex& index) const;
 

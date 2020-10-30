@@ -25,6 +25,19 @@ void Viewer::changeImage(const QPixmap& pixmap, const QPoint& position, bool dis
 
 
 
+void Viewer::changeImage(
+    const QPixmap& pixmap,
+    const QPoint& position,
+    const QPixmap& foregroundPixmap,
+    const QPoint& foregroundPosition,
+    bool displayTile
+) {
+    image->setVisible(true);
+    image->displaySuperimposedImages(pixmap, position, foregroundPixmap, foregroundPosition, displayTile);
+}
+
+
+
 void Viewer::clear()
 {
     image->setVisible(false);

@@ -57,6 +57,26 @@ QModelIndex BuildingAnimationModel::getInitialSelectionIndex() const
 
 
 
+bool BuildingAnimationModel::hasBackgroundImage(const QModelIndex& index) const
+{
+    if (!index.isValid()) {
+        return false;
+    }
+
+    switch (index.internalId()) {
+        case 0:
+            return false;
+
+        case 1:
+            return true;
+
+        default:
+            return false;
+    }
+}
+
+
+
 QModelIndex BuildingAnimationModel::getMainModelRootImageIndex() const
 {
     return rootImageIndex;

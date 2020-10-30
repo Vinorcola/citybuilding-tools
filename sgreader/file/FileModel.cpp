@@ -110,6 +110,23 @@ QPoint FileModel::getPosition(const QModelIndex& index) const
 
 
 
+QPoint FileModel::getRawPositionOffset(const QModelIndex& index) const
+{
+    if (!index.isValid()) {
+        return QPoint();
+    }
+    if (!index.parent().isValid()) {
+        return QPoint();
+    }
+    if (!index.parent().parent().isValid()) {
+        return metaData.getBitmapMetaData(index.parent().row()).getImageMetaData(index.row()).getRawPositionOffset();
+    }
+
+    return QPoint();
+}
+
+
+
 bool FileModel::displayTile(const QModelIndex& index) const
 {
     if (!index.isValid()) {

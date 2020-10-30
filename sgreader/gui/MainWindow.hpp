@@ -33,7 +33,7 @@ class MainWindow : public QMainWindow
     protected:
         void loadFile(const QString& filePath);
         void clearFile();
-        void loadImage(const QModelIndex& index);
+        void loadImage(const QModelIndex& index, const QModelIndex& animationIndex);
         void startAnimation();
         void stopAnimation();
         void updateBrowser(const QModelIndex& selection);

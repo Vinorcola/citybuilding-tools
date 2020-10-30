@@ -9,7 +9,6 @@ QT += core gui widgets
 HEADERS += \
     display/binary/BinaryDetails.hpp \
     display/binary/BinaryFormatter.hpp \
-    display/image/AnimatedImageGraphics.hpp \
     display/image/ImageGraphics.hpp \
     display/image/ImageScene.hpp \
     display/image/Viewer.hpp \
@@ -44,7 +43,6 @@ HEADERS += \
 SOURCES += \
     display/binary/BinaryDetails.cpp \
     display/binary/BinaryFormatter.cpp \
-    display/image/AnimatedImageGraphics.cpp \
     display/image/ImageGraphics.cpp \
     display/image/ImageScene.cpp \
     display/image/Viewer.cpp \

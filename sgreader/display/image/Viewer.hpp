@@ -18,6 +18,13 @@ class Viewer : public QGraphicsView
         explicit Viewer(QWidget* parent);
 
         void changeImage(const QPixmap& pixmap, const QPoint& position, bool displayTile);
+        void changeImage(
+            const QPixmap& backgroundPixmap,
+            const QPoint& backgroundPosition,
+            const QPixmap& pixmap,
+            const QPoint& position,
+            bool displayTile
+        );
         void clear();
 
     public slots:
