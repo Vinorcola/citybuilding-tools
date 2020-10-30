@@ -22,7 +22,7 @@ ImageGraphics::ImageGraphics() :
     QImage tile(TILE_WIDTH, TILE_HEIGHT, QImage::Format_ARGB32);
     tile.fill(Qt::transparent);
     QPainter painter(&tile);
-    painter.setPen(Qt::darkGreen);
+    painter.setPen(Qt::green);
     for (int y(0); y < TILE_HALF_HEIGHT; ++y) {
         int xBegin(TILE_HALF_WIDTH - (2 * y) - 1);
         int xEnd(TILE_HALF_WIDTH + (2 * y));

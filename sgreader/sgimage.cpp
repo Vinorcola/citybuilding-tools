@@ -4,7 +4,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QDataStream>
 
-#include "display/BinaryFormatter.hpp"
+#include "display/binary/BinaryFormatter.hpp"
 
 enum {
 	ISOMETRIC_TILE_WIDTH = 58,

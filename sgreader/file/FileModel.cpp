@@ -1,5 +1,6 @@
 #include "FileModel.hpp"
 
+#include "../exception/FileException.hpp"
 #include "BitmapMetaData.hpp"
 #include "FileMetaData.hpp"
 #include "ImageLoader.hpp"
@@ -34,6 +35,23 @@ QString FileModel::getTitle(const QModelIndex& index) const
 
 
 
+QString FileModel::getBinaryDetails(const QModelIndex& index) const
+{
+    if (!index.isValid()) {
+        return QString();
+    }
+    if (!index.parent().isValid()) {
+        return QString();
+    }
+    if (!index.parent().parent().isValid()) {
+        return metaData.getBitmapMetaData(index.parent().row()).getImageMetaData(index.row()).getBinaryDescription();
+    }
+
+    return QString();
+}
+
+
+
 QPixmap FileModel::getPixmap(const QModelIndex& index) const
 {
     if (!index.isValid()) {
@@ -43,9 +61,14 @@ QPixmap FileModel::getPixmap(const QModelIndex& index) const
         return QPixmap();
     }
     if (!index.parent().parent().isValid()) {
-        return QPixmap::fromImage(imageLoader.loadImage(
-            metaData.getBitmapMetaData(index.parent().row()).getImageMetaData(index.row())
-        ));
+        try {
+            return QPixmap::fromImage(imageLoader.loadImage(
+                metaData.getBitmapMetaData(index.parent().row()).getImageMetaData(index.row())
+            ));
+        }
+        catch (FileException exception) {
+            return QPixmap();
+        }
     }
 
     return QPixmap();

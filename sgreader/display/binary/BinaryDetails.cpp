@@ -1,11 +1,11 @@
-#include "ImageDetails.hpp"
+#include "BinaryDetails.hpp"
 
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QVBoxLayout>
 
 
 
-ImageDetails::ImageDetails(QWidget* parent) :
+BinaryDetails::BinaryDetails(QWidget* parent) :
     QWidget(parent),
     errorMessage(new QLabel(this)),
     details(new QLabel(this))
@@ -24,7 +24,7 @@ ImageDetails::ImageDetails(QWidget* parent) :
 
 
 
-void ImageDetails::changeImageDetails(const QString& details)
+void BinaryDetails::changeBinaryDetails(const QString& details)
 {
     errorMessage->setVisible(false);
     this->details->setText(details);
@@ -33,7 +33,7 @@ void ImageDetails::changeImageDetails(const QString& details)
 
 
 
-void ImageDetails::setError(const QString& errorMessage)
+void BinaryDetails::setError(const QString& errorMessage)
 {
     details->setVisible(false);
     this->errorMessage->setText(errorMessage);
@@ -42,7 +42,7 @@ void ImageDetails::setError(const QString& errorMessage)
 
 
 
-void ImageDetails::clear()
+void BinaryDetails::clear()
 {
     errorMessage->setVisible(false);
     details->setText("");

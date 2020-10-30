@@ -15,6 +15,7 @@
 #include "animation/AnimationDialog.hpp"
 #include "animation/BuildingAnimationModel.hpp"
 #include "exception/FileException.hpp"
+#include "display/binary/BinaryDetails.hpp"
 #include "display/image/Viewer.hpp"
 #include "file/BitmapMetaData.hpp"
 #include "file/FileMetaData.hpp"
@@ -25,7 +26,6 @@
 #include "gui/dialog/licencedialog.h"
 #include "gui/extractWizard/extractwizard.h"
 #include "gui/ControlPanel.hpp"
-#include "gui/ImageDetails.hpp"
 #include "gui/ImageTree.hpp"
 #include "gui/ImageTreeItem.hpp"
 
@@ -176,7 +176,7 @@ void LegacyMainWindow::loadImage(const ImageMetaData& imageMetaData)
 {
     try {
         //imageViewer->changeImage(imageMetaData);
-        imageDetails->changeImageDetails(imageMetaData.getBinaryDescription());
+        imageDetails->changeBinaryDetails(imageMetaData.getBinaryDescription());
         saveAction->setEnabled(true);
     }
     catch (FileException exception) {
@@ -206,7 +206,7 @@ void LegacyMainWindow::createChildren()
 
     auto rightDock(new QDockWidget("Image details", this));
     rightDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
-    imageDetails = new ImageDetails(rightDock);
+    imageDetails = new BinaryDetails(rightDock);
     rightDock->setWidget(imageDetails);
     addDockWidget(Qt::RightDockWidgetArea, rightDock);
 

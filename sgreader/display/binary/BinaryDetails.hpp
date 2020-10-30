@@ -5,7 +5,7 @@
 
 class QLabel;
 
-class ImageDetails : public QWidget
+class BinaryDetails : public QWidget
 {
         Q_OBJECT
 
@@ -14,9 +14,9 @@ class ImageDetails : public QWidget
         QLabel* details;
 
     public:
-        ImageDetails(QWidget* parent = nullptr);
+        explicit BinaryDetails(QWidget* parent = nullptr);
 
-        void changeImageDetails(const QString& details);
+        void changeBinaryDetails(const QString& details);
 
         void setError(const QString& errorMessage);
 

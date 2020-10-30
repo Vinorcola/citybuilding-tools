@@ -8,6 +8,7 @@
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QTreeView>
 
+#include "../display/binary/BinaryDetails.hpp"
 #include "../display/image/Viewer.hpp"
 #include "../exception/FileException.hpp"
 #include "../file/FileMetaData.hpp"
@@ -22,13 +23,14 @@ MainWindow::MainWindow() :
     imageLoader(),
     currentFileMetaData(nullptr),
     currentFileModel(nullptr),
-    navigator(new QTreeView(this)),
+    browser(new QTreeView(this)),
+    detailsDisplay(new BinaryDetails(this)),
     viewer(new Viewer(this))
 {
     // Configure window.
     setWindowTitle("SG Reader");
     setWindowIcon(QIcon(":/icon.png"));
-    setMinimumSize(800, 600);
+    setMinimumSize(1000, 600);
     setCentralWidget(viewer);
 
     // Configure actions.
@@ -58,12 +60,17 @@ MainWindow::MainWindow() :
     toolBar->addAction(animationAction);
 
     // Configure docks.
-    navigator->setHeaderHidden(true);
+    browser->setHeaderHidden(true);
 
     auto leftDock(new QDockWidget("Image browser", this));
     leftDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
-    leftDock->setWidget(navigator);
+    leftDock->setWidget(browser);
     addDockWidget(Qt::LeftDockWidgetArea, leftDock);
+
+    auto rightDock(new QDockWidget("Details", this));
+    rightDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
+    rightDock->setWidget(detailsDisplay);
+    addDockWidget(Qt::RightDockWidgetArea, rightDock);
 
     // Confiure status bar.
     auto controlPanel(new ControlPanel(this));
@@ -87,23 +94,34 @@ MainWindow::~MainWindow()
 
 void MainWindow::loadFile(const QString& filePath)
 {
+    if (currentFileMetaData!= nullptr) {
+        delete currentFileMetaData;
+    }
     try {
         currentFileMetaData = new FileMetaData(filePath);
     }
     catch (FileException exception) {
+        currentFileMetaData = nullptr;
         return;
     }
-
 
     if (currentFileModel != nullptr) {
         delete currentFileModel;
     }
     currentFileModel = new FileModel(this, imageLoader, *currentFileMetaData);
-    navigator->setModel(currentFileModel);
-    navigator->scrollToTop();
-    connect(navigator->selectionModel(), &QItemSelectionModel::selectionChanged, [this]() {
-        loadImage(navigator->selectionModel()->currentIndex());
+
+    // Update navigator.
+    browser->setModel(currentFileModel);
+    browser->scrollToTop();
+    connect(browser->selectionModel(), &QItemSelectionModel::selectionChanged, [this](const QItemSelection& selected) {
+        auto selectedIndexes(selected.indexes());
+        if (selectedIndexes.length() == 1) {
+            loadImage(selectedIndexes.first());
+        }
     });
+
+    // Clear details.
+    detailsDisplay->clear();
 
     animationAction->setEnabled(false);
 }
@@ -121,5 +139,6 @@ void MainWindow::loadImage(const QModelIndex& index)
         currentFileModel->getPosition(index),
         currentFileModel->displayTile(index)
     );
+    detailsDisplay->changeBinaryDetails(currentFileModel->getBinaryDetails(index));
     animationAction->setEnabled(currentFileModel->canBeAnimated(index));
 }

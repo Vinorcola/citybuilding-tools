@@ -18,6 +18,7 @@ class FileModel : public AbstractImageModel
         FileModel(QObject* parent, ImageLoader& imageLoader, const FileMetaData& metaData);
 
         QString getTitle(const QModelIndex& index) const;
+        QString getBinaryDetails(const QModelIndex& index) const;
         virtual QPixmap getPixmap(const QModelIndex& index) const override;
         virtual QPoint getPosition(const QModelIndex& index) const override;
         virtual bool displayTile(const QModelIndex& index) const override;

@@ -6,7 +6,7 @@
 class BitmapMetaData;
 class ControlPanel;
 class FileMetaData;
-class ImageDetails;
+class BinaryDetails;
 class ImageLoader;
 class ImageMetaData;
 class ImageTree;
@@ -21,7 +21,7 @@ class LegacyMainWindow : public QMainWindow
     private:
         ImageLoader* imageLoader;
         ImageTree* treeWidget;
-        ImageDetails* imageDetails;
+        BinaryDetails* imageDetails;
         ControlPanel* controlPanel;
         Viewer* imageViewer;
         QString filename;

@@ -2,7 +2,7 @@
 
 #include <QtCore/QDataStream>
 
-#include "../display/BinaryFormatter.hpp"
+#include "../display/binary/BinaryFormatter.hpp"
 
 
 
@@ -218,9 +218,7 @@ QString ImageMetaData::getBinaryDescription() const
 
 int ImageMetaData::getAnimationLength() const
 {
-    auto& workingRawData(invertedRawData == nullptr ? rawData : *invertedRawData);
-
-    return workingRawData.image_quantity_in_animation;
+    return rawData.image_quantity_in_animation;
 }
 
 

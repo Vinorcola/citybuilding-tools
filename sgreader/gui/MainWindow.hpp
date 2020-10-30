@@ -5,6 +5,7 @@
 
 #include "../file/ImageLoader.hpp"
 
+class BinaryDetails;
 class FileMetaData;
 class FileModel;
 class QTreeView;
@@ -19,7 +20,8 @@ class MainWindow : public QMainWindow
         ImageLoader imageLoader;
         FileMetaData* currentFileMetaData;
         FileModel* currentFileModel;
-        QTreeView* navigator;
+        QTreeView* browser;
+        BinaryDetails* detailsDisplay;
         Viewer* viewer;
 
     public:

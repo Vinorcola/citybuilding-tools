@@ -10,11 +10,12 @@ HEADERS += \
     animation/AnimationDialog.hpp \
     animation/AnimationScene.hpp \
     animation/BuildingAnimationModel.hpp \
+    display/binary/BinaryDetails.hpp \
+    display/binary/BinaryFormatter.hpp \
     display/image/AnimatedImageGraphics.hpp \
     display/image/ImageGraphics.hpp \
     display/image/ImageScene.hpp \
     display/image/Viewer.hpp \
-    display/BinaryFormatter.hpp \
     exception/FileException.hpp \
     exception/OutOfRangeException.hpp \
     exception/RuntimeException.hpp \
@@ -34,7 +35,6 @@ HEADERS += \
     gui/extractWizard/extractthread.h \
     gui/extractWizard/extractwizard.h \
     gui/ControlPanel.hpp \
-    gui/ImageDetails.hpp \
     gui/ImageTree.hpp \
     gui/ImageTreeItem.hpp \
     gui/MainWindow.hpp \
@@ -47,11 +47,12 @@ SOURCES += \
     animation/AnimationDialog.cpp \
     animation/AnimationScene.cpp \
     animation/BuildingAnimationModel.cpp \
+    display/binary/BinaryDetails.cpp \
+    display/binary/BinaryFormatter.cpp \
     display/image/AnimatedImageGraphics.cpp \
     display/image/ImageGraphics.cpp \
     display/image/ImageScene.cpp \
     display/image/Viewer.cpp \
-    display/BinaryFormatter.cpp \
     exception/FileException.cpp \
     exception/OutOfRangeException.cpp \
     exception/RuntimeException.cpp \
@@ -71,7 +72,6 @@ SOURCES += \
     gui/extractWizard/extractthread.cpp \
     gui/extractWizard/extractwizard.cpp \
     gui/ControlPanel.cpp \
-    gui/ImageDetails.cpp \
     gui/ImageTree.cpp \
     gui/ImageTreeItem.cpp \
     gui/MainWindow.cpp \
