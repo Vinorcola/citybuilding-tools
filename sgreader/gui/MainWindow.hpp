@@ -6,6 +6,7 @@
 #include "../file/ImageLoader.hpp"
 
 class AbstractAnimationModel;
+class AnimationController;
 class BinaryDetails;
 class FileMetaData;
 class FileModel;
@@ -17,7 +18,6 @@ class MainWindow : public QMainWindow
         Q_OBJECT
 
     private:
-        QAction* animationAction;
         ImageLoader imageLoader;
         FileMetaData* currentFileMetaData;
         FileModel* currentFileModel;
@@ -25,6 +25,8 @@ class MainWindow : public QMainWindow
         QTreeView* browser;
         BinaryDetails* detailsDisplay;
         Viewer* viewer;
+        QAction* animationAction;
+        AnimationController* animationPlayAction;
 
     public:
         MainWindow();

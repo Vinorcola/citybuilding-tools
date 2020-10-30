@@ -31,6 +31,7 @@ HEADERS += \
     gui/extractWizard/progresspage.h \
     gui/extractWizard/extractthread.h \
     gui/extractWizard/extractwizard.h \
+    gui/AnimationController.hpp \
     gui/ControlPanel.hpp \
     gui/ImageTree.hpp \
     gui/ImageTreeItem.hpp \
@@ -65,6 +66,7 @@ SOURCES += \
     gui/extractWizard/progresspage.cpp \
     gui/extractWizard/extractthread.cpp \
     gui/extractWizard/extractwizard.cpp \
+    gui/AnimationController.cpp \
     gui/ControlPanel.cpp \
     gui/ImageTree.cpp \
     gui/ImageTreeItem.cpp \

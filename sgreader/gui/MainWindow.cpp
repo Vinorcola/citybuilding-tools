@@ -16,20 +16,22 @@
 #include "../file/FileMetaData.hpp"
 #include "../file/FileModel.hpp"
 #include "../file/ImageMetaData.hpp"
+#include "AnimationController.hpp"
 #include "ControlPanel.hpp"
 
 
 
 MainWindow::MainWindow() :
     QMainWindow(),
-    animationAction(new QAction(QIcon(":/animation-icon"), tr("&Animation"), this)),
     imageLoader(),
     currentFileMetaData(nullptr),
     currentFileModel(nullptr),
     animationModel(nullptr),
     browser(new QTreeView(this)),
     detailsDisplay(new BinaryDetails(this)),
-    viewer(new Viewer(this))
+    viewer(new Viewer(this)),
+    animationAction(new QAction(QIcon(":/animation-icon"), tr("&Animation"), this)),
+    animationPlayAction(new AnimationController(this, browser))
 {
     // Configure window.
     setWindowTitle("SG Reader");
@@ -63,6 +65,14 @@ MainWindow::MainWindow() :
         }
     });
 
+    connect(animationPlayAction, &AnimationController::updateAnimation, [this](const QModelIndex& animationIndex) {
+        if (animationModel == nullptr) {
+            return;
+        }
+
+        browser->selectionModel()->setCurrentIndex(animationIndex, QItemSelectionModel::SelectCurrent);
+    });
+
     // Configure toolbar.
     auto toolBar(addToolBar("File"));
     toolBar->setMovable(false);
@@ -71,6 +81,7 @@ MainWindow::MainWindow() :
     toolBar->addSeparator();
     toolBar->addAction(openFileAction);
     toolBar->addAction(animationAction);
+    toolBar->addAction(animationPlayAction);
 
     // Configure docks.
     browser->setHeaderHidden(true);
@@ -180,6 +191,7 @@ void MainWindow::startAnimation()
     if (imageMetaData->isBuilding()) {
         animationModel = new BuildingAnimationModel(this, *currentFileModel, currentIndex);
         updateBrowser(QModelIndex());
+        animationPlayAction->start(*animationModel, animationModel->getInitialSelectionIndex());
     }
     else {
         detailsDisplay->setError("Unknown animation type.");
@@ -199,6 +211,7 @@ void MainWindow::stopAnimation()
     animationModel = nullptr;
 
     updateBrowser(initialImageIndex);
+    animationPlayAction->reset();
 }
 
 
@@ -224,6 +237,7 @@ void MainWindow::updateBrowser(const QModelIndex& selection)
             if (selectedIndexes.length() == 1) {
                 loadImage(animationModel->getMainModelImageIndex(selectedIndexes.first()), selectedIndexes.first());
             }
+            animationPlayAction->updateCurrentIndex(selectedIndexes.first());
         });
         browser->selectionModel()->setCurrentIndex(
             animationModel->getInitialSelectionIndex(),
