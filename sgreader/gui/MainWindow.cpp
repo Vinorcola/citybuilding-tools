@@ -96,40 +96,37 @@ MainWindow::~MainWindow()
 
 void MainWindow::loadFile(const QString& filePath)
 {
-    if (currentFileMetaData!= nullptr) {
-        delete currentFileMetaData;
-    }
+    clearFile();
+
     try {
         currentFileMetaData = new FileMetaData(filePath);
-    }
-    catch (FileException exception) {
-        currentFileMetaData = nullptr;
-        if (currentFileModel != nullptr) {
-            delete currentFileModel;
-            currentFileModel = nullptr;
-        }
-        detailsDisplay->clear();
-        animationAction->setEnabled(false);
-        return;
-    }
+        currentFileModel = new FileModel(this, imageLoader, *currentFileMetaData);
 
+        // Update browser.
+        browser->setModel(currentFileModel);
+        connect(browser->selectionModel(), &QItemSelectionModel::selectionChanged, [this](const QItemSelection& selected) {
+            auto selectedIndexes(selected.indexes());
+            if (selectedIndexes.length() == 1) {
+                loadImage(selectedIndexes.first());
+            }
+        });
+    }
+    catch (FileException exception) {}
+}
+
+
+
+void MainWindow::clearFile()
+{
+    if (currentFileMetaData!= nullptr) {
+        delete currentFileMetaData;
+        currentFileMetaData = nullptr;
+    }
     if (currentFileModel != nullptr) {
         delete currentFileModel;
+        currentFileModel = nullptr;
     }
-    currentFileModel = new FileModel(this, imageLoader, *currentFileMetaData);
-
-    // Update browser.
-    browser->setModel(currentFileModel);
-    connect(browser->selectionModel(), &QItemSelectionModel::selectionChanged, [this](const QItemSelection& selected) {
-        auto selectedIndexes(selected.indexes());
-        if (selectedIndexes.length() == 1) {
-            loadImage(selectedIndexes.first());
-        }
-    });
-
-    // Clear details.
     detailsDisplay->clear();
-
     animationAction->setEnabled(false);
 }
 

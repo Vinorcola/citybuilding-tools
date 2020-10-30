@@ -18,19 +18,19 @@ FileModel::FileModel(QObject* parent, ImageLoader& imageLoader, const FileMetaDa
 
 
 
-const ImageMetaData& FileModel::getMetaData(const QModelIndex& index) const
+const ImageMetaData* FileModel::getMetaData(const QModelIndex& index) const
 {
     if (!index.isValid()) {
-        return metaData.getImageMetaData(0);
+        return nullptr;
     }
     if (!index.parent().isValid()) {
-        return metaData.getImageMetaData(0);
+        return nullptr;
     }
     if (!index.parent().parent().isValid()) {
-        return metaData.getBitmapMetaData(index.parent().row()).getImageMetaData(index.row());
+        return &metaData.getBitmapMetaData(index.parent().row()).getImageMetaData(index.row());
     }
 
-    return metaData.getImageMetaData(0);
+    return nullptr;
 }
 
 

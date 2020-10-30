@@ -32,6 +32,7 @@ class MainWindow : public QMainWindow
 
     protected:
         void loadFile(const QString& filePath);
+        void clearFile();
         void loadImage(const QModelIndex& index);
 };
 
