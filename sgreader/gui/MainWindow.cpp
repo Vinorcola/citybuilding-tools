@@ -1,5 +1,6 @@
 #include "MainWindow.hpp"
 
+#include <QtCore/QStandardPaths>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QDockWidget>
 #include <QtWidgets/QFileDialog>
@@ -47,7 +48,12 @@ MainWindow::MainWindow() :
     auto openFileAction(new QAction(QIcon(":/open-file-icon"), tr("&Open"), this));
     openFileAction->setShortcut(tr("Ctrl+O", "Open file action shortcut"));
     connect(openFileAction, &QAction::triggered, [this]() {
-        auto file(QFileDialog::getOpenFileName(this, "Load SG file", {}, "Sierra Graphics files (*.sg2 *.sg3)"));
+        QString currentDirectory(
+            currentFileMetaData == nullptr ?
+                QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first() :
+                currentFileMetaData->getFileInfo().absoluteFilePath()
+        );
+        auto file(QFileDialog::getOpenFileName(this, "Load SG file", currentDirectory, "Sierra Graphics files (*.sg2 *.sg3)"));
         if (!file.isEmpty()) {
             loadFile(file);
         }
