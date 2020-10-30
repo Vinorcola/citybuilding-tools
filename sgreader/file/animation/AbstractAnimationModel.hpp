@@ -12,6 +12,7 @@ class AbstractAnimationModel : public QAbstractItemModel
     public:
         AbstractAnimationModel(QObject* parent);
 
+        virtual QModelIndex getMainModelRootImageIndex() const = 0;
         virtual QModelIndex getMainModelImageIndex(const QModelIndex& index) const = 0;
 };
 

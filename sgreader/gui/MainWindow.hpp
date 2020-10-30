@@ -34,6 +34,9 @@ class MainWindow : public QMainWindow
         void loadFile(const QString& filePath);
         void clearFile();
         void loadImage(const QModelIndex& index);
+        void startAnimation();
+        void stopAnimation();
+        void updateBrowser(const QModelIndex& selection);
 };
 
 #endif // MAINWINDOW_HPP

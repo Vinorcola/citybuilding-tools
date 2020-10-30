@@ -49,6 +49,13 @@ QString BuildingAnimationModel::getTitle(const QModelIndex& index) const
 
 
 
+QModelIndex BuildingAnimationModel::getMainModelRootImageIndex() const
+{
+    return rootImageIndex;
+}
+
+
+
 QModelIndex BuildingAnimationModel::getMainModelImageIndex(const QModelIndex& index) const
 {
     if (!index.isValid()) {

@@ -20,6 +20,7 @@ class BuildingAnimationModel : public AbstractAnimationModel
         BuildingAnimationModel(QObject* parent, const FileModel& model, const QModelIndex& rootImageIndex);
 
         QString getTitle(const QModelIndex& index) const;
+        virtual QModelIndex getMainModelRootImageIndex() const override;
         virtual QModelIndex getMainModelImageIndex(const QModelIndex& index) const override;
 
         virtual int columnCount(const QModelIndex &parent = QModelIndex()) const override;

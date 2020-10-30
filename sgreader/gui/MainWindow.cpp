@@ -11,8 +11,11 @@
 #include "../display/binary/BinaryDetails.hpp"
 #include "../display/image/Viewer.hpp"
 #include "../exception/FileException.hpp"
+#include "../file/animation/AbstractAnimationModel.hpp"
+#include "../file/animation/BuildingAnimationModel.hpp"
 #include "../file/FileMetaData.hpp"
 #include "../file/FileModel.hpp"
+#include "../file/ImageMetaData.hpp"
 #include "ControlPanel.hpp"
 
 
@@ -51,6 +54,14 @@ MainWindow::MainWindow() :
     animationAction->setShortcut(tr("Ctrl+A", "Animation action shortcut"));
     animationAction->setCheckable(true);
     animationAction->setEnabled(false);
+    connect(animationAction, &QAction::triggered, [this](bool checked) {
+        if (checked) {
+            startAnimation();
+        }
+        else {
+            stopAnimation();
+        }
+    });
 
     // Configure toolbar.
     auto toolBar(addToolBar("File"));
@@ -101,17 +112,11 @@ void MainWindow::loadFile(const QString& filePath)
     try {
         currentFileMetaData = new FileMetaData(filePath);
         currentFileModel = new FileModel(this, imageLoader, *currentFileMetaData);
-
-        // Update browser.
-        browser->setModel(currentFileModel);
-        connect(browser->selectionModel(), &QItemSelectionModel::selectionChanged, [this](const QItemSelection& selected) {
-            auto selectedIndexes(selected.indexes());
-            if (selectedIndexes.length() == 1) {
-                loadImage(selectedIndexes.first());
-            }
-        });
+        updateBrowser(QModelIndex());
     }
-    catch (FileException exception) {}
+    catch (FileException exception) {
+        detailsDisplay->setError(exception.getMessage());
+    }
 }
 
 
@@ -144,5 +149,73 @@ void MainWindow::loadImage(const QModelIndex& index)
         currentFileModel->displayTile(index)
     );
     detailsDisplay->changeBinaryDetails(currentFileModel->getBinaryDetails(index));
-    animationAction->setEnabled(currentFileModel->canBeAnimated(index));
+    animationAction->setEnabled(animationModel != nullptr || currentFileModel->canBeAnimated(index));
+}
+
+
+
+void MainWindow::startAnimation()
+{
+    if (animationModel != nullptr) {
+        delete animationModel;
+    }
+    auto currentIndex(browser->selectionModel()->currentIndex());
+    auto imageMetaData(currentFileModel->getImageMetaData(currentIndex));
+    if (imageMetaData == nullptr) {
+        return;
+    }
+
+    if (imageMetaData->isBuilding()) {
+        animationModel = new BuildingAnimationModel(this, *currentFileModel, currentIndex);
+        updateBrowser(QModelIndex());
+    }
+    else {
+        detailsDisplay->setError("Unknown animation type.");
+    }
+}
+
+
+
+void MainWindow::stopAnimation()
+{
+    if (animationModel == nullptr) {
+        return;
+    }
+    auto initialImageIndex(animationModel->getMainModelRootImageIndex());
+
+    delete animationModel;
+    animationModel = nullptr;
+
+    updateBrowser(initialImageIndex);
+}
+
+
+
+void MainWindow::updateBrowser(const QModelIndex& selection)
+{
+    if (animationModel == nullptr) {
+        browser->setModel(currentFileModel);
+        connect(browser->selectionModel(), &QItemSelectionModel::selectionChanged, [this](const QItemSelection& selected) {
+            auto selectedIndexes(selected.indexes());
+            if (selectedIndexes.length() == 1) {
+                loadImage(selectedIndexes.first());
+            }
+        });
+        if (selection.isValid()) {
+            browser->selectionModel()->setCurrentIndex(selection, QItemSelectionModel::SelectCurrent);
+        }
+    }
+    else {
+        browser->setModel(animationModel);
+        connect(browser->selectionModel(), &QItemSelectionModel::selectionChanged, [this](const QItemSelection& selected) {
+            auto selectedIndexes(selected.indexes());
+            if (selectedIndexes.length() == 1) {
+                loadImage(animationModel->getMainModelImageIndex(selectedIndexes.first()));
+            }
+        });
+        browser->selectionModel()->setCurrentIndex(
+            animationModel->index(0, 0, animationModel->index(0, 0)),
+            QItemSelectionModel::SelectCurrent
+        );
+    }
 }
