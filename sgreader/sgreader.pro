@@ -22,9 +22,6 @@ HEADERS += \
     file/FileModel.hpp \
     file/ImageLoader.hpp \
     file/ImageMetaData.hpp \
-    gui/dialog/aboutdialog.h \
-    gui/dialog/helpdialog.h \
-    gui/dialog/licencedialog.h \
     gui/extractWizard/filelistpage.h \
     gui/extractWizard/inputdirpage.h \
     gui/extractWizard/outputdirpage.h \
@@ -33,10 +30,8 @@ HEADERS += \
     gui/extractWizard/extractwizard.h \
     gui/AnimationController.hpp \
     gui/ControlPanel.hpp \
-    gui/ImageTree.hpp \
-    gui/ImageTreeItem.hpp \
+    gui/InfoDialog.hpp \
     gui/MainWindow.hpp \
-    mainwindow.h \
     sgbitmap.h \
     sgfile.h \
     sgimage.h
@@ -57,9 +52,6 @@ SOURCES += \
     file/FileModel.cpp \
     file/ImageLoader.cpp \
     file/ImageMetaData.cpp \
-    gui/dialog/aboutdialog.cpp \
-    gui/dialog/helpdialog.cpp \
-    gui/dialog/licencedialog.cpp \
     gui/extractWizard/filelistpage.cpp \
     gui/extractWizard/inputdirpage.cpp \
     gui/extractWizard/outputdirpage.cpp \
@@ -68,11 +60,9 @@ SOURCES += \
     gui/extractWizard/extractwizard.cpp \
     gui/AnimationController.cpp \
     gui/ControlPanel.cpp \
-    gui/ImageTree.cpp \
-    gui/ImageTreeItem.cpp \
+    gui/InfoDialog.cpp \
     gui/MainWindow.cpp \
     main.cpp \
-    mainwindow.cpp \
     sgbitmap.cpp \
     sgfile.cpp \
     sgimage.cpp

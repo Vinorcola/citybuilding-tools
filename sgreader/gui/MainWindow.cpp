@@ -19,6 +19,7 @@
 #include "../file/ImageMetaData.hpp"
 #include "AnimationController.hpp"
 #include "ControlPanel.hpp"
+#include "InfoDialog.hpp"
 
 
 
@@ -31,21 +32,21 @@ MainWindow::MainWindow() :
     browser(new QTreeView(this)),
     detailsDisplay(new BinaryDetails(this)),
     viewer(new Viewer(this)),
-    animationAction(new QAction(QIcon(":/animation-icon"), tr("&Animation"), this)),
+    animationAction(new QAction(QIcon(":/icon/animation"), tr("&Animation"), this)),
     animationPlayAction(new AnimationController(this, browser))
 {
     // Configure window.
     setWindowTitle("SG Reader");
-    setWindowIcon(QIcon(":/icon.png"));
+    setWindowIcon(QIcon(":/icon/main"));
     setMinimumSize(1000, 600);
     setCentralWidget(viewer);
 
     // Configure actions.
-    auto quitAction(new QAction(QIcon(":/quit-icon"), tr("&Quit"), this));
+    auto quitAction(new QAction(QIcon(":/icon/quit"), tr("&Quit"), this));
     quitAction->setShortcut(tr("Ctrl+Q", "Quit action shortcut"));
     connect(quitAction, &QAction::triggered, this, &QMainWindow::close);
 
-    auto openFileAction(new QAction(QIcon(":/open-file-icon"), tr("&Open"), this));
+    auto openFileAction(new QAction(QIcon(":/icon/open-file"), tr("&Open"), this));
     openFileAction->setShortcut(tr("Ctrl+O", "Open file action shortcut"));
     connect(openFileAction, &QAction::triggered, [this]() {
         QString currentDirectory(
@@ -57,6 +58,13 @@ MainWindow::MainWindow() :
         if (!file.isEmpty()) {
             loadFile(file);
         }
+    });
+
+    auto infoAction(new QAction(QIcon(":/icon/info"), tr("&Info"), this));
+    infoAction->setShortcut(QKeySequence::HelpContents);
+    connect(infoAction, &QAction::triggered, [this]() {
+        InfoDialog dialog(this);
+        dialog.exec();
     });
 
     animationAction->setShortcut(tr("Ctrl+A", "Animation action shortcut"));
@@ -88,6 +96,10 @@ MainWindow::MainWindow() :
     toolBar->addAction(openFileAction);
     toolBar->addAction(animationAction);
     toolBar->addAction(animationPlayAction);
+    auto spacer(new QWidget());
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    toolBar->addWidget(spacer);
+    toolBar->addAction(infoAction);
 
     // Configure docks.
     browser->setHeaderHidden(true);

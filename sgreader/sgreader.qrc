@@ -1,10 +1,15 @@
 <RCC>
-    <qresource prefix="/">
-        <file alias="icon.png">icons/sgreader.png</file>
-        <file alias="quit-icon">icons/quit.svg</file>
-        <file alias="open-file-icon">icons/open-file.svg</file>
-        <file alias="animation-icon">icons/animation.svg</file>
-        <file alias="play-icon">icons/play.svg</file>
-        <file alias="pause-icon">icons/pause.svg</file>
+    <qresource prefix="/icon">
+        <file alias="main">assets/icons/sgreader.png</file>
+        <file alias="quit">assets/icons/quit.svg</file>
+        <file alias="open-file">assets/icons/open-file.svg</file>
+        <file alias="animation">assets/icons/animation.svg</file>
+        <file alias="play">assets/icons/play.svg</file>
+        <file alias="pause">assets/icons/pause.svg</file>
+        <file alias="info">assets/icons/info.svg</file>
+    </qresource>
+    <qresource prefix="/license">
+        <file alias="icons">assets/licenses/cc-by-4.0.txt</file>
+        <file alias="software">assets/licenses/gpl-2.txt</file>
     </qresource>
 </RCC>

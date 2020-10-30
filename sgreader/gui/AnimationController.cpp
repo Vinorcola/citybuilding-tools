@@ -10,9 +10,9 @@ const int TIMER_INTERVAL(150);
 
 
 AnimationController::AnimationController(QWidget* parent, QWidget* imageBrowser) :
-    QAction(QIcon(":/play-icon"), PLAY_TEXT, parent),
-    PLAY_ICON(":/play-icon"),
-    PAUSE_ICON(":/pause-icon"),
+    QAction(QIcon(":/icon/play"), PLAY_TEXT, parent),
+    PLAY_ICON(":/icon/play"),
+    PAUSE_ICON(":/icon/pause"),
     imageBrowser(imageBrowser),
     model(nullptr),
     currentIndex(),
