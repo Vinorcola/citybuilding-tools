@@ -7,9 +7,6 @@ QT += core gui widgets
 
 # Input
 HEADERS += \
-    animation/AnimationDialog.hpp \
-    animation/AnimationScene.hpp \
-    animation/BuildingAnimationModel.hpp \
     display/binary/BinaryDetails.hpp \
     display/binary/BinaryFormatter.hpp \
     display/image/AnimatedImageGraphics.hpp \
@@ -19,6 +16,7 @@ HEADERS += \
     exception/FileException.hpp \
     exception/OutOfRangeException.hpp \
     exception/RuntimeException.hpp \
+    file/animation/BuildingAnimationModel.hpp \
     file/AbstractImageModel.hpp \
     file/BitmapMetaData.hpp \
     file/FileMetaData.hpp \
@@ -44,9 +42,6 @@ HEADERS += \
     sgimage.h
 
 SOURCES += \
-    animation/AnimationDialog.cpp \
-    animation/AnimationScene.cpp \
-    animation/BuildingAnimationModel.cpp \
     display/binary/BinaryDetails.cpp \
     display/binary/BinaryFormatter.cpp \
     display/image/AnimatedImageGraphics.cpp \
@@ -56,6 +51,7 @@ SOURCES += \
     exception/FileException.cpp \
     exception/OutOfRangeException.cpp \
     exception/RuntimeException.cpp \
+    file/animation/BuildingAnimationModel.cpp \
     file/AbstractImageModel.cpp \
     file/BitmapMetaData.cpp \
     file/FileMetaData.cpp \

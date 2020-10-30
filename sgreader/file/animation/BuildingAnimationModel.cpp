@@ -38,7 +38,7 @@ QString BuildingAnimationModel::getTitle(const QModelIndex& index) const
             return "Root image";
 
         case 1:
-            return QString::number(index.column() + 1);
+            return QString::number(index.row() + 1);
 
         default:
             return QString();

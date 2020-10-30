@@ -5,6 +5,7 @@
 
 class FileMetaData;
 class ImageLoader;
+class ImageMetaData;
 
 class FileModel : public AbstractImageModel
 {
@@ -17,6 +18,7 @@ class FileModel : public AbstractImageModel
     public:
         FileModel(QObject* parent, ImageLoader& imageLoader, const FileMetaData& metaData);
 
+        const ImageMetaData& getMetaData(const QModelIndex& index) const;
         QString getTitle(const QModelIndex& index) const;
         QString getBinaryDetails(const QModelIndex& index) const;
         virtual QPixmap getPixmap(const QModelIndex& index) const override;

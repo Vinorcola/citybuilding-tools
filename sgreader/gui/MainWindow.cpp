@@ -23,6 +23,7 @@ MainWindow::MainWindow() :
     imageLoader(),
     currentFileMetaData(nullptr),
     currentFileModel(nullptr),
+    animationModel(nullptr),
     browser(new QTreeView(this)),
     detailsDisplay(new BinaryDetails(this)),
     viewer(new Viewer(this))
@@ -48,6 +49,7 @@ MainWindow::MainWindow() :
     });
 
     animationAction->setShortcut(tr("Ctrl+A", "Animation action shortcut"));
+    animationAction->setCheckable(true);
     animationAction->setEnabled(false);
 
     // Configure toolbar.
@@ -102,6 +104,12 @@ void MainWindow::loadFile(const QString& filePath)
     }
     catch (FileException exception) {
         currentFileMetaData = nullptr;
+        if (currentFileModel != nullptr) {
+            delete currentFileModel;
+            currentFileModel = nullptr;
+        }
+        detailsDisplay->clear();
+        animationAction->setEnabled(false);
         return;
     }
 
@@ -110,9 +118,8 @@ void MainWindow::loadFile(const QString& filePath)
     }
     currentFileModel = new FileModel(this, imageLoader, *currentFileMetaData);
 
-    // Update navigator.
+    // Update browser.
     browser->setModel(currentFileModel);
-    browser->scrollToTop();
     connect(browser->selectionModel(), &QItemSelectionModel::selectionChanged, [this](const QItemSelection& selected) {
         auto selectedIndexes(selected.indexes());
         if (selectedIndexes.length() == 1) {

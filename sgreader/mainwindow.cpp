@@ -12,8 +12,6 @@
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 
-#include "animation/AnimationDialog.hpp"
-#include "animation/BuildingAnimationModel.hpp"
 #include "exception/FileException.hpp"
 #include "display/binary/BinaryDetails.hpp"
 #include "display/image/Viewer.hpp"
