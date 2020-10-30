@@ -6,27 +6,24 @@
 
 #include "AbstractAnimationModel.hpp"
 
-class BitmapMetaData;
-class FileMetaData;
-class ImageLoader;
-class ImageMetaData;
+class FileModel;
 
 class BuildingAnimationModel : public AbstractAnimationModel
 {
         Q_OBJECT
 
     private:
-        ImageLoader& imageLoader;
-        const ImageMetaData& animationMetaData;
-        QPixmap rootImage;
-        QList<QPixmap> animationImages;
+        QModelIndex rootImageIndex;
+        QList<QModelIndex> animationImageIndexes;
 
     public:
-        BuildingAnimationModel(ImageLoader& imageLoader, const ImageMetaData& imageMetaData);
+        BuildingAnimationModel(QObject* parent, const FileModel& model, const QModelIndex& rootImageIndex);
 
         QString getTitle(const QModelIndex& index) const;
-        virtual QPixmap getPixmap(const QModelIndex &index) const override;
-        virtual QPoint getPosition(const QModelIndex &index) const override;
+        virtual QModelIndex getInitialSelectionIndex() const override;
+        virtual bool hasBackgroundImage(const QModelIndex& index) const override;
+        virtual QModelIndex getMainModelRootImageIndex() const override;
+        virtual QModelIndex getMainModelImageIndex(const QModelIndex& index) const override;
 
         virtual int columnCount(const QModelIndex &parent = QModelIndex()) const override;
         virtual int rowCount(const QModelIndex &parent = QModelIndex()) const override;

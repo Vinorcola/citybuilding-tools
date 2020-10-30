@@ -4,8 +4,6 @@
 #include <QtWidgets/QGraphicsView>
 
 class ImageGraphics;
-class ImageLoader;
-class ImageMetaData;
 class ImageScene;
 
 class Viewer : public QGraphicsView
@@ -17,9 +15,16 @@ class Viewer : public QGraphicsView
         ImageGraphics* image;
 
     public:
-        Viewer(QWidget* parent, ImageLoader& imageLoader);
+        explicit Viewer(QWidget* parent);
 
-        void changeImage(const ImageMetaData& imageMetaData);
+        void changeImage(const QPixmap& pixmap, const QPoint& position, bool displayTile);
+        void changeImage(
+            const QPixmap& backgroundPixmap,
+            const QPoint& backgroundPosition,
+            const QPixmap& pixmap,
+            const QPoint& position,
+            bool displayTile
+        );
         void clear();
 
     public slots:

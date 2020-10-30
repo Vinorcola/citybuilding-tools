@@ -3,26 +3,27 @@
 
 #include <QtWidgets/QGraphicsItem>
 
-class AnimatedImageGraphics;
-class ImageLoader;
-class ImageMetaData;
-
 /**
  * @brief Display an image (or a set of animated images).
  */
 class ImageGraphics : public QGraphicsItem
 {
     private:
-        ImageLoader& imageLoader;
         QGraphicsPixmapItem* tileImage;
         QGraphicsPixmapItem* mainImage;
-        AnimatedImageGraphics* animation;
+        QGraphicsPixmapItem* foregroundImage;
 
     public:
-        explicit ImageGraphics(ImageLoader& imageLoader);
+        ImageGraphics();
 
-        void displayImage(const ImageMetaData& imageMetaData);
-        void displayImageWithAnimation(const ImageMetaData& imageMetaData);
+        void displayImage(const QPixmap& image, const QPoint& position, bool displayTile);
+        void displaySuperimposedImages(
+            const QPixmap& backgroundImage,
+            const QPoint& backgroundPosition,
+            const QPixmap& image,
+            const QPoint& position,
+            bool displayTile
+        );
 
         virtual QRectF boundingRect() const override;
         virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;

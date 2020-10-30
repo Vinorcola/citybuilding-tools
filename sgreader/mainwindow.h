@@ -6,7 +6,7 @@
 class BitmapMetaData;
 class ControlPanel;
 class FileMetaData;
-class ImageDetails;
+class BinaryDetails;
 class ImageLoader;
 class ImageMetaData;
 class ImageTree;
@@ -14,14 +14,14 @@ class QAction;
 class QTreeWidget;
 class Viewer;
 
-class MainWindow : public QMainWindow
+class LegacyMainWindow : public QMainWindow
 {
         Q_OBJECT
 
     private:
         ImageLoader* imageLoader;
         ImageTree* treeWidget;
-        ImageDetails* imageDetails;
+        BinaryDetails* imageDetails;
         ControlPanel* controlPanel;
         Viewer* imageViewer;
         QString filename;
@@ -40,8 +40,8 @@ class MainWindow : public QMainWindow
         QAction* aboutAction;
 
     public:
-        MainWindow();
-        virtual ~MainWindow();
+        LegacyMainWindow();
+        virtual ~LegacyMainWindow();
 
     private slots:
         void openFile();

@@ -7,20 +7,19 @@ QT += core gui widgets
 
 # Input
 HEADERS += \
-    animation/AbstractAnimationModel.hpp \
-    animation/AnimationDialog.hpp \
-    animation/AnimationScene.hpp \
-    animation/BuildingAnimationModel.hpp \
-    display/image/AnimatedImageGraphics.hpp \
+    display/binary/BinaryDetails.hpp \
+    display/binary/BinaryFormatter.hpp \
     display/image/ImageGraphics.hpp \
     display/image/ImageScene.hpp \
     display/image/Viewer.hpp \
-    display/BinaryFormatter.hpp \
     exception/FileException.hpp \
     exception/OutOfRangeException.hpp \
     exception/RuntimeException.hpp \
+    file/animation/AbstractAnimationModel.hpp \
+    file/animation/BuildingAnimationModel.hpp \
     file/BitmapMetaData.hpp \
     file/FileMetaData.hpp \
+    file/FileModel.hpp \
     file/ImageLoader.hpp \
     file/ImageMetaData.hpp \
     gui/dialog/aboutdialog.h \
@@ -32,29 +31,30 @@ HEADERS += \
     gui/extractWizard/progresspage.h \
     gui/extractWizard/extractthread.h \
     gui/extractWizard/extractwizard.h \
+    gui/AnimationController.hpp \
     gui/ControlPanel.hpp \
-    gui/ImageDetails.hpp \
     gui/ImageTree.hpp \
     gui/ImageTreeItem.hpp \
+    gui/MainWindow.hpp \
     mainwindow.h \
     sgbitmap.h \
     sgfile.h \
     sgimage.h
 
 SOURCES += \
-    animation/AnimationDialog.cpp \
-    animation/AnimationScene.cpp \
-    animation/BuildingAnimationModel.cpp \
-    display/image/AnimatedImageGraphics.cpp \
+    display/binary/BinaryDetails.cpp \
+    display/binary/BinaryFormatter.cpp \
     display/image/ImageGraphics.cpp \
     display/image/ImageScene.cpp \
     display/image/Viewer.cpp \
-    display/BinaryFormatter.cpp \
     exception/FileException.cpp \
     exception/OutOfRangeException.cpp \
     exception/RuntimeException.cpp \
+    file/animation/AbstractAnimationModel.cpp \
+    file/animation/BuildingAnimationModel.cpp \
     file/BitmapMetaData.cpp \
     file/FileMetaData.cpp \
+    file/FileModel.cpp \
     file/ImageLoader.cpp \
     file/ImageMetaData.cpp \
     gui/dialog/aboutdialog.cpp \
@@ -66,10 +66,11 @@ SOURCES += \
     gui/extractWizard/progresspage.cpp \
     gui/extractWizard/extractthread.cpp \
     gui/extractWizard/extractwizard.cpp \
+    gui/AnimationController.cpp \
     gui/ControlPanel.cpp \
-    gui/ImageDetails.cpp \
     gui/ImageTree.cpp \
     gui/ImageTreeItem.cpp \
+    gui/MainWindow.cpp \
     main.cpp \
     mainwindow.cpp \
     sgbitmap.cpp \

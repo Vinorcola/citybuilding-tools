@@ -1,23 +1,29 @@
 #include "BuildingAnimationModel.hpp"
 
-#include "../file/BitmapMetaData.hpp"
-#include "../file/ImageLoader.hpp"
-#include "../file/ImageMetaData.hpp"
+#include "../BitmapMetaData.hpp"
+#include "../FileModel.hpp"
+#include "../ImageMetaData.hpp"
 
 
 
-BuildingAnimationModel::BuildingAnimationModel(ImageLoader& imageLoader, const ImageMetaData& imageMetaData) :
-    AbstractAnimationModel(),
-    imageLoader(imageLoader),
-    animationMetaData(imageMetaData),
-    rootImage(QPixmap::fromImage(imageLoader.loadImage(imageMetaData))),
-    animationImages()
+BuildingAnimationModel::BuildingAnimationModel(
+    QObject* parent,
+    const FileModel& model,
+    const QModelIndex& rootImageIndex
+) :
+    AbstractAnimationModel(parent),
+    rootImageIndex(rootImageIndex),
+    animationImageIndexes()
 {
-    auto& bitmapMetaData(imageMetaData.getBitmapMetaData());
-    const ImageMetaData* nextImage(&imageMetaData);
-    for (int animationIndex(0); animationIndex < imageMetaData.getAnimationLength(); ++animationIndex) {
-        nextImage = &bitmapMetaData.getNextImage(*nextImage);
-        animationImages.append(QPixmap::fromImage(imageLoader.loadImage(*nextImage)));
+    auto imageMetaData(model.getImageMetaData(rootImageIndex));
+    if (imageMetaData) {
+        for (int animationIndex(1); animationIndex <= imageMetaData->getAnimationLength(); ++animationIndex) {
+            animationImageIndexes.append(model.index(
+                rootImageIndex.row() + animationIndex,
+                rootImageIndex.column(),
+                rootImageIndex.parent()
+            ));
+        }
     }
 }
 
@@ -34,7 +40,7 @@ QString BuildingAnimationModel::getTitle(const QModelIndex& index) const
             return "Root image";
 
         case 1:
-            return QString::number(index.column() + 1);
+            return QString::number(index.row() + 1);
 
         default:
             return QString();
@@ -43,33 +49,54 @@ QString BuildingAnimationModel::getTitle(const QModelIndex& index) const
 
 
 
-QPixmap BuildingAnimationModel::getPixmap(const QModelIndex& index) const
+QModelIndex BuildingAnimationModel::getInitialSelectionIndex() const
+{
+    // First sub image.
+    return index(0, 0, index(0, 0));
+}
+
+
+
+bool BuildingAnimationModel::hasBackgroundImage(const QModelIndex& index) const
 {
     if (!index.isValid()) {
-        return QPixmap();
+        return false;
     }
 
     switch (index.internalId()) {
         case 0:
-            return rootImage;
+            return false;
 
         case 1:
-            return animationImages.at(index.row());
+            return true;
 
         default:
-            return QPixmap();
+            return false;
     }
 }
 
 
 
-QPoint BuildingAnimationModel::getPosition(const QModelIndex& index) const
+QModelIndex BuildingAnimationModel::getMainModelRootImageIndex() const
+{
+    return rootImageIndex;
+}
+
+
+
+QModelIndex BuildingAnimationModel::getMainModelImageIndex(const QModelIndex& index) const
 {
     if (!index.isValid()) {
-        return QPoint();
+        return QModelIndex();
+    }
+    if (!index.parent().isValid()) {
+        return rootImageIndex;
+    }
+    if (!index.parent().parent().isValid()) {
+        return animationImageIndexes.at(index.row());
     }
 
-    return animationMetaData.getRawPositionOffset();
+    return QModelIndex();
 }
 
 
@@ -87,7 +114,7 @@ int BuildingAnimationModel::rowCount(const QModelIndex& parent) const
         return 1;
     }
     if (!parent.parent().isValid()) {
-        return animationImages.length();
+        return animationImageIndexes.length();
     }
 
     return 0;

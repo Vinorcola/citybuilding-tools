@@ -2,10 +2,6 @@
 
 #include <QtGui/QPainter>
 
-#include "../../file/ImageLoader.hpp"
-#include "../../file/ImageMetaData.hpp"
-#include "AnimatedImageGraphics.hpp"
-
 // TODO: Review to handle Emperor size.
 const int TILE_WIDTH(58);
 const int TILE_HALF_WIDTH(TILE_WIDTH / 2);
@@ -14,18 +10,17 @@ const int TILE_HALF_HEIGHT(TILE_HEIGHT / 2);
 
 
 
-ImageGraphics::ImageGraphics(ImageLoader& imageLoader) :
+ImageGraphics::ImageGraphics() :
     QGraphicsItem(),
-    imageLoader(imageLoader),
     tileImage(new QGraphicsPixmapItem(this)),
     mainImage(new QGraphicsPixmapItem(this)),
-    animation(new AnimatedImageGraphics(this))
+    foregroundImage(new QGraphicsPixmapItem(mainImage))
 {
     // Generate tile image.
     QImage tile(TILE_WIDTH, TILE_HEIGHT, QImage::Format_ARGB32);
     tile.fill(Qt::transparent);
     QPainter painter(&tile);
-    painter.setPen(Qt::darkGreen);
+    painter.setPen(Qt::green);
     for (int y(0); y < TILE_HALF_HEIGHT; ++y) {
         int xBegin(TILE_HALF_WIDTH - (2 * y) - 1);
         int xEnd(TILE_HALF_WIDTH + (2 * y));
@@ -36,25 +31,34 @@ ImageGraphics::ImageGraphics(ImageLoader& imageLoader) :
 
     tileImage->setPixmap(QPixmap::fromImage(tile));
     tileImage->setPos(-TILE_HALF_WIDTH, -TILE_HEIGHT);
+    tileImage->setVisible(false);
 }
 
 
 
-void ImageGraphics::displayImage(const ImageMetaData& imageMetaData)
+void ImageGraphics::displayImage(const QPixmap& image, const QPoint& position, bool displayTile)
 {
-    auto image(imageLoader.loadImage(imageMetaData));
-    mainImage->setPixmap(QPixmap::fromImage(image));
-    mainImage->setPos(imageMetaData.getPositionOffset());
-    tileImage->setVisible(imageMetaData.isBuilding() || imageMetaData.isCharacter());
-    animation->setVisible(false);
+    tileImage->setVisible(displayTile);
+    mainImage->setPixmap(image);
+    mainImage->setPos(position);
+    foregroundImage->setVisible(false);
 }
 
 
 
-void ImageGraphics::displayImageWithAnimation(const ImageMetaData& imageMetaData)
-{
-    // TODO
-    displayImage(imageMetaData);
+void ImageGraphics::displaySuperimposedImages(
+    const QPixmap& image,
+    const QPoint& position,
+    const QPixmap& foregroundImage,
+    const QPoint& foregroundPosition,
+    bool displayTile
+) {
+    tileImage->setVisible(displayTile);
+    mainImage->setPixmap(image);
+    mainImage->setPos(position);
+    this->foregroundImage->setPixmap(foregroundImage);
+    this->foregroundImage->setPos(foregroundPosition);
+    this->foregroundImage->setVisible(true);
 }
 
 

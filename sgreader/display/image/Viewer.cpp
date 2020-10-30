@@ -5,21 +5,35 @@
 
 
 
-Viewer::Viewer(QWidget* parent, ImageLoader& imageLoader) :
+Viewer::Viewer(QWidget* parent) :
     QGraphicsView(parent),
     scene(new ImageScene(this)),
-    image(new ImageGraphics(imageLoader))
+    image(new ImageGraphics())
 {
+    image->setVisible(false);
     scene->addItem(image);
     setScene(scene);
 }
 
 
 
-void Viewer::changeImage(const ImageMetaData& imageMetaData)
+void Viewer::changeImage(const QPixmap& pixmap, const QPoint& position, bool displayTile)
 {
     image->setVisible(true);
-    image->displayImage(imageMetaData);
+    image->displayImage(pixmap, position, displayTile);
+}
+
+
+
+void Viewer::changeImage(
+    const QPixmap& pixmap,
+    const QPoint& position,
+    const QPixmap& foregroundPixmap,
+    const QPoint& foregroundPosition,
+    bool displayTile
+) {
+    image->setVisible(true);
+    image->displaySuperimposedImages(pixmap, position, foregroundPixmap, foregroundPosition, displayTile);
 }
 
 

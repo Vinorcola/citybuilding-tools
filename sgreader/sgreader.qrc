@@ -1,6 +1,10 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-<qresource>
-	<file alias="icon.png">icons/sgreader.png</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file alias="icon.png">icons/sgreader.png</file>
+        <file alias="quit-icon">icons/quit.svg</file>
+        <file alias="open-file-icon">icons/open-file.svg</file>
+        <file alias="animation-icon">icons/animation.svg</file>
+        <file alias="play-icon">icons/play.svg</file>
+        <file alias="pause-icon">icons/pause.svg</file>
+    </qresource>
 </RCC>
