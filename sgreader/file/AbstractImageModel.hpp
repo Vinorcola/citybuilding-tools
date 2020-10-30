@@ -14,6 +14,7 @@ class AbstractImageModel : public QAbstractItemModel
 
         virtual QPixmap getPixmap(const QModelIndex& index) const = 0;
         virtual QPoint getPosition(const QModelIndex& index) const = 0;
+        virtual bool displayTile(const QModelIndex& index) const = 0;
 };
 
 #endif // ABSTRACTIMAGEMODEL_HPP

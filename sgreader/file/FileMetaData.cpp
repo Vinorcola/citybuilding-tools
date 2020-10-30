@@ -4,6 +4,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 
+#include "../exception/FileException.hpp"
 #include "BitmapMetaData.hpp"
 #include "ImageMetaData.hpp"
 
@@ -17,7 +18,9 @@ FileMetaData::FileMetaData(const QFileInfo& fileInfo) :
 {
     // Create the data stream from the file.
     QFile file(fileInfo.absoluteFilePath());
-    file.open(QIODevice::ReadOnly);
+    if (!file.open(QIODevice::ReadOnly)) {
+        throw FileException("Unable to open file");
+    }
     QDataStream input(&file);
     input.setByteOrder(QDataStream::LittleEndian);
 

@@ -29,7 +29,7 @@
 #include "gui/ImageTree.hpp"
 #include "gui/ImageTreeItem.hpp"
 
-MainWindow::MainWindow() :
+LegacyMainWindow::LegacyMainWindow() :
     QMainWindow(),
     imageLoader(new ImageLoader()),
     appname("SGReader"),
@@ -49,7 +49,7 @@ MainWindow::MainWindow() :
     resize(1200, 600);
 }
 
-MainWindow::~MainWindow()
+LegacyMainWindow::~LegacyMainWindow()
 {
     if (sgFile != nullptr) {
         delete sgFile;
@@ -58,7 +58,7 @@ MainWindow::~MainWindow()
 }
 
 /* Slots */
-void MainWindow::openFile() {
+void LegacyMainWindow::openFile() {
 	QString newfilename = QFileDialog::getOpenFileName(this, "Load SG file",
 		filename, "Sierra Graphics files (*.sg2 *.sg3)");
 	if (!newfilename.isEmpty()) {
@@ -66,7 +66,7 @@ void MainWindow::openFile() {
 	}
 }
 
-void MainWindow::saveFile() {
+void LegacyMainWindow::saveFile() {
 	QString suggestion = filename.replace(filename.length() - 4, 4, ".png");
 	QString pngfilename = QFileDialog::getSaveFileName(this, tr("Save Image"),
 		filename, "PNG File (*.png)");
@@ -85,22 +85,22 @@ void MainWindow::saveFile() {
 	}
 }
 
-void MainWindow::extractAll() {
+void LegacyMainWindow::extractAll() {
 	ExtractWizard wizard(this);
 	wizard.exec();
 }
 
-void MainWindow::licence() {
+void LegacyMainWindow::licence() {
 	LicenceDialog dialog(this, appname);
 	dialog.exec();
 }
 
-void MainWindow::help() {
+void LegacyMainWindow::help() {
 	HelpDialog dialog(this, appname);
 	dialog.exec();
 }
 
-void MainWindow::about() {
+void LegacyMainWindow::about() {
 	AboutDialog dialog(this, appname, QString("1.1 (2019-01-12)"),
 		tr("Copyright (C) 2007-2020 Bianca van Schaik &lt;pecuniam@gmail.com&gt;"),
 		tr("Read graphics files (*.sg2 and *.sg3) from Impressions citybuilding games.\n\n"
@@ -111,7 +111,7 @@ void MainWindow::about() {
     dialog.exec();
 }
 
-void MainWindow::treeSelectionChanged()
+void LegacyMainWindow::treeSelectionChanged()
 {
     QList<QTreeWidgetItem*> items = treeWidget->selectedItems();
     if (items.size() != 1) {
@@ -129,7 +129,7 @@ void MainWindow::treeSelectionChanged()
     }
 }
 
-void MainWindow::loadFile(const QString &filename)
+void LegacyMainWindow::loadFile(const QString &filename)
 {
     treeWidget->clear();
     treeWidget->setHeaderLabel("No file loaded");
@@ -172,10 +172,10 @@ void MainWindow::loadFile(const QString &filename)
     imageLoader->clearCache();
 }
 
-void MainWindow::loadImage(const ImageMetaData& imageMetaData)
+void LegacyMainWindow::loadImage(const ImageMetaData& imageMetaData)
 {
     try {
-        imageViewer->changeImage(imageMetaData);
+        //imageViewer->changeImage(imageMetaData);
         imageDetails->changeImageDetails(imageMetaData.getBinaryDescription());
         saveAction->setEnabled(true);
     }
@@ -186,7 +186,7 @@ void MainWindow::loadImage(const ImageMetaData& imageMetaData)
     }
 }
 
-void MainWindow::clearImage()
+void LegacyMainWindow::clearImage()
 {
     imageViewer->clear();
     imageDetails->clear();
@@ -194,7 +194,7 @@ void MainWindow::clearImage()
 }
 
 /* Creating stuff */
-void MainWindow::createChildren()
+void LegacyMainWindow::createChildren()
 {
     auto leftDock(new QDockWidget("Image browser", this));
     leftDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
@@ -215,7 +215,7 @@ void MainWindow::createChildren()
     statusBar->addWidget(controlPanel);
     setStatusBar(statusBar);
 
-    imageViewer = new Viewer(this, *imageLoader);
+    //imageViewer = new Viewer(this, *imageLoader);
 
     auto mainWidget(new QWidget());
     auto layout(new QVBoxLayout());
@@ -223,11 +223,11 @@ void MainWindow::createChildren()
     mainWidget->setLayout(layout);
     setCentralWidget(mainWidget);
 
-    connect(treeWidget, &QTreeWidget::itemSelectionChanged, this, &MainWindow::treeSelectionChanged);
+    connect(treeWidget, &QTreeWidget::itemSelectionChanged, this, &LegacyMainWindow::treeSelectionChanged);
     connect(controlPanel, &ControlPanel::zoomChanged, imageViewer, &Viewer::changeZoom);
 }
 
-void MainWindow::createActions() {
+void LegacyMainWindow::createActions() {
 	openAction = new QAction("&Open...", this);
 	openAction->setShortcut(tr("Ctrl+O"));
 	connect(openAction, SIGNAL(triggered()), this, SLOT(openFile()));
@@ -254,9 +254,9 @@ void MainWindow::createActions() {
         }
 
         if (imageItem->getImageMetaData().getType() == ImageMetaData::Type::Building) {
-            BuildingAnimationModel model(this, *imageLoader, imageItem->getImageMetaData());
-            AnimationDialog dialog(this, model);
-            dialog.exec();
+            //BuildingAnimationModel model(this, *imageLoader, imageItem->getImageMetaData());
+            //AnimationDialog dialog(this, model);
+            //dialog.exec();
         }
     });
 	
@@ -275,7 +275,7 @@ void MainWindow::createActions() {
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 }
 
-void MainWindow::createMenu() {
+void LegacyMainWindow::createMenu() {
 	QMenu *menu;
 	
 	menu = menuBar()->addMenu("&File");

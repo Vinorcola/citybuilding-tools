@@ -14,7 +14,7 @@ class QAction;
 class QTreeWidget;
 class Viewer;
 
-class MainWindow : public QMainWindow
+class LegacyMainWindow : public QMainWindow
 {
         Q_OBJECT
 
@@ -40,8 +40,8 @@ class MainWindow : public QMainWindow
         QAction* aboutAction;
 
     public:
-        MainWindow();
-        virtual ~MainWindow();
+        LegacyMainWindow();
+        virtual ~LegacyMainWindow();
 
     private slots:
         void openFile();

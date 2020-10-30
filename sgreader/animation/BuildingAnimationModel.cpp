@@ -78,6 +78,17 @@ QPoint BuildingAnimationModel::getPosition(const QModelIndex& index) const
 
 
 
+bool BuildingAnimationModel::displayTile(const QModelIndex& index) const
+{
+    if (!index.isValid()) {
+        return false;
+    }
+
+    return true;
+}
+
+
+
 int BuildingAnimationModel::columnCount(const QModelIndex& /*parent*/) const
 {
     return 1;

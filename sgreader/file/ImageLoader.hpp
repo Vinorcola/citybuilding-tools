@@ -10,6 +10,8 @@ class ImageMetaData;
 
 class ImageLoader
 {
+        Q_DISABLE_COPY_MOVE(ImageLoader)
+
     private:
         QHash<const ImageMetaData*, QImage> imageCache;
 

@@ -1,0 +1,125 @@
+#include "MainWindow.hpp"
+
+#include <QtWidgets/QAction>
+#include <QtWidgets/QDockWidget>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QToolBar>
+#include <QtWidgets/QTreeView>
+
+#include "../display/image/Viewer.hpp"
+#include "../exception/FileException.hpp"
+#include "../file/FileMetaData.hpp"
+#include "../file/FileModel.hpp"
+#include "ControlPanel.hpp"
+
+
+
+MainWindow::MainWindow() :
+    QMainWindow(),
+    animationAction(new QAction(QIcon(":/animation-icon"), tr("&Animation"), this)),
+    imageLoader(),
+    currentFileMetaData(nullptr),
+    currentFileModel(nullptr),
+    navigator(new QTreeView(this)),
+    viewer(new Viewer(this))
+{
+    // Configure window.
+    setWindowTitle("SG Reader");
+    setWindowIcon(QIcon(":/icon.png"));
+    setMinimumSize(800, 600);
+    setCentralWidget(viewer);
+
+    // Configure actions.
+    auto quitAction(new QAction(QIcon(":/quit-icon"), tr("&Quit"), this));
+    quitAction->setShortcut(tr("Ctrl+Q", "Quit action shortcut"));
+    connect(quitAction, &QAction::triggered, this, &QMainWindow::close);
+
+    auto openFileAction(new QAction(QIcon(":/open-file-icon"), tr("&Open"), this));
+    openFileAction->setShortcut(tr("Ctrl+O", "Open file action shortcut"));
+    connect(openFileAction, &QAction::triggered, [this]() {
+        auto file(QFileDialog::getOpenFileName(this, "Load SG file", {}, "Sierra Graphics files (*.sg2 *.sg3)"));
+        if (!file.isEmpty()) {
+            loadFile(file);
+        }
+    });
+
+    animationAction->setShortcut(tr("Ctrl+A", "Animation action shortcut"));
+    animationAction->setEnabled(false);
+
+    // Configure toolbar.
+    auto toolBar(addToolBar("File"));
+    toolBar->setMovable(false);
+    toolBar->setIconSize({32, 32});
+    toolBar->addAction(quitAction);
+    toolBar->addSeparator();
+    toolBar->addAction(openFileAction);
+    toolBar->addAction(animationAction);
+
+    // Configure docks.
+    navigator->setHeaderHidden(true);
+
+    auto leftDock(new QDockWidget("Image browser", this));
+    leftDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
+    leftDock->setWidget(navigator);
+    addDockWidget(Qt::LeftDockWidgetArea, leftDock);
+
+    // Confiure status bar.
+    auto controlPanel(new ControlPanel(this));
+    connect(controlPanel, &ControlPanel::zoomChanged, viewer, &Viewer::changeZoom);
+
+    auto statusBar(new QStatusBar(this));
+    statusBar->addWidget(controlPanel);
+    setStatusBar(statusBar);
+}
+
+
+
+MainWindow::~MainWindow()
+{
+    if (currentFileMetaData!= nullptr) {
+        delete currentFileMetaData;
+    }
+}
+
+
+
+void MainWindow::loadFile(const QString& filePath)
+{
+    try {
+        currentFileMetaData = new FileMetaData(filePath);
+    }
+    catch (FileException exception) {
+        return;
+    }
+
+
+    if (currentFileModel != nullptr) {
+        delete currentFileModel;
+    }
+    currentFileModel = new FileModel(this, imageLoader, *currentFileMetaData);
+    navigator->setModel(currentFileModel);
+    navigator->scrollToTop();
+    connect(navigator->selectionModel(), &QItemSelectionModel::selectionChanged, [this]() {
+        loadImage(navigator->selectionModel()->currentIndex());
+    });
+
+    animationAction->setEnabled(false);
+}
+
+
+
+void MainWindow::loadImage(const QModelIndex& index)
+{
+    if (currentFileModel == nullptr) {
+        return;
+    }
+
+    viewer->changeImage(
+        currentFileModel->getPixmap(index),
+        currentFileModel->getPosition(index),
+        currentFileModel->displayTile(index)
+    );
+    animationAction->setEnabled(currentFileModel->canBeAnimated(index));
+}

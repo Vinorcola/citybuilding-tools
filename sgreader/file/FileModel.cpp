@@ -26,7 +26,7 @@ QString FileModel::getTitle(const QModelIndex& index) const
         return metaData.getBitmapMetaData(index.row()).getTitle();
     }
     if (!index.parent().parent().isValid()) {
-        return metaData.getBitmapMetaData(index.parent().row()).getImageMetaData(index.row()).getTitle();
+        return QString::number(index.row() + 1) + ": " + metaData.getBitmapMetaData(index.parent().row()).getImageMetaData(index.row()).getTitle();
     }
 
     return QString();
@@ -66,6 +66,42 @@ QPoint FileModel::getPosition(const QModelIndex& index) const
     }
 
     return QPoint();
+}
+
+
+
+bool FileModel::displayTile(const QModelIndex& index) const
+{
+    if (!index.isValid()) {
+        return false;
+    }
+    if (!index.parent().isValid()) {
+        return false;
+    }
+    if (!index.parent().parent().isValid()) {
+        auto& imageMetaData(metaData.getBitmapMetaData(index.parent().row()).getImageMetaData(index.row()));
+
+        return imageMetaData.isBuilding() || imageMetaData.isCharacter();
+    }
+
+    return false;
+}
+
+
+
+bool FileModel::canBeAnimated(const QModelIndex& index) const
+{
+    if (!index.isValid()) {
+        return false;
+    }
+    if (!index.parent().isValid()) {
+        return false;
+    }
+    if (!index.parent().parent().isValid()) {
+        return metaData.getBitmapMetaData(index.parent().row()).getImageMetaData(index.row()).getAnimationLength() > 0;
+    }
+
+    return false;
 }
 
 

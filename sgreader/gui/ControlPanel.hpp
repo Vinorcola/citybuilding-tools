@@ -8,7 +8,7 @@ class ControlPanel : public QWidget
         Q_OBJECT
 
     public:
-        ControlPanel(QWidget* parent = nullptr);
+        explicit ControlPanel(QWidget* parent = nullptr);
 
     signals:
         void zoomChanged(int zoom);

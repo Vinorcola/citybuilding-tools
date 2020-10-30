@@ -2,8 +2,6 @@
 
 #include <QtGui/QPainter>
 
-#include "../../file/ImageLoader.hpp"
-#include "../../file/ImageMetaData.hpp"
 #include "AnimatedImageGraphics.hpp"
 
 // TODO: Review to handle Emperor size.
@@ -14,9 +12,8 @@ const int TILE_HALF_HEIGHT(TILE_HEIGHT / 2);
 
 
 
-ImageGraphics::ImageGraphics(ImageLoader& imageLoader) :
+ImageGraphics::ImageGraphics() :
     QGraphicsItem(),
-    imageLoader(imageLoader),
     tileImage(new QGraphicsPixmapItem(this)),
     mainImage(new QGraphicsPixmapItem(this)),
     animation(new AnimatedImageGraphics(this))
@@ -36,25 +33,24 @@ ImageGraphics::ImageGraphics(ImageLoader& imageLoader) :
 
     tileImage->setPixmap(QPixmap::fromImage(tile));
     tileImage->setPos(-TILE_HALF_WIDTH, -TILE_HEIGHT);
+    tileImage->setVisible(false);
 }
 
 
 
-void ImageGraphics::displayImage(const ImageMetaData& imageMetaData)
+void ImageGraphics::displayImage(const QPixmap& image, const QPoint& position, bool displayTile)
 {
-    auto image(imageLoader.loadImage(imageMetaData));
-    mainImage->setPixmap(QPixmap::fromImage(image));
-    mainImage->setPos(imageMetaData.getPositionOffset());
-    tileImage->setVisible(imageMetaData.isBuilding() || imageMetaData.isCharacter());
+    mainImage->setPixmap(image);
+    mainImage->setPos(position);
+    tileImage->setVisible(displayTile);
     animation->setVisible(false);
 }
 
 
 
-void ImageGraphics::displayImageWithAnimation(const ImageMetaData& imageMetaData)
+void ImageGraphics::displayImageWithAnimation()
 {
     // TODO
-    displayImage(imageMetaData);
 }
 
 

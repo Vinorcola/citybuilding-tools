@@ -20,6 +20,8 @@ class FileModel : public AbstractImageModel
         QString getTitle(const QModelIndex& index) const;
         virtual QPixmap getPixmap(const QModelIndex& index) const override;
         virtual QPoint getPosition(const QModelIndex& index) const override;
+        virtual bool displayTile(const QModelIndex& index) const override;
+        bool canBeAnimated(const QModelIndex& index) const;
 
         virtual int columnCount(const QModelIndex &parent = QModelIndex()) const override;
         virtual int rowCount(const QModelIndex &parent = QModelIndex()) const override;
