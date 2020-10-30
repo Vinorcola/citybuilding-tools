@@ -215,7 +215,7 @@ void MainWindow::updateBrowser(const QModelIndex& selection)
             }
         });
         browser->selectionModel()->setCurrentIndex(
-            animationModel->index(0, 0, animationModel->index(0, 0)),
+            animationModel->getInitialSelectionIndex(),
             QItemSelectionModel::SelectCurrent
         );
     }
