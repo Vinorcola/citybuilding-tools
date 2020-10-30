@@ -16,8 +16,8 @@ HEADERS += \
     exception/FileException.hpp \
     exception/OutOfRangeException.hpp \
     exception/RuntimeException.hpp \
+    file/animation/AbstractAnimationModel.hpp \
     file/animation/BuildingAnimationModel.hpp \
-    file/AbstractImageModel.hpp \
     file/BitmapMetaData.hpp \
     file/FileMetaData.hpp \
     file/FileModel.hpp \
@@ -51,8 +51,8 @@ SOURCES += \
     exception/FileException.cpp \
     exception/OutOfRangeException.cpp \
     exception/RuntimeException.cpp \
+    file/animation/AbstractAnimationModel.cpp \
     file/animation/BuildingAnimationModel.cpp \
-    file/AbstractImageModel.cpp \
     file/BitmapMetaData.cpp \
     file/FileMetaData.cpp \
     file/FileModel.cpp \

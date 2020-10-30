@@ -1,13 +1,15 @@
 #ifndef FILEMODEL_HPP
 #define FILEMODEL_HPP
 
-#include "AbstractImageModel.hpp"
+#include <QtCore/QAbstractItemModel>
+#include <QtCore/QString>
+#include <QtGui/QPixmap>
 
 class FileMetaData;
 class ImageLoader;
 class ImageMetaData;
 
-class FileModel : public AbstractImageModel
+class FileModel : public QAbstractItemModel
 {
         Q_OBJECT
 
@@ -18,12 +20,12 @@ class FileModel : public AbstractImageModel
     public:
         FileModel(QObject* parent, ImageLoader& imageLoader, const FileMetaData& metaData);
 
-        const ImageMetaData* getMetaData(const QModelIndex& index) const;
+        const ImageMetaData* getImageMetaData(const QModelIndex& index) const;
         QString getTitle(const QModelIndex& index) const;
         QString getBinaryDetails(const QModelIndex& index) const;
-        virtual QPixmap getPixmap(const QModelIndex& index) const override;
-        virtual QPoint getPosition(const QModelIndex& index) const override;
-        virtual bool displayTile(const QModelIndex& index) const override;
+        QPixmap getPixmap(const QModelIndex& index) const;
+        QPoint getPosition(const QModelIndex& index) const;
+        bool displayTile(const QModelIndex& index) const;
         bool canBeAnimated(const QModelIndex& index) const;
 
         virtual int columnCount(const QModelIndex &parent = QModelIndex()) const override;

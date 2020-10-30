@@ -9,7 +9,7 @@
 
 
 FileModel::FileModel(QObject* parent, ImageLoader& imageLoader, const FileMetaData& metaData) :
-    AbstractImageModel(parent),
+    QAbstractItemModel(parent),
     imageLoader(imageLoader),
     metaData(metaData)
 {
@@ -18,7 +18,7 @@ FileModel::FileModel(QObject* parent, ImageLoader& imageLoader, const FileMetaDa
 
 
 
-const ImageMetaData* FileModel::getMetaData(const QModelIndex& index) const
+const ImageMetaData* FileModel::getImageMetaData(const QModelIndex& index) const
 {
     if (!index.isValid()) {
         return nullptr;

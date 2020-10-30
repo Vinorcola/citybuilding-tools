@@ -1,27 +1,29 @@
 #include "BuildingAnimationModel.hpp"
 
-#include "../file/BitmapMetaData.hpp"
-#include "../file/ImageLoader.hpp"
-#include "../file/ImageMetaData.hpp"
+#include "../BitmapMetaData.hpp"
+#include "../FileModel.hpp"
+#include "../ImageMetaData.hpp"
 
 
 
 BuildingAnimationModel::BuildingAnimationModel(
     QObject* parent,
-    ImageLoader& imageLoader,
-    const ImageMetaData& imageMetaData
+    const FileModel& model,
+    const QModelIndex& rootImageIndex
 ) :
-    AbstractImageModel(parent),
-    imageLoader(imageLoader),
-    animationMetaData(imageMetaData),
-    rootImage(QPixmap::fromImage(imageLoader.loadImage(imageMetaData))),
-    animationImages()
+    AbstractAnimationModel(parent),
+    rootImageIndex(rootImageIndex),
+    animationImageIndexes()
 {
-    auto& bitmapMetaData(imageMetaData.getBitmapMetaData());
-    const ImageMetaData* nextImage(&imageMetaData);
-    for (int animationIndex(0); animationIndex < imageMetaData.getAnimationLength(); ++animationIndex) {
-        nextImage = &bitmapMetaData.getNextImage(*nextImage);
-        animationImages.append(QPixmap::fromImage(imageLoader.loadImage(*nextImage)));
+    auto imageMetaData(model.getImageMetaData(rootImageIndex));
+    if (imageMetaData) {
+        for (int animationIndex(1); animationIndex <= imageMetaData->getAnimationLength(); ++animationIndex) {
+            animationImageIndexes.append(model.index(
+                rootImageIndex.row() + animationIndex,
+                rootImageIndex.column(),
+                rootImageIndex.parent()
+            ));
+        }
     }
 }
 
@@ -47,44 +49,19 @@ QString BuildingAnimationModel::getTitle(const QModelIndex& index) const
 
 
 
-QPixmap BuildingAnimationModel::getPixmap(const QModelIndex& index) const
+QModelIndex BuildingAnimationModel::getMainModelImageIndex(const QModelIndex& index) const
 {
     if (!index.isValid()) {
-        return QPixmap();
+        return QModelIndex();
+    }
+    if (!index.parent().isValid()) {
+        return rootImageIndex;
+    }
+    if (!index.parent().parent().isValid()) {
+        return animationImageIndexes.at(index.row());
     }
 
-    switch (index.internalId()) {
-        case 0:
-            return rootImage;
-
-        case 1:
-            return animationImages.at(index.row());
-
-        default:
-            return QPixmap();
-    }
-}
-
-
-
-QPoint BuildingAnimationModel::getPosition(const QModelIndex& index) const
-{
-    if (!index.isValid()) {
-        return QPoint();
-    }
-
-    return animationMetaData.getRawPositionOffset();
-}
-
-
-
-bool BuildingAnimationModel::displayTile(const QModelIndex& index) const
-{
-    if (!index.isValid()) {
-        return false;
-    }
-
-    return true;
+    return QModelIndex();
 }
 
 
@@ -102,7 +79,7 @@ int BuildingAnimationModel::rowCount(const QModelIndex& parent) const
         return 1;
     }
     if (!parent.parent().isValid()) {
-        return animationImages.length();
+        return animationImageIndexes.length();
     }
 
     return 0;

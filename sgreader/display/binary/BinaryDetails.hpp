@@ -1,5 +1,5 @@
-#ifndef IMAGEDETAILS_HPP
-#define IMAGEDETAILS_HPP
+#ifndef BINARYDETAILS_HPP
+#define BINARYDETAILS_HPP
 
 #include <QtWidgets/QWidget>
 
@@ -23,4 +23,4 @@ class BinaryDetails : public QWidget
         void clear();
 };
 
-#endif // IMAGEDETAILS_HPP
+#endif // BINARYDETAILS_HPP
