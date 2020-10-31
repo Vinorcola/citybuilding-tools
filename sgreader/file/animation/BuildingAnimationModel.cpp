@@ -149,10 +149,6 @@ QModelIndex BuildingAnimationModel::parent(const QModelIndex& child) const
 
 QVariant BuildingAnimationModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid()) {
-        return QVariant();
-    }
-
     switch (role) {
         case Qt::DisplayRole:
             return getTitle(index);

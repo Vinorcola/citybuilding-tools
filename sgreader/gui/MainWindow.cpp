@@ -14,6 +14,7 @@
 #include "../exception/FileException.hpp"
 #include "../file/animation/AbstractAnimationModel.hpp"
 #include "../file/animation/BuildingAnimationModel.hpp"
+#include "../file/animation/CharacterAnimationModel.hpp"
 #include "../file/FileMetaData.hpp"
 #include "../file/FileModel.hpp"
 #include "../file/ImageMetaData.hpp"
@@ -209,7 +210,12 @@ void MainWindow::startAnimation()
     if (imageMetaData->isBuilding()) {
         animationModel = new BuildingAnimationModel(this, *currentFileModel, currentIndex);
         updateBrowser(QModelIndex());
-        animationPlayAction->start(*animationModel, animationModel->getInitialSelectionIndex());
+        animationPlayAction->start(*animationModel);
+    }
+    else if (imageMetaData->isCharacter()) {
+        animationModel = new CharacterAnimationModel(this, *currentFileModel, currentIndex);
+        updateBrowser(QModelIndex());
+        animationPlayAction->start(*animationModel);
     }
     else {
         detailsDisplay->setError("Unknown animation type.");

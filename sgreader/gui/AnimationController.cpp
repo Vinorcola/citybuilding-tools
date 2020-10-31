@@ -31,10 +31,10 @@ AnimationController::AnimationController(QWidget* parent, QWidget* imageBrowser)
 
 
 
-void AnimationController::start(const AbstractAnimationModel& model, const QModelIndex& initialIndex)
+void AnimationController::start(const AbstractAnimationModel& model)
 {
     this->model = &model;
-    currentIndex = initialIndex;
+    currentIndex = model.getInitialSelectionIndex();
     setEnabled(true);
     if (timerId == 0) {
         play();

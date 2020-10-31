@@ -22,7 +22,7 @@ class AnimationController : public QAction
     public:
         AnimationController(QWidget* parent, QWidget* imageBrowser);
 
-        void start(const AbstractAnimationModel& model, const QModelIndex& initialIndex);
+        void start(const AbstractAnimationModel& model);
         void updateCurrentIndex(const QModelIndex& index);
         void reset();
 

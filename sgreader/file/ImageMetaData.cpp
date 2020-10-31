@@ -223,6 +223,13 @@ int ImageMetaData::getAnimationLength() const
 
 
 
+int ImageMetaData::getAnimationAlternativesQuantity() const
+{
+    return rawData.animation_orientation_alternative_quantity;
+}
+
+
+
 bool ImageMetaData::isBuilding() const
 {
     return getType() == Type::Building;

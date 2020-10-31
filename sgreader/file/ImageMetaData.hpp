@@ -96,6 +96,7 @@ class ImageMetaData
         QPoint getRawPositionOffset() const;
         QString getBinaryDescription() const;
         int getAnimationLength() const;
+        int getAnimationAlternativesQuantity() const;
         bool isBuilding() const;
         bool isCharacter() const;
 

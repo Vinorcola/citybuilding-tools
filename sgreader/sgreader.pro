@@ -17,6 +17,7 @@ HEADERS += \
     exception/RuntimeException.hpp \
     file/animation/AbstractAnimationModel.hpp \
     file/animation/BuildingAnimationModel.hpp \
+    file/animation/CharacterAnimationModel.hpp \
     file/BitmapMetaData.hpp \
     file/FileMetaData.hpp \
     file/FileModel.hpp \
@@ -47,6 +48,7 @@ SOURCES += \
     exception/RuntimeException.cpp \
     file/animation/AbstractAnimationModel.cpp \
     file/animation/BuildingAnimationModel.cpp \
+    file/animation/CharacterAnimationModel.cpp \
     file/BitmapMetaData.cpp \
     file/FileMetaData.cpp \
     file/FileModel.cpp \
