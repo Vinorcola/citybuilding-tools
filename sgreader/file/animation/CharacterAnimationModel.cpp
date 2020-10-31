@@ -20,13 +20,16 @@ CharacterAnimationModel::CharacterAnimationModel(
         if (animationAlternatives == 0) {
             animationAlternatives = 1;
         }
-        animationImageIndexes.append(rootImageIndex);
-        for (int animationIndex(1); animationIndex < imageMetaData->getAnimationLength(); ++animationIndex) {
-            animationImageIndexes.append(model.index(
-                rootImageIndex.row() + (animationIndex * animationAlternatives),
-                rootImageIndex.column(),
-                rootImageIndex.parent()
-            ));
+        for (int alternativeIndex(0); alternativeIndex < animationAlternatives; ++alternativeIndex) {
+            QList<QModelIndex> alternativeList;
+            for (int animationIndex(0); animationIndex < imageMetaData->getAnimationLength(); ++animationIndex) {
+                alternativeList.append(model.index(
+                    rootImageIndex.row() + (animationIndex * animationAlternatives) + alternativeIndex,
+                    rootImageIndex.column(),
+                    rootImageIndex.parent()
+                ));
+            }
+            animationImageIndexes.append(alternativeList);
         }
     }
 }
@@ -40,6 +43,10 @@ QString CharacterAnimationModel::getTitle(const QModelIndex& index) const
     }
 
     if (!index.parent().isValid()) {
+        return tr("Alternative ") + QString::number(index.row() + 1);
+    }
+
+    if (!index.parent().parent().isValid()) {
         return QString::number(index.row() + 1);
     }
 
@@ -50,7 +57,7 @@ QString CharacterAnimationModel::getTitle(const QModelIndex& index) const
 
 QModelIndex CharacterAnimationModel::getInitialSelectionIndex() const
 {
-    return index(0, 0);
+    return index(0, 0, index(0, 0));
 }
 
 
@@ -64,7 +71,7 @@ bool CharacterAnimationModel::hasBackgroundImage(const QModelIndex& /*index*/) c
 
 QModelIndex CharacterAnimationModel::getMainModelRootImageIndex() const
 {
-    return animationImageIndexes.first();
+    return animationImageIndexes.first().first();
 }
 
 
@@ -76,7 +83,11 @@ QModelIndex CharacterAnimationModel::getMainModelImageIndex(const QModelIndex& i
     }
 
     if (!index.parent().isValid()) {
-        return animationImageIndexes.at(index.row());
+        return animationImageIndexes.at(index.row()).first();
+    }
+
+    if (!index.parent().parent().isValid()) {
+        return animationImageIndexes.at(index.parent().row()).at(index.row());
     }
 
     return QModelIndex();
@@ -96,6 +107,9 @@ int CharacterAnimationModel::rowCount(const QModelIndex& parent) const
     if (!parent.isValid()) {
         return animationImageIndexes.length();
     }
+    if (!parent.parent().isValid()) {
+        return animationImageIndexes.at(parent.row()).length();
+    }
 
     return 0;
 }
@@ -105,7 +119,10 @@ int CharacterAnimationModel::rowCount(const QModelIndex& parent) const
 QModelIndex CharacterAnimationModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!parent.isValid()) {
-        return createIndex(row, column);
+        return createIndex(row, column, -1);
+    }
+    if (!parent.parent().isValid()) {
+        return createIndex(row, column, parent.row());
     }
 
     return QModelIndex();
@@ -113,8 +130,12 @@ QModelIndex CharacterAnimationModel::index(int row, int column, const QModelInde
 
 
 
-QModelIndex CharacterAnimationModel::parent(const QModelIndex& /*child*/) const
+QModelIndex CharacterAnimationModel::parent(const QModelIndex& child) const
 {
+    if (child.internalId() >= 0) {
+        return createIndex(child.internalId(), 0, -1);
+    }
+
     return QModelIndex();
 }
 

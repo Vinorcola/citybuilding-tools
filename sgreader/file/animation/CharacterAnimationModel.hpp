@@ -10,7 +10,7 @@ class CharacterAnimationModel : public AbstractAnimationModel
         Q_OBJECT
 
     private:
-        QList<QModelIndex> animationImageIndexes;
+        QList<QList<QModelIndex>> animationImageIndexes;
 
     public:
         CharacterAnimationModel(QObject* parent, const FileModel& model, const QModelIndex& rootImageIndex);
