@@ -8,6 +8,12 @@
 class BitmapMetaData;
 class ImageMetaData;
 
+/**
+ * @brief Load a displayable image using an image meta-data.
+ *
+ * `.sg*` files mostly contains meta-data about images and `.555` files contains the image content data. The service
+ * contains all the logic necessary to load a displayable image by reading the `.555` file using the image meta-data.
+ */
 class ImageLoader
 {
         Q_DISABLE_COPY_MOVE(ImageLoader)

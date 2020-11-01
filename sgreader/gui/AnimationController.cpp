@@ -8,7 +8,7 @@ const QString PAUSE_TEXT(QObject::tr("Pause"));
 
 
 
-AnimationController::AnimationController(QWidget* parent, QWidget* imageBrowser) :
+AnimationController::AnimationController(QWidget* parent, QWidget& imageBrowser) :
     QAction(QIcon(":/icon/play"), PLAY_TEXT, parent),
     PLAY_ICON(":/icon/play"),
     PAUSE_ICON(":/icon/pause"),
@@ -71,7 +71,7 @@ void AnimationController::play()
     timerId = startTimer(model->getAnimationTimeInterval());
     setIcon(PAUSE_ICON);
     setText(PAUSE_TEXT);
-    imageBrowser->setEnabled(false);
+    imageBrowser.setEnabled(false);
 }
 
 
@@ -82,7 +82,7 @@ void AnimationController::pause()
     timerId = 0;
     setIcon(PLAY_ICON);
     setText(PLAY_TEXT);
-    imageBrowser->setEnabled(true);
+    imageBrowser.setEnabled(true);
 }
 
 

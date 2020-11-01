@@ -8,6 +8,12 @@
 
 class FileModel;
 
+/**
+ * @brief Handle a building (a static element) animation.
+ *
+ * Building animations are composed of a main image: the main building image; and an animation set of images to apply
+ * over the main image.
+ */
 class BuildingAnimationModel : public AbstractAnimationModel
 {
         Q_OBJECT

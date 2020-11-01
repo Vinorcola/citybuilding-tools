@@ -10,7 +10,7 @@ class ImageMetaData;
 /**
  * @brief Represente the meta-data of a bitmap.
  *
- * An `.sg*` file contains one to several bitmaps. Each bitmap contains to it tourn several images met-data.
+ * A `.sg*` file contains one to several bitmaps. Each bitmap contains to it's tourn several images meta-data.
  */
 class BitmapMetaData
 {

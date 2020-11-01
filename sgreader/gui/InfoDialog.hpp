@@ -3,6 +3,9 @@
 
 #include <QtWidgets/QDialog>
 
+/**
+ * @brief A dialog with copyrights, help and licenses details.
+ */
 class InfoDialog : public QDialog
 {
         Q_OBJECT

@@ -3,6 +3,9 @@
 
 #include <QtCore/QString>
 
+/**
+ * @brief A helper for formatting binary data for a display purpose.
+ */
 class BinaryFormatter
 {
     public:

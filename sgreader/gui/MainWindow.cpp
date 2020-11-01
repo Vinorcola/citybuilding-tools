@@ -34,7 +34,7 @@ MainWindow::MainWindow() :
     detailsDisplay(new BinaryDetails(this)),
     viewer(new Viewer(this)),
     animationAction(new QAction(QIcon(":/icon/animation"), tr("&Animation"), this)),
-    animationPlayAction(new AnimationController(this, browser))
+    animationPlayAction(new AnimationController(this, *browser))
 {
     // Configure window.
     setWindowTitle("SG Reader");

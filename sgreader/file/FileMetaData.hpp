@@ -10,6 +10,12 @@ class ImageMetaData;
 
 template<class T> using owner = T;
 
+/**
+ * @brief Represent the meta-data of a `.sg*` file.
+ *
+ * Each `.sg*` file have a header including information about bitmaps and images. A file meta-data will load bitmaps meta-
+ * data and images meta-data.
+ */
 class FileMetaData
 {
         Q_DISABLE_COPY_MOVE(FileMetaData)

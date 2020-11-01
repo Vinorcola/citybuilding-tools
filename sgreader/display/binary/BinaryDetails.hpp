@@ -5,6 +5,9 @@
 
 class QLabel;
 
+/**
+ * @brief A widget to display some binary data.
+ */
 class BinaryDetails : public QWidget
 {
         Q_OBJECT

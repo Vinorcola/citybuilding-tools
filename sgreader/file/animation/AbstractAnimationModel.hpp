@@ -5,6 +5,13 @@
 #include <QtCore/QPoint>
 #include <QtGui/QPixmap>
 
+/**
+ * @brief A model handling an animation data.
+ *
+ * The animation models are used to run an animation. Animation information (length, alternatives) are found into the
+ * first image meta data of the animation mostly (except for building images where animation info are hold by the
+ * main building image).
+ */
 class AbstractAnimationModel : public QAbstractItemModel
 {
         Q_OBJECT

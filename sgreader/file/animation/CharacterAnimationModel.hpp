@@ -5,6 +5,12 @@
 
 class FileModel;
 
+/**
+ * @brief Handle a character (a dynamic element) animation.
+ *
+ * Character animations are composed of a set of images and may have several alternatives. Most of the time, animation
+ * alternatives are due to different orientations.
+ */
 class CharacterAnimationModel : public AbstractAnimationModel
 {
         Q_OBJECT

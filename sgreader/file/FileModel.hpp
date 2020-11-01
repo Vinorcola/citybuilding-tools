@@ -9,6 +9,11 @@ class FileMetaData;
 class ImageLoader;
 class ImageMetaData;
 
+/**
+ * @brief A model that represent the hierarchy of available bitmaps and images withint a `.sg*` file.
+ *
+ * This model will be displayed in the main window's browser.
+ */
 class FileModel : public QAbstractItemModel
 {
         Q_OBJECT
