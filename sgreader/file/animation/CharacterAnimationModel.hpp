@@ -16,6 +16,7 @@ class CharacterAnimationModel : public AbstractAnimationModel
         CharacterAnimationModel(QObject* parent, const FileModel& model, const QModelIndex& rootImageIndex);
 
         QString getTitle(const QModelIndex& index) const;
+        virtual int getAnimationTimeInterval() const override;
         virtual QModelIndex getInitialAnimationIndex(const QModelIndex& index) const override;
         virtual bool hasBackgroundImage(const QModelIndex& index) const override;
         virtual QModelIndex getMainModelRootImageIndex() const override;

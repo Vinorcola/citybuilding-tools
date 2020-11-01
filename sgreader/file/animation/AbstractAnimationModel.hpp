@@ -12,6 +12,7 @@ class AbstractAnimationModel : public QAbstractItemModel
     public:
         AbstractAnimationModel(QObject* parent);
 
+        virtual int getAnimationTimeInterval() const = 0;
         virtual QModelIndex getInitialAnimationIndex(const QModelIndex& index) const = 0;
         virtual bool hasBackgroundImage(const QModelIndex& index) const = 0;
         virtual QModelIndex getMainModelRootImageIndex() const = 0;

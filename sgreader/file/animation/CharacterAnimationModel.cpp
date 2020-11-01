@@ -55,6 +55,13 @@ QString CharacterAnimationModel::getTitle(const QModelIndex& index) const
 
 
 
+int CharacterAnimationModel::getAnimationTimeInterval() const
+{
+    return 100;
+}
+
+
+
 QModelIndex CharacterAnimationModel::getInitialAnimationIndex(const QModelIndex& index) const
 {
     if (!index.isValid()) {

@@ -49,6 +49,13 @@ QString BuildingAnimationModel::getTitle(const QModelIndex& index) const
 
 
 
+int BuildingAnimationModel::getAnimationTimeInterval() const
+{
+    return 150;
+}
+
+
+
 QModelIndex BuildingAnimationModel::getInitialAnimationIndex(const QModelIndex& index) const
 {
     if (!index.isValid()) {

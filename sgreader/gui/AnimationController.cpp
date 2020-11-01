@@ -5,7 +5,6 @@
 // Note: we can't initialoze the icons here as resosurces will not be loaded (images won't be found)
 const QString PLAY_TEXT(QObject::tr("Play"));
 const QString PAUSE_TEXT(QObject::tr("Pause"));
-const int TIMER_INTERVAL(150);
 
 
 
@@ -69,7 +68,7 @@ void AnimationController::play()
     currentIndex = model->getInitialAnimationIndex(currentIndex);
     emit updateAnimation(currentIndex);
 
-    timerId = startTimer(TIMER_INTERVAL);
+    timerId = startTimer(model->getAnimationTimeInterval());
     setIcon(PAUSE_ICON);
     setText(PAUSE_TEXT);
     imageBrowser->setEnabled(false);
