@@ -162,7 +162,13 @@ void MainWindow::clearFile()
         delete currentFileModel;
         currentFileModel = nullptr;
     }
+    if (animationModel != nullptr) {
+        animationPlayAction->reset();
+        delete animationModel;
+        animationModel = nullptr;
+    }
     detailsDisplay->clear();
+    viewer->clear();
     animationAction->setEnabled(false);
 }
 
