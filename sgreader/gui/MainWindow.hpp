@@ -3,6 +3,7 @@
 
 #include <QtWidgets/QMainWindow>
 
+#include "../file/ImageExporter.hpp"
 #include "../file/ImageLoader.hpp"
 
 class AbstractAnimationModel;
@@ -19,6 +20,7 @@ class MainWindow : public QMainWindow
 
     private:
         ImageLoader imageLoader;
+        ImageExporter imageExporter;
         FileMetaData* currentFileMetaData;
         FileModel* currentFileModel;
         AbstractAnimationModel* animationModel;
@@ -39,6 +41,9 @@ class MainWindow : public QMainWindow
         void startAnimation();
         void stopAnimation();
         void updateBrowser(const QModelIndex& selection);
+
+    protected slots:
+        void saveImage();
 };
 
 #endif // MAINWINDOW_HPP

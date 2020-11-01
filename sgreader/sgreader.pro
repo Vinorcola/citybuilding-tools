@@ -21,6 +21,7 @@ HEADERS += \
     file/BitmapMetaData.hpp \
     file/FileMetaData.hpp \
     file/FileModel.hpp \
+    file/ImageExporter.hpp \
     file/ImageLoader.hpp \
     file/ImageMetaData.hpp \
     gui/extractWizard/filelistpage.h \
@@ -52,6 +53,7 @@ SOURCES += \
     file/BitmapMetaData.cpp \
     file/FileMetaData.cpp \
     file/FileModel.cpp \
+    file/ImageExporter.cpp \
     file/ImageLoader.cpp \
     file/ImageMetaData.cpp \
     gui/extractWizard/filelistpage.cpp \

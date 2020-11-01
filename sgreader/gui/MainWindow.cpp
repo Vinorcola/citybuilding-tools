@@ -27,6 +27,7 @@
 MainWindow::MainWindow() :
     QMainWindow(),
     imageLoader(),
+    imageExporter(imageLoader),
     currentFileMetaData(nullptr),
     currentFileModel(nullptr),
     animationModel(nullptr),
@@ -47,9 +48,13 @@ MainWindow::MainWindow() :
     quitAction->setShortcut(tr("Ctrl+Q", "Quit action shortcut"));
     connect(quitAction, &QAction::triggered, this, &QMainWindow::close);
 
+    auto extractAction(new QAction(QIcon(":/icon/extract"), tr("Extract"), this));
+    extractAction->setEnabled(false);
+    connect(extractAction, &QAction::triggered, this, &MainWindow::saveImage);
+
     auto openFileAction(new QAction(QIcon(":/icon/open-file"), tr("&Open"), this));
     openFileAction->setShortcut(tr("Ctrl+O", "Open file action shortcut"));
-    connect(openFileAction, &QAction::triggered, [this]() {
+    connect(openFileAction, &QAction::triggered, [this, extractAction]() {
         QString currentDirectory(
             currentFileMetaData == nullptr ?
                 QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first() :
@@ -58,6 +63,7 @@ MainWindow::MainWindow() :
         auto file(QFileDialog::getOpenFileName(this, "Load SG file", currentDirectory, "Sierra Graphics files (*.sg2 *.sg3)"));
         if (!file.isEmpty()) {
             loadFile(file);
+            extractAction->setEnabled(true);
         }
     });
 
@@ -95,6 +101,8 @@ MainWindow::MainWindow() :
     toolBar->addAction(quitAction);
     toolBar->addSeparator();
     toolBar->addAction(openFileAction);
+    toolBar->addAction(extractAction);
+    toolBar->addSeparator();
     toolBar->addAction(animationAction);
     toolBar->addAction(animationPlayAction);
     auto spacer(new QWidget());
@@ -269,5 +277,25 @@ void MainWindow::updateBrowser(const QModelIndex& selection)
             }
             animationPlayAction->updateCurrentIndex(selectedIndexes.first());
         });
+    }
+}
+
+
+
+void MainWindow::saveImage()
+{
+    auto file(QFileDialog::getSaveFileName(
+        this,
+        "Save image",
+        currentFileMetaData->getFileInfo().dir().absolutePath() + "/image.png",
+        "Image (*.png)"
+    ));
+    if (file.isEmpty()) {
+        return;
+    }
+
+    auto currentImage(currentFileModel->getImageMetaData(browser->selectionModel()->currentIndex()));
+    if (currentImage != nullptr) {
+        imageExporter.exportImageTo(*currentImage, file);
     }
 }

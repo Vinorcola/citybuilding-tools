@@ -7,6 +7,7 @@
         <file alias="play">assets/icons/play.svg</file>
         <file alias="pause">assets/icons/pause.svg</file>
         <file alias="info">assets/icons/info.svg</file>
+        <file alias="extract">assets/icons/extract.svg</file>
     </qresource>
     <qresource prefix="/license">
         <file alias="icons">assets/licenses/cc-by-4.0.txt</file>
