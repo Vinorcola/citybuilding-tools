@@ -49,10 +49,20 @@ QString BuildingAnimationModel::getTitle(const QModelIndex& index) const
 
 
 
-QModelIndex BuildingAnimationModel::getInitialSelectionIndex() const
+QModelIndex BuildingAnimationModel::getInitialAnimationIndex(const QModelIndex& index) const
 {
-    // First sub image.
-    return index(0, 0, index(0, 0));
+    if (!index.isValid()) {
+        return QModelIndex();
+    }
+
+    if (!index.parent().isValid()) {
+        return this->index(0, 0, this->index(0, 0));
+    }
+    if (!index.parent().parent().isValid()) {
+        return index;
+    }
+
+    return QModelIndex();
 }
 
 

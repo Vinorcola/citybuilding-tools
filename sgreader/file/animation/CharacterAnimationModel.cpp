@@ -55,9 +55,20 @@ QString CharacterAnimationModel::getTitle(const QModelIndex& index) const
 
 
 
-QModelIndex CharacterAnimationModel::getInitialSelectionIndex() const
+QModelIndex CharacterAnimationModel::getInitialAnimationIndex(const QModelIndex& index) const
 {
-    return index(0, 0, index(0, 0));
+    if (!index.isValid()) {
+        return QModelIndex();
+    }
+
+    if (!index.parent().isValid()) {
+        return this->index(0, 0, index);
+    }
+    if (!index.parent().parent().isValid()) {
+        return index;
+    }
+
+    return QModelIndex();
 }
 
 

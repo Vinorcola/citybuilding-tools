@@ -34,7 +34,7 @@ AnimationController::AnimationController(QWidget* parent, QWidget* imageBrowser)
 void AnimationController::start(const AbstractAnimationModel& model)
 {
     this->model = &model;
-    currentIndex = model.getInitialSelectionIndex();
+    currentIndex = model.index(0, 0);
     setEnabled(true);
     if (timerId == 0) {
         play();
@@ -66,6 +66,9 @@ void AnimationController::reset()
 
 void AnimationController::play()
 {
+    currentIndex = model->getInitialAnimationIndex(currentIndex);
+    emit updateAnimation(currentIndex);
+
     timerId = startTimer(TIMER_INTERVAL);
     setIcon(PAUSE_ICON);
     setText(PAUSE_TEXT);
