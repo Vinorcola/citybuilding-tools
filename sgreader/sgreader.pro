@@ -12,6 +12,7 @@ HEADERS += \
     display/image/ImageGraphics.hpp \
     display/image/ImageScene.hpp \
     display/image/Viewer.hpp \
+    exception/ExportException.hpp \
     exception/FileException.hpp \
     exception/OutOfRangeException.hpp \
     exception/RuntimeException.hpp \
@@ -44,6 +45,7 @@ SOURCES += \
     display/image/ImageGraphics.cpp \
     display/image/ImageScene.cpp \
     display/image/Viewer.cpp \
+    exception/ExportException.cpp \
     exception/FileException.cpp \
     exception/OutOfRangeException.cpp \
     exception/RuntimeException.cpp \

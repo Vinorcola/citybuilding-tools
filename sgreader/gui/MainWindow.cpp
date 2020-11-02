@@ -11,6 +11,7 @@
 
 #include "../display/binary/BinaryDetails.hpp"
 #include "../display/image/Viewer.hpp"
+#include "../exception/ExportException.hpp"
 #include "../exception/FileException.hpp"
 #include "../file/animation/AbstractAnimationModel.hpp"
 #include "../file/animation/BuildingAnimationModel.hpp"
@@ -284,18 +285,54 @@ void MainWindow::updateBrowser(const QModelIndex& selection)
 
 void MainWindow::saveImage()
 {
-    auto file(QFileDialog::getSaveFileName(
-        this,
-        "Save image",
-        currentFileMetaData->getFileInfo().dir().absolutePath() + "/image.png",
-        "Image (*.png)"
-    ));
-    if (file.isEmpty()) {
-        return;
-    }
+    if (animationModel == nullptr) {
+        // Export single image.
+        auto file(QFileDialog::getSaveFileName(
+            this,
+            "Save image",
+            currentFileMetaData->getFileInfo().dir().absolutePath() + "/image.png",
+            "Image (*.png)"
+        ));
+        if (file.isEmpty()) {
+            return;
+        }
 
-    auto currentImage(currentFileModel->getImageMetaData(browser->selectionModel()->currentIndex()));
-    if (currentImage != nullptr) {
-        imageExporter.exportImageTo(*currentImage, file);
+        auto currentImage(currentFileModel->getImageMetaData(browser->selectionModel()->currentIndex()));
+        if (currentImage != nullptr) {
+            imageExporter.exportImageTo(*currentImage, file);
+        }
+    }
+    else {
+        // Export animation.
+        auto file(QFileDialog::getSaveFileName(
+            this,
+            "Save animation image",
+            currentFileMetaData->getFileInfo().dir().absolutePath() + "/animation",
+            "Folder"
+        ));
+        if (file.isEmpty()) {
+            return;
+        }
+
+        auto buildingAnimationModel(dynamic_cast<BuildingAnimationModel*>(animationModel));
+        if (buildingAnimationModel != nullptr) {
+            try {
+                imageExporter.exportBuildingAnimationTo(*currentFileModel, *buildingAnimationModel, file);
+            }
+            catch (ExportException exception) {
+                detailsDisplay->setError(exception.getMessage());
+            }
+            return;
+        }
+
+        auto characterAnimationModel(dynamic_cast<CharacterAnimationModel*>(animationModel));
+        if (characterAnimationModel != nullptr) {
+            try {
+                imageExporter.exportCharacterAnimationTo(*currentFileModel, *characterAnimationModel, file);
+            }
+            catch (ExportException exception) {
+                detailsDisplay->setError(exception.getMessage());
+            }
+        }
     }
 }

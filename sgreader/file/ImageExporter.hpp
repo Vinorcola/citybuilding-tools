@@ -3,9 +3,11 @@
 
 #include <QtCore/QtGlobal>
 
+class BuildingAnimationModel;
+class CharacterAnimationModel;
+class FileModel;
 class ImageLoader;
 class ImageMetaData;
-class QPixmap;
 
 class ImageExporter
 {
@@ -18,6 +20,18 @@ class ImageExporter
         ImageExporter(ImageLoader& imageLoader);
 
         void exportImageTo(const ImageMetaData& image, const QString& path) const;
+
+        void exportBuildingAnimationTo(
+            const FileModel& imageModel,
+            const BuildingAnimationModel& animationModel,
+            const QString& path
+        ) const;
+
+        void exportCharacterAnimationTo(
+            const FileModel& imageModel,
+            const CharacterAnimationModel& animationModel,
+            const QString& path
+        ) const;
 };
 
 #endif // IMAGEEXPORTER_HPP
