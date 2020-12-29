@@ -8,7 +8,7 @@
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
 
-const QString VERSION("2.0-alpha1 (2020-10-30)");
+const QString VERSION("2.0.0 (2020-12-29)");
 const QStringList COPYRIGHTS({
     "Copyright (C) 2007-2020 Bianca van Schaik &lt;pecuniam@gmail.com&gt;",
     "Copyright (C) 2020 Vinorcola &lt;vinorcola@gmail.com&gt;"
