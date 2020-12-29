@@ -30,7 +30,6 @@ ImageGraphics::ImageGraphics() :
     painter.end();
 
     tileImage->setPixmap(QPixmap::fromImage(tile));
-    tileImage->setPos(-TILE_HALF_WIDTH, -TILE_HEIGHT);
     tileImage->setVisible(false);
 }
 

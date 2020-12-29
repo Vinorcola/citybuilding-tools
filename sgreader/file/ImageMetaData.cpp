@@ -132,6 +132,12 @@ int ImageMetaData::getTileSize() const
 
 
 
+// TODO: Review to handle Emperor size.
+const int TILE_WIDTH(58);
+const int TILE_HALF_WIDTH(TILE_WIDTH / 2);
+const int TILE_HEIGHT((TILE_WIDTH + 2) / 2);
+const int TILE_HALF_HEIGHT(TILE_HEIGHT / 2);
+
 QPoint ImageMetaData::getPositionOffset() const
 {
     auto& workingRawData(invertedRawData == nullptr ? rawData : *invertedRawData);
@@ -146,8 +152,8 @@ QPoint ImageMetaData::getPositionOffset() const
         case Type::Decoration:
             if (workingRawData.is_character) {
                 return {
-                    rawData.invert_offset != 0 ? -workingRawData.width + workingRawData.position_offset_x : -workingRawData.position_offset_x,
-                    -workingRawData.position_offset_y - 10 // 10 = Third of tile height
+                    (rawData.invert_offset != 0 ? -workingRawData.width + workingRawData.position_offset_x : -workingRawData.position_offset_x) + TILE_HALF_WIDTH + 2,
+                    -workingRawData.position_offset_y + TILE_HALF_HEIGHT + 8
                 };
             }
             // No break wanted

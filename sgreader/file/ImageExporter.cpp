@@ -102,7 +102,7 @@ void ImageExporter::exportCharacterAnimationTo(
             auto image(imageModel.getImageMetaData(animationModel.getMainModelImageIndex(index)));
             if (image != nullptr) {
                 exportImageTo(*image, path + "/" + animationTitle + "/" + QString::number(row + 1) + ".png");
-                manifest += "      - file: " + QString::number(row + 1) + ".png\n";
+                manifest += "      - file: " + animationTitle + "/" + QString::number(row + 1) + ".png\n";
                 auto position(image->getPositionOffset());
                 manifest += "        position: { x: " + QString::number(position.x()) + ", y: " + QString::number(position.y()) + " }\n";
             }
