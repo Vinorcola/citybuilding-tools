@@ -335,6 +335,9 @@ void ImageLoader::writeIsometricTile(QImage& image, const quint8* data, int offs
 
 void ImageLoader::writeTransparentImage(const ImageMetaData& imageMetaData, QImage& image, const quint8* data, int length)
 {
+    const bool transformRedToTransparent(
+        !imageMetaData.hasAlphaData() && imageMetaData.getType() == ImageMetaData::Type::Decoration
+    );
     const int width(imageMetaData.getSize().width());
 
     int dataIndex(0);
@@ -351,7 +354,7 @@ void ImageLoader::writeTransparentImage(const ImageMetaData& imageMetaData, QIma
         else {
             // `c' is the number of image data bytes
             for (int j(0); j < c; j++, dataIndex += 2) {
-                writePixel(image, { x, y }, data[dataIndex] | (data[dataIndex+1] << 8));
+                writePixel(image, { x, y }, data[dataIndex] | (data[dataIndex+1] << 8), transformRedToTransparent);
                 x++;
                 if (x >= width) {
                     y++; x = 0;
@@ -363,7 +366,7 @@ void ImageLoader::writeTransparentImage(const ImageMetaData& imageMetaData, QIma
 
 
 
-void ImageLoader::writePixel(QImage& image, const QPoint& position, quint16 color)
+void ImageLoader::writePixel(QImage& image, const QPoint& position, quint16 color, bool transformRedToTransparent)
 {
     if (color == 0xf81f) {
         // ???
@@ -382,8 +385,8 @@ void ImageLoader::writePixel(QImage& image, const QPoint& position, quint16 colo
     rgb |= ((color & 0x1f) << 3) | ((color & 0x1c) >> 2);
 
     // Transform red to transparent black (for shadows).
-    if (rgb == 0xffff0000) {
-        rgb = 0x88000000;
+    if (rgb == 0xffff0000 && transformRedToTransparent) {
+        rgb = 0x66000000;
     }
 
     image.setPixel(position, rgb);

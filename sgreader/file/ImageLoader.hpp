@@ -52,7 +52,7 @@ class ImageLoader
         );
         static void writeTransparentImage(const ImageMetaData& imageMetaData, QImage& image, const quint8* data, int length);
         // -- Pixel decoding.
-        static void writePixel(QImage& image, const QPoint& position, quint16 color);
+        static void writePixel(QImage& image, const QPoint& position, quint16 color, bool transformRedToTransparent = false);
         static void writeAlphaPixel(QImage& image, const QPoint& position, quint8 color);
 };
 
